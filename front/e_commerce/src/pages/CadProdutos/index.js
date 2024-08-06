@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+//import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Input from '../../components/form/Input';
 import Button from '../../components/form/Button';
 
-const CadProdutos = () => {
-  const [nome_prod, setNome_prod] = useState('');
-  const [descricao_prod, setDescricao_prod] = useState('');
-  const [preco_prod, setPreco_prod] = useState();
+const CadProdutos = ({ onClose, onSalvar, produto }) => {
+  const [nome_prod, setNome_prod] = useState(produto ? produto.nome_prod : '');
+  const [descricao_prod, setDescricao_prod] = useState(produto ? produto.descricao_prod : '');
+  const [preco_prod, setPreco_prod] = useState(produto ? produto.descricao_prod : '');
   const [image, setImage] = useState('');
   const [error, setError] = useState('');
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
-  const handleCadastro = async (e) => {
+  useEffect(() => {
+    if (produto) {
+      setNome_prod(produto.nome_prod)
+      setDescricao_prod(produto.descricao_prod)
+      setPreco_prod(produto.preco_prod)
+    }
+  }, [produto])
+
+  const handleSalvar = async (e) => {
     e.preventDefault();
     if (!nome_prod || !descricao_prod || !preco_prod) {
       setError('Preencha todos os campos');
@@ -25,22 +33,35 @@ const CadProdutos = () => {
     formData.append('nome_prod', nome_prod);
     formData.append('descricao_prod', descricao_prod);
     formData.append('preco_prod', preco_prod);
-    formData.append('image', image);
+    if (image) formData.append('image', image);
 
-    await axios.post("http://localhost:3003/sistema/produtos/", formData)
-      .then((response) => {
-        console.log(response);
-      }).catch((err) => {
-        if (err.response) {
-          console.log(err.response);
-        } else {
-          console.log("Back end desligado, tente novamente mais tarde.");
-        }
-      });
+    try {
+      if (produto) {
+        await axios.put(`http://localhost:3003/sistema/produtos/${produto.id}`, formData)
+        console.log(produto.id)
+      }
+      else {
+        await axios.post("http://localhost:3003/sistema/produtos", formData)
+      }
 
-    alert("Produto cadastrado com sucesso!");
-    navigate("/home");
-  }
+      onSalvar({
+        nome_prod,
+        descricao_prod,
+        preco_prod,
+        image
+      })
+
+      onClose()
+
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response);
+      } else {
+        console.log("Back end desligado, tente novamente mais tarde.");
+      }
+      console.error(err)
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -83,7 +104,7 @@ const CadProdutos = () => {
           )}
 
           <label className="text-red-500">{error}</label>
-          <Button Text="Cadastrar" onClick={handleCadastro} className="mt-4" />
+          <Button Text="Cadastrar" onClick={handleSalvar} className="mt-4" />
         </div>
       </form>
     </div>

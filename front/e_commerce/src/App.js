@@ -12,7 +12,10 @@ import Registrar from "./pages/Registrar";
 import User from "./pages/User";
 import CadProdutos from "./pages/CadProdutos";
 import Produto from "./pages/Produto";
+
+
 import UserInfo from "./services/UserInfo";
+import GerenciaProdutos from "./pages/GerenciaProdutos";
 
 const Private = ({ Item }) => {
   const { signed } = useAuth();
@@ -39,11 +42,18 @@ const RoutesApp = () => {
           <Route path="/" element={<Private Item={Home} />} />
 
           <Route exact path="/user" element={<Private Item={User} />} />
+
           <Route
             exact
             path="/cadProd"
             element={<PrivateAdmin Item={CadProdutos} />}
           />
+          <Route
+            exact
+            path="/gerenciaProd"
+            element={<PrivateAdmin Item={GerenciaProdutos} />}
+          />
+
           <Route
             exact
             path="/produto/:id"
