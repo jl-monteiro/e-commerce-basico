@@ -6,12 +6,14 @@ exports.Insert = (req, res, next) => {
     const login = req.body.login
     const email = req.body.email
     const senha = req.body.senha
+    const tipo = req.body.tipo
 
     Usuario.create({
         nome: nome,
         login: login,
         email: email,
-        senha: senha
+        senha: senha,
+        tipo: tipo,
     }).then(usuario => {
         if (usuario) {
             res.status(status.OK).send(usuario)
@@ -51,6 +53,7 @@ exports.Update = (req, res, next) => {
     const email = req.body.email
     const login = req.body.login
     const senha = req.body.senha
+    const tipo = req.body.tipo
 
     Usuario.findByPk(id)
         .then(usuario => {
@@ -59,7 +62,8 @@ exports.Update = (req, res, next) => {
                     nome: nome,
                     email: email,
                     login: login,
-                    senha: senha
+                    senha: senha,
+                    tipo: tipo,
                 },
                     {
                         where: { id: id }

@@ -37,6 +37,10 @@ const Usuario = conexao.define("usuario", {
         validate: {
             len: [7,100]
         }
+    },
+    tipo: {
+        allowNull: false,
+        type: Sequelize.ENUM('admin', 'usuario'),
     }
 
 })

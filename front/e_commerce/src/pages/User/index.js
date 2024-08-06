@@ -51,7 +51,9 @@ const User = () => {
         </div>
 
         <div>
-          <label htmlFor="nome" className="block mb-2">Nome:</label>
+          <label htmlFor="nome" className="block mb-2">
+            Nome:
+          </label>
           <input
             type="text"
             id="nome"
@@ -61,7 +63,9 @@ const User = () => {
             className="w-full p-2 border rounded mb-4"
           />
 
-          <label htmlFor="login" className="block mb-2">Login:</label>
+          <label htmlFor="login" className="block mb-2">
+            Login:
+          </label>
           <input
             type="text"
             id="login"
@@ -71,7 +75,9 @@ const User = () => {
             className="w-full p-2 border rounded mb-4"
           />
 
-          <label htmlFor="email" className="block mb-2">Email:</label>
+          <label htmlFor="email" className="block mb-2">
+            Email:
+          </label>
           <input
             type="email"
             id="email"
@@ -80,16 +86,27 @@ const User = () => {
             onChange={(e) => [setEmail(e.target.value), setEditando(true)]}
             className="w-full p-2 border rounded mb-4"
           />
+          {userInfo.tipo === "admin" && <label>admin</label>}
         </div>
 
         {editando && (
           <div className="text-center">
-            <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Salvar</button>
+            <button
+              onClick={handleSave}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Salvar
+            </button>
           </div>
         )}
       </div>
       <div className="text-center mt-4">
-        <button onClick={() => [deslogar(), navigate("/")]} className="bg-red-500 text-white px-4 py-2 rounded">Sair</button>
+        <button
+          onClick={() => [deslogar(), navigate("/")]}
+          className="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          Sair
+        </button>
       </div>
     </div>
   );
