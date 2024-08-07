@@ -53,7 +53,7 @@ const Registrar = () => {
     }
 
     alert("Usuário cadastrado com sucesso!");
-    navigate("/registrar");
+    navigate("/login");
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import useAuth from "./hooks/useAuth";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -16,10 +16,10 @@ import Produto from "./pages/Produto";
 import UserInfo from "./services/UserInfo";
 import GerenciaProdutos from "./pages/GerenciaProdutos";
 
-const Private = ({ Item }) => {
+const Private = ({ Item, GoTo }) => {
   const { signed } = useAuth();
 
-  return signed > 0 ? <Item /> : <Home />;
+  return signed > 0 ? <Item /> : <GoTo />;
 };
 
 const PrivateAdmin = ({ Item }) => {
@@ -29,9 +29,8 @@ const PrivateAdmin = ({ Item }) => {
 
   const isAdmin = userInfo && userInfo.tipo === "admin";
 
-  return signed && isAdmin > 0 ? <Item /> : <Home />;
+  return signed && isAdmin > 0 ? <Item /> : <Login />;
 
-  return <Login />
 };
 
 const RoutesApp = () => {
@@ -40,10 +39,10 @@ const RoutesApp = () => {
       <Fragment>
         <Header />
         <Routes>
-          <Route exact path="/home" element={<Private Item={Home} />} />
-          <Route path="/" element={<Private Item={Home} />} />
+          <Route exact path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
 
-          <Route exact path="/user" element={<Private Item={User} />} />
+          <Route exact path="/user" element={<Private Item={User} GoTo={Login} />} />
 
           <Route
             exact
@@ -54,7 +53,7 @@ const RoutesApp = () => {
           <Route
             exact
             path="/produto/:id"
-            element={<Private Item={Produto} />}
+            element={<Private Item={Produto} GoTo={Login} />}
           />
 
           <Route path="/login" element={<Login />} />
