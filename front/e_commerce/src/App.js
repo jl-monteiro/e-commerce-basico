@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import useAuth from "./hooks/useAuth";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -10,7 +10,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registrar from "./pages/Registrar";
 import User from "./pages/User";
-import CadProdutos from "./pages/CadProdutos";
 import Produto from "./pages/Produto";
 
 
@@ -20,16 +19,19 @@ import GerenciaProdutos from "./pages/GerenciaProdutos";
 const Private = ({ Item }) => {
   const { signed } = useAuth();
 
-  return signed > 0 ? <Item /> : <Login />;
+  return signed > 0 ? <Item /> : <Home />;
 };
 
 const PrivateAdmin = ({ Item }) => {
   const { signed } = useAuth();
+
   const userInfo = UserInfo();
 
   const isAdmin = userInfo && userInfo.tipo === "admin";
 
   return signed && isAdmin > 0 ? <Item /> : <Home />;
+
+  return <Login />
 };
 
 const RoutesApp = () => {
@@ -43,11 +45,6 @@ const RoutesApp = () => {
 
           <Route exact path="/user" element={<Private Item={User} />} />
 
-          <Route
-            exact
-            path="/cadProd"
-            element={<PrivateAdmin Item={CadProdutos} />}
-          />
           <Route
             exact
             path="/gerenciaProd"

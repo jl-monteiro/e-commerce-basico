@@ -5,7 +5,7 @@ import axios from 'axios';
 import Input from '../../components/form/Input';
 import Button from '../../components/form/Button';
 
-const CadProdutos = ({ onClose, onSalvar, produto }) => {
+const CadProdutos = ({ onClose, produto }) => {
   const [nome_prod, setNome_prod] = useState(produto ? produto.nome_prod : '');
   const [descricao_prod, setDescricao_prod] = useState(produto ? produto.descricao_prod : '');
   const [preco_prod, setPreco_prod] = useState(produto ? produto.descricao_prod : '');
@@ -28,6 +28,10 @@ const CadProdutos = ({ onClose, onSalvar, produto }) => {
       setError('Preencha todos os campos');
       return;
     }
+    if(!image){
+      setError('Insira uma imagem')
+      return
+    }
 
     const formData = new FormData();
     formData.append('nome_prod', nome_prod);
@@ -38,21 +42,13 @@ const CadProdutos = ({ onClose, onSalvar, produto }) => {
     try {
       if (produto) {
         await axios.put(`http://localhost:3003/sistema/produtos/${produto.id}`, formData)
-        console.log(produto.id)
+        console.log(nome_prod)
       }
       else {
         await axios.post("http://localhost:3003/sistema/produtos", formData)
       }
 
-      onSalvar({
-        nome_prod,
-        descricao_prod,
-        preco_prod,
-        image
-      })
-
       onClose()
-
     } catch (err) {
       if (err.response) {
         console.log(err.response);

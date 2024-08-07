@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
-
+ 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_token"));
+    if(!userData){
+      return 
+    }
     const email = userData.email;
 
     axios.get("http://localhost:3003/sistema/usuarios")

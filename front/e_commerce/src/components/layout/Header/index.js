@@ -16,24 +16,31 @@ const Header = () => {
         <Link to="/" className="w-16 cursor-pointer">
           JL
         </Link>
-        {signed && (
-          <div className="nav-links duration-500 md:static absolute min-h-[10vh] left-0 top-[-100%] md:w-auto  w-full flex items-center px-5">
-            <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
-              {isAdmin && (
-                <li>
-                  <Link to="/gerenciaProd" className="hover:text-gray-500">
-                    Gerenciar produtos
-                  </Link>
-                </li>
-              )}
+
+        <div className="nav-links duration-500 md:static absolute min-h-[10vh] left-0 top-[-100%] md:w-auto  w-full flex items-center px-5">
+          <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
+            {isAdmin && (
+              <li>
+                <Link to="/gerenciaProd" className="hover:text-gray-500">
+                  Gerenciar produtos
+                </Link>
+              </li>
+            )}
+            {signed ?
               <li>
                 <Link to="/user" className="hover:text-gray-500">
                   User
                 </Link>
+              </li> :
+              <li>
+                <Link to="/login" className="hover:text-gray-500">
+                  User
+                </Link>
               </li>
-            </ul>
-          </div>
-        )}
+            }
+          </ul>
+        </div>
+
       </nav>
     </header>
   );

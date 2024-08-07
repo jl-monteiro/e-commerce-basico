@@ -77,6 +77,7 @@ exports.Update = (req, res, next) => {
   const nome_prod = req.body.nome_prod;
   const descricao_prod = req.body.descricao_prod;
   const preco_prod = req.body.preco_prod;
+  const imagem_prod = req.file ? req.file.filename : null;
 
   Produto.findByPk(id)
     .then((produto) => {
@@ -87,6 +88,7 @@ exports.Update = (req, res, next) => {
               nome_prod: nome_prod,
               descricao_prod: descricao_prod,
               preco_prod: preco_prod,
+              imagem_prod: imagem_prod
             },
             {
               where: { id: id },

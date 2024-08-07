@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-
 import Button from "../../components/form/Button"
 import Modal from "../../components/Modal";
 
@@ -15,6 +14,7 @@ const GerenciaProdutos = () => {
 
     const openModal = (tipo, produto = null) => {
         setModalTipo(tipo)
+        console.log(produto)
         setProdutoEmEdicao(produto)
         setIsModalOpen(true)
     }
@@ -23,26 +23,7 @@ const GerenciaProdutos = () => {
         setIsModalOpen(false)
         setProdutoEmEdicao(null)
     }
-    
-    const handleAdicionarProduto = async (produto) => {
-        try {
-            await axios.post("http://localhost:3003/sistema/produtos", produto);
-            const response = await axios.get("http://localhost:3003/sistema/produtos");
-            setProdutos(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
-    const handleAtualizarProduto = async (produto) => {
-        try {
-            await axios.put(`http://localhost:3003/sistema/produtos/${produto.id}`, produto);
-            const response = await axios.get("http://localhost:3003/sistema/produtos");
-            setProdutos(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
     const handleExcluirProduto = async (id) => {
         try {
             await axios.delete(`http://localhost:3003/sistema/produtos/${id}`)
@@ -114,7 +95,6 @@ const GerenciaProdutos = () => {
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <CadProdutos
                     onClose={closeModal}
-                    onSalvar={modalTipo === 'adicionar' ? handleAdicionarProduto : handleAtualizarProduto}
                     produto={produtoEmEdicao}
                 />
             </Modal>

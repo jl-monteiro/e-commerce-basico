@@ -15,7 +15,7 @@ router.delete('/usuarios/:id', UsuarioController.Delete)
 router.post('/produtos', uploadUser.single('image'), ProdutoController.Insert)
 router.get('/produtos', ProdutoController.SearchAll)
 router.get('/produtos/:id', ProdutoController.SearchOne)
-router.put('/produtos/:id', ProdutoController.Update)
+router.put('/produtos/:id', uploadUser.single('image'), ProdutoController.Update)
 router.delete('/produtos/:id', ProdutoController.Delete)
 
 
