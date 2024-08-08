@@ -60,9 +60,12 @@ const Login = () => {
               >
                 Senha
               </label>
+              {/*
               <Link to="/esqSenha" className="text-sm text-blue-600 underline">
                 Esqueceu a senha?
               </Link>
+              */}
+
             </div>
             <Input
               className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"

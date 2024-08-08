@@ -1,5 +1,7 @@
 const Produto = require("../models/produto");
 const status = require("http-status");
+const fs = require("fs");
+const path = require("path");
 
 exports.Insert = async (req, res, next) => {
   if (req.file) {
@@ -88,7 +90,7 @@ exports.Update = (req, res, next) => {
               nome_prod: nome_prod,
               descricao_prod: descricao_prod,
               preco_prod: preco_prod,
-              imagem_prod: imagem_prod
+              imagem_prod: imagem_prod,
             },
             {
               where: { id: id },
@@ -126,4 +128,22 @@ exports.Delete = (req, res, next) => {
     .catch((error) => next(error));
 };
 
-//upload imagem
+exports.DeleteImg = (req, res) => {
+  const { imageUrl } = req.body;
+
+  const imagePath = imageUrl.replace(
+    "http://localhost:3003/sistema/produtos/files/users",
+    ""
+  );
+  const fullPath = path.join(__dirname, "../../public/upload/users", imagePath);
+
+  fs.unlink(fullPath, (err) => {
+    if (err) {
+      console.error(err);
+      return res
+        .status(500)
+        .json({ message: "Erro ao deletar imagem no back" });
+    }
+    res.status(200).json({ message: "Imagem deletada com sucesso." });
+  });
+};

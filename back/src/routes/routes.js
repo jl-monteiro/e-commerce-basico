@@ -17,6 +17,7 @@ router.get('/produtos', ProdutoController.SearchAll)
 router.get('/produtos/:id', ProdutoController.SearchOne)
 router.put('/produtos/:id', uploadUser.single('image'), ProdutoController.Update)
 router.delete('/produtos/:id', ProdutoController.Delete)
+router.post("/produtos/delete-image", ProdutoController.DeleteImg)
 
 
 module.exports = router
