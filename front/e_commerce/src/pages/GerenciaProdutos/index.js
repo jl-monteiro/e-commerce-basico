@@ -10,10 +10,8 @@ const GerenciaProdutos = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [produtoEmEdicao, setProdutoEmEdicao] = useState(null);
-  const [modalTipo, setModalTipo] = useState("adicionar");
 
   const openModal = (tipo, produto = null) => {
-    setModalTipo(tipo);
     setProdutoEmEdicao(produto);
     setIsModalOpen(true);
   };

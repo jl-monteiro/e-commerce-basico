@@ -1,5 +1,6 @@
 const Produto = require("../models/produto");
 const status = require("http-status");
+const { Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
@@ -37,7 +38,19 @@ exports.Insert = async (req, res, next) => {
 };
 
 exports.SearchAll = (req, res, next) => {
-  Produto.findAll()
+  const searchQuery = req.query.search
+
+  let whereCondition = {}
+
+  if(searchQuery){
+    whereCondition = {
+      nome_prod: {
+        [Op.like]: `%${searchQuery}%`,
+      }
+    }
+  }
+
+  Produto.findAll({ where: whereCondition})
     .then((produtos) => {
       const produtosUrl = produtos.map((produto) => ({
         id: produto.id,
