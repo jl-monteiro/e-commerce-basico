@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const conexao = require('../database/database')
+const sequelize = require('../database/database')
 
 const Usuario = conexao.define("usuario", {
     id: {
@@ -41,6 +42,10 @@ const Usuario = conexao.define("usuario", {
     tipo: {
         allowNull: false,
         type: Sequelize.ENUM('admin', 'usuario'),
+    },
+    token: {
+        allowNull: false,
+        type: Sequelize.STRING(200),
     }
 
 })

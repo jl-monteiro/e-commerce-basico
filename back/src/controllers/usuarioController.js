@@ -1,19 +1,25 @@
 const Usuario = require('../models/usuario')
 const status = require('http-status')
+const bcrypt = require('bcryptjs')
 
 exports.Insert = (req, res, next) => {
     const nome = req.body.nome
     const login = req.body.login
     const email = req.body.email
     const senha = req.body.senha
+    const hash = bcrypt.genSaltSync(10)
+    const senhaHash = bcrypt.hashSync(senha, hash)
     const tipo = req.body.tipo
+    const token = req.body.token
 
     Usuario.create({
         nome: nome,
         login: login,
         email: email,
-        senha: senha,
+        senha: senhaHash,
         tipo: tipo,
+        token: token
+        
     }).then(usuario => {
         if (usuario) {
             res.status(status.OK).send(usuario)
@@ -53,7 +59,10 @@ exports.Update = (req, res, next) => {
     const email = req.body.email
     const login = req.body.login
     const senha = req.body.senha
+    const hash = bcrypt.genSaltSync(10)
+    const senhaHash = bcrypt.hashSync(senha, hash)
     const tipo = req.body.tipo
+    const token = req.body.token
 
     Usuario.findByPk(id)
         .then(usuario => {
@@ -62,7 +71,7 @@ exports.Update = (req, res, next) => {
                     nome: nome,
                     email: email,
                     login: login,
-                    senha: senha,
+                    senha: senhaHash,
                     tipo: tipo,
                 },
                     {

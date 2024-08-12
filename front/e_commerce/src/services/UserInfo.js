@@ -10,11 +10,11 @@ const UserInfo = () => {
     if(!userData){
       return 
     }
-    const email = userData.email;
+    const token = userData.token;
 
     axios.get("http://localhost:3003/sistema/usuarios")
       .then((response) => {
-        const user = response.data.find((u) => u.email === email);
+        const user = response.data.find((u) => u.token === token);
         setUser(user);
       })
       .catch((error) => {

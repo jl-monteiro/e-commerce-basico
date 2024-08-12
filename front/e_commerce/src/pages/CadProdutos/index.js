@@ -28,6 +28,7 @@ const CadProdutos = ({ onClose, produto }) => {
 
   const handleSalvar = async (e) => {
     e.preventDefault();
+    console.log(image)
     if (!nome_prod || !descricao_prod || !preco_prod) {
       setError("Preencha todos os campos");
       return;
@@ -56,7 +57,7 @@ const CadProdutos = ({ onClose, produto }) => {
       onClose();
     } catch (err) {
       if (err.response) {
-        console.log(err.response);
+        setError(err.response.data.mensagem);
       } else {
         console.log("Back end desligado, tente novamente mais tarde.");
       }
