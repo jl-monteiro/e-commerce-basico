@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Button from "../../components/form/Button";
+import { SearchContext } from "../../contexts/SearchContext";
+import { useContext } from "react";
+import Loading from "../../components/Loading";
 
 const Produto = () => {
   const { id } = useParams();
   const [produto, setProduto] = useState({});
+  const { loading, setLoading } = useContext(SearchContext);
 
   useEffect(() => {
     const fetchProduto = async () => {
@@ -18,6 +23,7 @@ const Produto = () => {
       }
     };
     fetchProduto();
+    setLoading(false)
   }, [id]);
 
   function toBRL(preco) {
@@ -30,7 +36,29 @@ const Produto = () => {
     );
   }
 
+  const addCarrinho = () => {
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+    const produtoCarrinho = carrinho.findIndex(prod => prod.id === id);
+
+    if (produtoCarrinho > -1) {
+      carrinho[produtoCarrinho].qtd += 1
+    }
+    else{
+      carrinho.push({
+        id: id,
+        nome_prod: produto.nome_prod,
+        preco_prod: produto.preco_prod,
+        imagem_prod: produto.imagem_prod,
+        qtd: 1,
+      })
+    }
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    console.log(carrinho);
+  }
+
   return (
+    (loading && <Loading />) ||
     <div className="antialiased layout-body bg-gray-100 min-h-screen flex items-center justify-center p-4">
       <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="md:flex">
@@ -50,9 +78,12 @@ const Produto = () => {
               <span className="text-2xl font-bold text-gray-900">
                 {toBRL(produto.preco_prod)}
               </span>
-              <button className="ml-4 px-4 py-2 bg-indigo-500 text-white text-sm font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Adicionar ao Carrinho
-              </button>
+
+              <Button
+                Text="Adicionar ao Carrinho"
+                onClick={addCarrinho}
+              />
+
             </div>
           </div>
         </div>
