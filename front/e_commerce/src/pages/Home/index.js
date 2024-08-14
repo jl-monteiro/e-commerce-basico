@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,8 @@ import Loading from "../../components/Loading";
 import { SearchContext } from "../../contexts/SearchContext";
 
 const Home = () => {
-  const { produtos, setProdutos, loading, setLoading } = useContext(SearchContext);
+  const { produtos, setProdutos, loading, setLoading } =
+    useContext(SearchContext);
 
   useEffect(() => {
     const fetchProdutos = async () => {

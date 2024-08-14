@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //import { useContext } from "react";
 import useAuth from "../../../hooks/useAuth";
@@ -13,8 +13,15 @@ import Carrinho from "../../Carrinho";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [carrinho, setCarrinho] = useState([]);
   const { signed } = useAuth();
   const userInfo = UserInfo();
+
+  useEffect(() => {
+    const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
+
+    setCarrinho(carrinhoStorage || []);
+  }, [carrinho]);
 
   const isAdmin = userInfo && userInfo.tipo === "admin";
 
@@ -59,12 +66,13 @@ const Header = () => {
                 <>
                   <div
                     onClick={openModal}
-                    className="text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
+                    className="relative text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
                   >
-                    <CiShoppingCart size="25px">
-                      
-                    </CiShoppingCart>
-                    <p>1</p>
+                    <CiShoppingCart size="25px"></CiShoppingCart>
+
+                    <p className="absolute top-1 right-1 rounded-full bg-red-500 p-0.1 px-1 text-sm text-red-50">
+                      {carrinho.length}
+                    </p>
                   </div>
                   <Link
                     to="/user"
