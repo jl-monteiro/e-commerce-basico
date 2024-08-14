@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b bg-background">
+      <header className="sticky top-0 z-40 w-full border-b bg-white">
         <div className="container mx-auto flex h-16 items-center justify-between py-4 px-4">
           <div className="flex items-center space-x-4">
             <Link to="/" className="font-bold ml-4">
@@ -61,7 +61,10 @@ const Header = () => {
                     onClick={openModal}
                     className="text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
                   >
-                    <CiShoppingCart size="25px" />
+                    <CiShoppingCart size="25px">
+                      
+                    </CiShoppingCart>
+                    <p>1</p>
                   </div>
                   <Link
                     to="/user"
