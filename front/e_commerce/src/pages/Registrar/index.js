@@ -52,8 +52,7 @@ const Registrar = () => {
       return;
     }
 
-    alert("Usuário cadastrado com sucesso!");
-    navigate("/login");
+    navigate("/");
   };
 
   return (

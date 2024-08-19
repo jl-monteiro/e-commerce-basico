@@ -64,6 +64,8 @@ export const AuthProvider = ({ children }) => {
           tipo,
           token,
         });
+        localStorage.setItem("user_token", JSON.stringify({ token }));
+        setUser(user);
         return null;
       }
     } catch (error) {

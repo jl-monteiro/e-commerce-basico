@@ -21,8 +21,8 @@ const Header = () => {
     const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
 
     setCarrinho(carrinhoStorage || []);
-  }, [carrinho]);
-
+  }, []);
+  
   const isAdmin = userInfo && userInfo.tipo === "admin";
 
   const openModal = () => {
