@@ -1,6 +1,4 @@
-const Endereco = require("../models/endereco");
-const Cidade = require("../models/cidade");
-const Usuario = require("../models/usuario");
+const { Endereco, Cidade, Usuario } = require("../models/relacoes");
 
 const EnderecoController = {
   async Insert(req, res) {

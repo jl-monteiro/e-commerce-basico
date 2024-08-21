@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import Button from "../../components/form/Button";
 import Modal from "../../components/Modal";
 
 import CadProdutos from "../CadProdutos";
+import { SearchContext } from "../../contexts/SearchContext";
+import Loading from "../../components/Loading";
 
 const GerenciaProdutos = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [produtoEmEdicao, setProdutoEmEdicao] = useState(null);
+  const { loading, setLoading } = useContext(SearchContext);
 
   const openModal = (tipo, produto = null) => {
     setProdutoEmEdicao(produto);
@@ -51,53 +54,56 @@ const GerenciaProdutos = () => {
       }
     };
     fetchProdutos();
+    setLoading(false);
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-6">Gerenciamento de Produtos</h1>
-      <div className="space-x-4">
-        <Button Text="Cadastrar Produto" onClick={openModal} />
-      </div>
+    (loading && <Loading />) || (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <h1 className="text-3xl font-bold mb-6">Gerenciamento de Produtos</h1>
+        <div className="space-x-4">
+          <Button Text="Cadastrar Produto" onClick={openModal} />
+        </div>
 
-      <div className="w-full max-w-4xl">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead>
-            <tr className="border-b">
-              <th className="p-4 text-left">Nome</th>
-              <th className="p-4 text-left">Descricao</th>
-              <th className="p-4 text-left">Preco</th>
-              <th className="p-4 text-left">Acoes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {produtos.map((produto) => (
-              <tr key={produto.id} className="border-b">
-                <td className="p-4">{produto.nome_prod}</td>
-                <td className="p-4">{produto.descricao_prod}</td>
-                <td className="p-4">{produto.preco_prod}</td>
-                <td className="p-4 flex space-x-2">
-                  <Button
-                    Text="Editar"
-                    onClick={() => openModal("editar", produto)}
-                  />
-                  <Button
-                    Text="Excluir"
-                    onClick={() =>
-                      handleExcluirProduto(produto.id, produto.imagem_prod)
-                    }
-                  />
-                </td>
+        <div className="w-full max-w-4xl">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr className="border-b">
+                <th className="p-4 text-left">Nome</th>
+                <th className="p-4 text-left">Descricao</th>
+                <th className="p-4 text-left">Preco</th>
+                <th className="p-4 text-left">Acoes</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {produtos.map((produto) => (
+                <tr key={produto.id} className="border-b">
+                  <td className="p-4">{produto.nome_prod}</td>
+                  <td className="p-4">{produto.descricao_prod}</td>
+                  <td className="p-4">{produto.preco_prod}</td>
+                  <td className="p-4 flex space-x-2">
+                    <Button
+                      Text="Editar"
+                      onClick={() => openModal("editar", produto)}
+                    />
+                    <Button
+                      Text="Excluir"
+                      onClick={() =>
+                        handleExcluirProduto(produto.id, produto.imagem_prod)
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <CadProdutos onClose={closeModal} produto={produtoEmEdicao} />
-      </Modal>
-    </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <CadProdutos onClose={closeModal} produto={produtoEmEdicao} />
+        </Modal>
+      </div>
+    )
   );
 };
 

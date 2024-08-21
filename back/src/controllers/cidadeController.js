@@ -1,5 +1,4 @@
-const Cidade = require("../models/cidade");
-const Estado = require("../models/estado");
+const { Cidade, Estado } = require('../models/relacoes')
 
 const CidadeController = {
   async SearchAll(req, res) {

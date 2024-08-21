@@ -66,12 +66,12 @@ exports.Update = (req, res, next) => {
 
         if (nome) updates.nome = nome;
         if (email) updates.email = email;
-        if (login) updateData.login = login;
+        if (login) updates.login = login;
         if (senha) {
           const hash = bcrypt.genSaltSync(10);
-          updateData.senha = bcrypt.hashSync(senha, hash);
+          updates.senha = bcrypt.hashSync(senha, hash);
         }
-        if (tipo) updateData.tipo = tipo;
+        if (tipo) updates.tipo = tipo;
         usuario
           .update(updates)
           .then(() => {
