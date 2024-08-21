@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import UserInfo from "../../services/UserInfo";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,8 +6,7 @@ import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 
 const User = () => {
-  const userInfo = UserInfo();
-  const { deslogar } = useAuth();
+  const { deslogar, user } = useAuth();
   const navigate = useNavigate();
 
   const [nome, setNome] = useState("");
@@ -16,20 +14,20 @@ const User = () => {
   const [email, setEmail] = useState("");
   const [editando, setEditando] = useState(false);
 
-  const { loading, setLoading } = useContext(SearchContext)
+  const { loading, setLoading } = useContext(SearchContext);
 
   useEffect(() => {
-    if (userInfo) {
-      setNome(userInfo.nome);
-      setLogin(userInfo.login);
-      setEmail(userInfo.email);
+    if (user) {
+      setNome(user.nome);
+      setLogin(user.login);
+      setEmail(user.email);
     }
-    setLoading(false)
-  }, [userInfo]);
+    setLoading(false);
+  }, [user]);
 
   const handleSave = () => {
     axios
-      .put(`http://localhost:3003/sistema/usuarios/${userInfo.id}`, {
+      .put(`http://localhost:3003/sistema/usuarios/${user.id}`, {
         nome,
         login,
         email,
@@ -44,17 +42,16 @@ const User = () => {
       });
   };
 
-  if (!userInfo) {
-    return (<Loading />);
+  if (!user) {
+    return <Loading />;
   }
 
   return (
     (loading && <Loading />) || (
-
       <div className="container mx-auto p-4">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="text-center mb-4">
-            <h1 className="text-2xl font-bold">Olá, {userInfo.nome}</h1>
+            <h1 className="text-2xl font-bold">Olá, {user.nome}</h1>
           </div>
 
           <div>
@@ -93,7 +90,7 @@ const User = () => {
               onChange={(e) => [setEmail(e.target.value), setEditando(true)]}
               className="w-full p-2 border rounded mb-4"
             />
-            {userInfo.tipo === "admin" && <label>admin</label>}
+            {user.tipo === "admin" && <label>admin</label>}
           </div>
 
           {editando && (
@@ -115,7 +112,8 @@ const User = () => {
             Sair
           </button>
         </div>
-      </div>)
+      </div>
+    )
   );
 };
 

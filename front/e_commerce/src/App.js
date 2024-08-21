@@ -12,7 +12,6 @@ import Registrar from "./pages/Registrar";
 import User from "./pages/User";
 import Produto from "./pages/Produto";
 
-import UserInfo from "./services/UserInfo";
 import GerenciaProdutos from "./pages/GerenciaProdutos";
 import { SearchProvider } from "./contexts/SearchContext";
 
@@ -23,11 +22,9 @@ const Private = ({ Item, GoTo }) => {
 };
 
 const PrivateAdmin = ({ Item }) => {
-  const { signed } = useAuth();
+  const { signed, user } = useAuth();
 
-  const userInfo = UserInfo();
-
-  const isAdmin = userInfo && userInfo.tipo === "admin";
+  const isAdmin = user && user.tipo === "admin";
 
   return signed && isAdmin > 0 ? <Item /> : <Login />;
 };
@@ -60,7 +57,11 @@ const RoutesApp = () => {
           />
 
           <Route path="/login" element={<Private Item={Home} GoTo={Login} />} />
-          <Route exact path="/registrar" element={<Private Item={Home} GoTo={Registrar} />} />
+          <Route
+            exact
+            path="/registrar"
+            element={<Private Item={Home} GoTo={Registrar} />}
+          />
 
           <Route path="*" element={<Private Item={Home} />} />
         </Routes>

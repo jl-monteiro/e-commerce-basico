@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //import { useContext } from "react";
 import useAuth from "../../../hooks/useAuth";
-import UserInfo from "../../../services/UserInfo";
 
 import { RxAvatar } from "react-icons/rx";
 import { CiShoppingCart } from "react-icons/ci";
@@ -14,16 +13,15 @@ import Carrinho from "../../Carrinho";
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [carrinho, setCarrinho] = useState([]);
-  const { signed } = useAuth();
-  const userInfo = UserInfo();
+  const { signed, user } = useAuth();
 
   useEffect(() => {
     const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
 
     setCarrinho(carrinhoStorage || []);
   }, []);
-  
-  const isAdmin = userInfo && userInfo.tipo === "admin";
+
+  const isAdmin = user && user.tipo === "admin";
 
   const openModal = () => {
     setIsModalOpen(true);

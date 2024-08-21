@@ -5,12 +5,17 @@ export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const bcrypt = require('bcryptjs')
+  const bcrypt = require("bcryptjs");
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
     if (userToken) {
       const storedUser = JSON.parse(userToken);
-      setUser(storedUser);
+      axios.get("http://localhost:3003/sistema/usuarios").then((response) => {
+        const userInfo = response.data.find(
+          (u) => u.token === storedUser.token
+        );
+        setUser(userInfo);
+      });
     }
   }, []);
 
@@ -20,12 +25,12 @@ export const AuthProvider = ({ children }) => {
         "http://localhost:3003/sistema/usuarios"
       );
       const users = response.data;
-      const user = users.find((u) => u.email === email );
-      
+      const user = users.find((u) => u.email === email);
+
       if (user) {
-        const token = user.token
-        const compare = bcrypt.compareSync(senha, user.senha)
-        if(!compare){
+        const token = user.token;
+        const compare = bcrypt.compareSync(senha, user.senha);
+        if (!compare) {
           return "Email ou senha incorretos";
         }
         localStorage.setItem("user_token", JSON.stringify({ token }));
