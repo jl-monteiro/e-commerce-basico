@@ -24,7 +24,7 @@ const EnderecoController = {
       });
       res.status(201).json(endereco);
     } catch (err) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: err});
     }
   },
 

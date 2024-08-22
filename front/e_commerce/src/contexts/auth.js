@@ -70,6 +70,12 @@ export const AuthProvider = ({ children }) => {
           token,
         });
         localStorage.setItem("user_token", JSON.stringify({ token }));
+        const response = await axios.get(
+          "http://localhost:3003/sistema/usuarios"
+        );
+        const users = response.data;
+        const user = users.find((u) => u.token === token);
+  
         setUser(user);
         return null;
       }

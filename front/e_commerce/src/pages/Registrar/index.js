@@ -52,7 +52,7 @@ const Registrar = () => {
       return;
     }
 
-    navigate("/");
+    navigate("/home");
   };
 
   return (

@@ -2,13 +2,24 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
+import useAuth from "../../hooks/useAuth";
 
 const Endereco = ({ onClose }) => {
   const { loading, setLoading } = useContext(SearchContext);
+  const { user } = useAuth()
+
   const [estadoSelecionado, setEstadoSelecionado] = useState("");
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
+
+  const [cidade, setCidade] = useState(0)
+  const [logradouro, setLogradouro] = useState("")
+  const [numero, setNumero] = useState("")
+  const [complemento, setComplemento] = useState("")
+  const [bairro, setBairro] = useState("")
+  const [cep, setCep] = useState("")
+  const [error, setError] = useState("")
 
   const fetchDados = async () => {
     try {
@@ -27,6 +38,31 @@ const Endereco = ({ onClose }) => {
   useEffect(() => {
     fetchDados();
   }, []);
+
+  const handleSalvar = async (e) => {
+    e.preventDefault()
+    if (!logradouro || !numero || !complemento || !bairro || !cep || !cidade) {
+      setError("Preencha todos os campos!")
+      console.log(logradouro, numero, complemento, bairro, cep, cidade)
+      return
+    }
+    try {
+      await axios.post("http://localhost:3003/sistema/enderecos", {
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        cep,
+        cidadeId: cidade,
+        usuarioId: user.id
+      })
+    } catch (err) {
+      console.error("Erro ao salvar dados:", err);
+    }
+    finally{
+      onClose()
+    }
+  }
 
   const handleEstadoChange = (e) => {
     const idEstado = e.target.value;
@@ -49,7 +85,7 @@ const Endereco = ({ onClose }) => {
             <div className="grid gap-2">
               <label htmlFor="estado" className="block text-sm font-medium text-gray-700">Estado</label>
               <select
-                id="estado"
+                id="estadoId"
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 value={estadoSelecionado}
                 onChange={handleEstadoChange}
@@ -63,65 +99,73 @@ const Endereco = ({ onClose }) => {
             <div className="grid gap-2">
               <label htmlFor="cidade" className="block text-sm font-medium text-gray-700">Cidade</label>
               <select
-                id="cidade"
+                id="cidadeId"
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 disabled={!estadoSelecionado}
+                onChange={(e) => setCidade(e.target.value)}
               >
                 <option value="" disabled>Selecione a cidade</option>
                 {cidadesFiltradas.map((cidade) => (
-                  <option key={cidade.id} value={cidade.nome_cidade}>{cidade.nome_cidade}</option>
+                  <option key={cidade.id} value={cidade.id}>{cidade.nome_cidade}</option>
                 ))}
               </select>
             </div>
             <div className="grid gap-2">
-              <label htmlFor="street" className="block text-sm font-medium text-gray-700">Logradouro</label>
+              <label htmlFor="logradouro" className="block text-sm font-medium text-gray-700">Logradouro</label>
               <input
-                id="street"
+                id="logradouro"
                 type="text"
                 placeholder="Rua, Avenida, etc."
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                onChange={(e) => setLogradouro(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="number" className="block text-sm font-medium text-gray-700">Número</label>
+              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">Número</label>
               <input
-                id="number"
+                id="numero"
                 type="text"
                 placeholder="Número do endereço"
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                onChange={(e) => setNumero(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="complement" className="block text-sm font-medium text-gray-700">Complemento</label>
+              <label htmlFor="complemento" className="block text-sm font-medium text-gray-700">Complemento</label>
               <input
-                id="complement"
+                id="complemento"
                 type="text"
                 placeholder="Apartamento, casa, etc."
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                onChange={(e) => setComplemento(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="neighborhood" className="block text-sm font-medium text-gray-700">Bairro</label>
+              <label htmlFor="Bairro" className="block text-sm font-medium text-gray-700">Bairro</label>
               <input
-                id="neighborhood"
+                id="Bairro"
                 type="text"
                 placeholder="Bairro"
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                onChange={(e) => setBairro(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <label htmlFor="zip" className="block text-sm font-medium text-gray-700">CEP</label>
+              <label htmlFor="CEP" className="block text-sm font-medium text-gray-700">CEP</label>
               <input
-                id="zip"
+                id="CEP"
                 type="text"
                 placeholder="00000-000"
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                onChange={(e) => setCep(e.target.value)}
               />
             </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
             <div className="flex justify-end gap-4 mt-4">
               <button
-                type="submit"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                onClick={handleSalvar}
               >
                 Salvar endereço
               </button>
