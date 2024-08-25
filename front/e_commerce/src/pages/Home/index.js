@@ -34,14 +34,14 @@ const Home = () => {
 
   return (
     (loading && <Loading />) || (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4">
         {produtos.map((produto) => (
           <div key={produto.id} className="bg-white p-4 rounded-lg shadow-md">
             <Link to={`/produto/${produto.id}`}>
               <img
                 src={produto.imagem_prod}
                 alt={produto.nome_prod}
-                className="w-full h-48 object-cover rounded-lg mb-4"
+                className="w-full h-48 object-contain rounded-lg mb-4"
               />
               <div>
                 <h1 className="text-lg font-bold">{produto.nome_prod}</h1>

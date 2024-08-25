@@ -1,4 +1,4 @@
-const { Endereco, Cidade, Usuario } = require("../models/relacoes");
+const { Endereco, Cidade, Usuario, Estado } = require("../models/relacoes");
 
 const EnderecoController = {
   async Insert(req, res) {
@@ -10,6 +10,7 @@ const EnderecoController = {
         bairro,
         cep,
         cidadeId,
+        estadoId,
         usuarioId,
       } = req.body;
 
@@ -20,18 +21,19 @@ const EnderecoController = {
         bairro,
         cep,
         cidadeId,
+        estadoId,
         usuarioId,
       });
       res.status(201).json(endereco);
     } catch (err) {
-      res.status(500).json({ error: err});
+      res.status(500).json({ error: err });
     }
   },
 
   async SearchAll(req, res) {
     try {
       const enderecos = await Endereco.findAll({
-        include: [Cidade, Usuario],
+        include: [Cidade, Estado, Usuario],
       });
       res.status(200).json({ enderecos });
     } catch (error) {
@@ -65,6 +67,7 @@ const EnderecoController = {
         bairro,
         cep,
         cidadeId,
+        estadoId,
         usuarioId,
       } = req.body;
       const endereco = await Endereco.findByPk(id);
@@ -76,6 +79,7 @@ const EnderecoController = {
           bairro,
           cep,
           cidadeId,
+          estadoId,
           usuarioId,
         });
         res.status(200).json(endereco);

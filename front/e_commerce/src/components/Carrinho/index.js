@@ -10,15 +10,8 @@ import Loading from "../../components/Loading";
 import { SearchContext } from "../../contexts/SearchContext";
 
 const Carrinho = () => {
-  const [carrinho, setCarrinho] = useState([]);
   const [totalCarrinho, setTotalCarrinho] = useState(0);
-  const { loading, setLoading } = useContext(SearchContext);
-
-  useEffect(() => {
-    const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
-    setCarrinho(carrinhoStorage || []);
-    setLoading(false);
-  }, []);
+  const { loading, setLoading, carrinho, setCarrinho } = useContext(SearchContext);
 
   useEffect(() => {
     const total = carrinho.reduce(

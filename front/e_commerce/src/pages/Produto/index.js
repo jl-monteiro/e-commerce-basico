@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Button from "../../components/form/Button";
 import { SearchContext } from "../../contexts/SearchContext";
-import { useContext } from "react";
 import Loading from "../../components/Loading";
 
 const Produto = () => {
   const { id } = useParams();
   const [produto, setProduto] = useState({});
-  const { loading, setLoading } = useContext(SearchContext);
+  const { loading, setLoading, addCarrinho } = useContext(SearchContext);
 
   useEffect(() => {
     const fetchProduto = async () => {
@@ -27,42 +26,11 @@ const Produto = () => {
   }, [id]);
 
   function toBRL(preco) {
-    return (
-      preco &&
-      preco.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL",
-      })
-    );
-  }
-
-  const addCarrinho = () => {
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-
-    const produtoCarrinho = carrinho.findIndex((prod) => prod.id === id);
-
-    if (produtoCarrinho > -1) {
-      carrinho[produtoCarrinho].qtd += 1;
-    } else {
-      carrinho.push({
-        id: id,
-        nome_prod: produto.nome_prod,
-        preco_prod: produto.preco_prod,
-        imagem_prod: produto.imagem_prod,
-        qtd: 1,
-      });
-    }
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    console.log(carrinho);
-  };
-
-  function toBRL(preco) {
-    return preco.toLocaleString("pt-br", {
+    return parseInt(preco).toLocaleString("pt-br", {
       style: "currency",
       currency: "BRL",
     });
   }
-
   return (
     (loading && <Loading />) || (
       <div className="bg-background">
@@ -73,7 +41,7 @@ const Produto = () => {
               alt={produto.nome_prod}
               width={600}
               height={600}
-              className="rounded-lg object-cover w-full aspect-square"
+              className="rounded-lg object-none w-full aspect-square "
             />
           </div>
           <div className="flex flex-col gap-6">
@@ -87,13 +55,12 @@ const Produto = () => {
                 {produto.descricao_prod}
               </p>
               <div className="flex items-center gap-4">
-                <p className="text-4xl font-bold">R$ {produto.preco_prod}</p>
-                <Button
-                  Text="Adicionar ao carrinho"
-                  size="lg"
-                  onClick={addCarrinho}
-                />
+                <p className="text-4xl font-bold">{toBRL(produto.preco_prod)}</p>
               </div>
+              <Button
+                Text="Adicionar ao carrinho"
+                onClick={() => addCarrinho(id, produto)}
+              />
             </div>
           </div>
         </section>

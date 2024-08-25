@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //import { useContext } from "react";
 import useAuth from "../../../hooks/useAuth";
@@ -9,18 +9,12 @@ import { CiShoppingCart } from "react-icons/ci";
 import SearchBar from "../SearchBar";
 import Modal from "../../Modal";
 import Carrinho from "../../Carrinho";
+import { SearchContext } from "../../../contexts/SearchContext";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [carrinho, setCarrinho] = useState([]);
   const { signed, user } = useAuth();
-
-  useEffect(() => {
-    const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
-
-    setCarrinho(carrinhoStorage || []);
-  }, []);
-
+  const { carrinho } = useContext(SearchContext)
   const isAdmin = user && user.tipo === "admin";
 
   const openModal = () => {

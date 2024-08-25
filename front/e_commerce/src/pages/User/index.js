@@ -16,6 +16,7 @@ const User = () => {
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+  const [enderecos, setEnderecos] = useState([])
   const [editando, setEditando] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,8 +36,9 @@ const User = () => {
       setLogin(user.login);
       setEmail(user.email);
     }
+    fetchEndereco()
     setLoading(false);
-  }, [user]);
+  }, [user, isModalOpen]);
 
   const handleSave = () => {
     axios
@@ -54,6 +56,12 @@ const User = () => {
         alert("Erro ao atualizar os dados.");
       });
   };
+
+  const fetchEndereco = async () => {
+    const resEndereco = await axios.get("http://localhost:3003/sistema/enderecos")
+    const endereco = resEndereco.data.enderecos;
+    setEnderecos(endereco)
+  }
 
   if (!user) {
     return <Loading />;
@@ -141,9 +149,8 @@ const User = () => {
               </div>
 
               <div
-                className={`mt-6 text-center transition-opacity duration-300 ${
-                  editando ? "opacity-100" : "opacity-0"
-                }`}
+                className={`mt-6 text-center transition-opacity duration-300 ${editando ? "opacity-100" : "opacity-0"
+                  }`}
               >
                 <button
                   onClick={handleSave}
@@ -162,19 +169,19 @@ const User = () => {
                 <p className="text-sm text-gray-600">Gerencie seus endereços</p>
               </div>
               <div className="grid gap-4">
-                {/* enderecos map*/}
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">
-                      tipos de endereco (casa, comercial, residencial sla)
-                    </h3>
-                    <button className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                      Editar
-                    </button>
+                {enderecos.map((endereco) => (
+                  <div key={endereco.id} className="grid gap-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium">
+                        {endereco.logradouro}
+                      </h3>
+                      <button className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                        Editar
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-500">{endereco.estado.nome_estado}, {endereco.cidade.nome_cidade}, {endereco.bairro}, {endereco.logradouro}, {endereco.numero}, {endereco.complemento}, {endereco.cep}</p>
                   </div>
-                  <p className="text-sm text-gray-500">endereco completo</p>
-                </div>
-
+                ))}
                 <button
                   className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
                   onClick={openModal}

@@ -54,12 +54,14 @@ const Endereco = ({ onClose }) => {
         bairro,
         cep,
         cidadeId: cidade,
+        estadoId: estadoSelecionado,
         usuarioId: user.id
       })
     } catch (err) {
       console.error("Erro ao salvar dados:", err);
+      console.log(estadoSelecionado, user.id)
     }
-    finally{
+    finally {
       onClose()
     }
   }

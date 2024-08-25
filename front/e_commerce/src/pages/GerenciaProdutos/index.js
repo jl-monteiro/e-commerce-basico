@@ -55,7 +55,7 @@ const GerenciaProdutos = () => {
     };
     fetchProdutos();
     setLoading(false);
-  }, []);
+  }, [isModalOpen]);
 
   return (
     (loading && <Loading />) || (

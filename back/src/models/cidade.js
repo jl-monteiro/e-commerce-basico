@@ -1,7 +1,5 @@
 const Sequelize = require('sequelize');
 const conexao = require('../database/database');
-const Estado = require('./estado')
-const Endereco = require('./endereco')
 
 const Cidade = conexao.define('cidade', {
     id: {

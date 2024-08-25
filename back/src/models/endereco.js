@@ -33,7 +33,15 @@ const Endereco = conexao.define("endereco", {
   cidadeId: {
     type: Sequelize.INTEGER,
     references: {
-      model: "cidades", // nome da tabela referenciada
+      model: "cidades", 
+      key: "id",
+    },
+    allowNull: false,
+  },
+  estadoId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: "estados",
       key: "id",
     },
     allowNull: false,
