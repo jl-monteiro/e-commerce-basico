@@ -19,15 +19,18 @@ const User = () => {
   const [enderecos, setEnderecos] = useState([])
   const [editando, setEditando] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
 
   const { loading, setLoading } = useContext(SearchContext);
 
-  const openModal = () => {
+  const openModal = (tipo, endereco = null) => {
+    setEnderecoEmEdicao(endereco) 
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setEnderecoEmEdicao(null)
   };
 
   useEffect(() => {
@@ -175,7 +178,9 @@ const User = () => {
                       <h3 className="text-lg font-medium">
                         {endereco.logradouro}
                       </h3>
-                      <button className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                      <button
+                        className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+                        onClick={() => openModal("editar", endereco)}>
                         Editar
                       </button>
                     </div>
@@ -202,7 +207,7 @@ const User = () => {
         </div>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <Endereco onClose={closeModal} />
+          <Endereco onClose={closeModal} endereco={enderecoEmEdicao} />
         </Modal>
       </div>
     )

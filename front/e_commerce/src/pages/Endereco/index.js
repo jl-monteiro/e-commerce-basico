@@ -4,21 +4,22 @@ import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import useAuth from "../../hooks/useAuth";
 
-const Endereco = ({ onClose }) => {
+const Endereco = ({ onClose, endereco }) => {
   const { loading, setLoading } = useContext(SearchContext);
   const { user } = useAuth()
 
-  const [estadoSelecionado, setEstadoSelecionado] = useState("");
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
 
-  const [cidade, setCidade] = useState(0)
-  const [logradouro, setLogradouro] = useState("")
-  const [numero, setNumero] = useState("")
-  const [complemento, setComplemento] = useState("")
-  const [bairro, setBairro] = useState("")
-  const [cep, setCep] = useState("")
+  const [estadoSelecionado, setEstadoSelecionado] = useState(endereco ? endereco.estadoId : "") ;
+  const [cidade, setCidade] = useState(endereco ? endereco.cidadeId : "")
+  const [logradouro, setLogradouro] = useState(endereco ? endereco.logradouro : "")
+  const [numero, setNumero] = useState(endereco ? endereco.numero : "")
+  const [complemento, setComplemento] = useState(endereco ? endereco.complemento : "")
+  const [bairro, setBairro] = useState(endereco ? endereco.bairro : "")
+  const [cep, setCep] = useState(endereco ? endereco.cep : "")
+
   const [error, setError] = useState("")
 
   const fetchDados = async () => {
@@ -41,11 +42,19 @@ const Endereco = ({ onClose }) => {
 
   const handleSalvar = async (e) => {
     e.preventDefault()
+
     if (!logradouro || !numero || !complemento || !bairro || !cep || !cidade) {
       setError("Preencha todos os campos!")
-      console.log(logradouro, numero, complemento, bairro, cep, cidade)
+      //console.log(logradouro, numero, complemento, bairro, cep, cidade)
       return
     }
+
+    const cepRegex = /^[0-9]{5}-?[0-9]{3}$/
+    if (!cepRegex.test(cep)) {
+      setError("CEP inválido. Formato correto: XXXXX-XXX")
+      return
+    }
+
     try {
       await axios.post("http://localhost:3003/sistema/enderecos", {
         logradouro,
@@ -74,6 +83,19 @@ const Endereco = ({ onClose }) => {
 
     setCidadesFiltradas(filtrarCidades);
   };
+
+  const handleCep = (e) => {
+    const value = e.target.value
+
+    const onlyNum = value.replace(/\D/g, "")
+
+    let cepFormatado = onlyNum
+    if (onlyNum.length > 5) {
+      cepFormatado = `${onlyNum.slice(0, 5)}-${onlyNum.slice(5, 8)}`
+    }
+
+    setCep(cepFormatado)
+  }
 
   return (
     (loading && <Loading />) || (
@@ -119,6 +141,7 @@ const Endereco = ({ onClose }) => {
                 type="text"
                 placeholder="Rua, Avenida, etc."
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={logradouro}
                 onChange={(e) => setLogradouro(e.target.value)}
               />
             </div>
@@ -129,6 +152,7 @@ const Endereco = ({ onClose }) => {
                 type="text"
                 placeholder="Número do endereço"
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={numero}
                 onChange={(e) => setNumero(e.target.value)}
               />
             </div>
@@ -139,6 +163,7 @@ const Endereco = ({ onClose }) => {
                 type="text"
                 placeholder="Apartamento, casa, etc."
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={complemento}
                 onChange={(e) => setComplemento(e.target.value)}
               />
             </div>
@@ -149,6 +174,7 @@ const Endereco = ({ onClose }) => {
                 type="text"
                 placeholder="Bairro"
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={bairro}
                 onChange={(e) => setBairro(e.target.value)}
               />
             </div>
@@ -159,7 +185,8 @@ const Endereco = ({ onClose }) => {
                 type="text"
                 placeholder="00000-000"
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
-                onChange={(e) => setCep(e.target.value)}
+                value={cep}
+                onChange={handleCep}
               />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
