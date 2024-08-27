@@ -12,7 +12,7 @@ const Endereco = ({ onClose, endereco }) => {
   const [cidades, setCidades] = useState([]);
   const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
 
-  const [estadoSelecionado, setEstadoSelecionado] = useState(endereco ? endereco.estadoId : "") ;
+  const [estadoSelecionado, setEstadoSelecionado] = useState(endereco ? endereco.estadoId : "");
   const [cidade, setCidade] = useState(endereco ? endereco.cidadeId : "")
   const [logradouro, setLogradouro] = useState(endereco ? endereco.logradouro : "")
   const [numero, setNumero] = useState(endereco ? endereco.numero : "")
@@ -39,6 +39,11 @@ const Endereco = ({ onClose, endereco }) => {
   useEffect(() => {
     fetchDados();
   }, []);
+
+  useEffect(() => {
+    const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(estadoSelecionado, 10));
+    setCidades(filtrarCidades)
+  }, [estadoSelecionado, cidades])
 
   const handleSalvar = async (e) => {
     e.preventDefault()
@@ -82,6 +87,7 @@ const Endereco = ({ onClose, endereco }) => {
     const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(idEstado, 10));
 
     setCidadesFiltradas(filtrarCidades);
+    setCidade("")
   };
 
   const handleCep = (e) => {
@@ -126,6 +132,7 @@ const Endereco = ({ onClose, endereco }) => {
                 id="cidadeId"
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 disabled={!estadoSelecionado}
+                value={cidade}
                 onChange={(e) => setCidade(e.target.value)}
               >
                 <option value="" disabled>Selecione a cidade</option>

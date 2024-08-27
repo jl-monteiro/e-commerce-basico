@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 //import { useContext } from "react";
 import useAuth from "../../../hooks/useAuth";
@@ -86,7 +86,7 @@ const Header = () => {
         </div>
       </header>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Carrinho />
+        <Carrinho onClose={closeModal}/>
       </Modal>
     </>
   );
