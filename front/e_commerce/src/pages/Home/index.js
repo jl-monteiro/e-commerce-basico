@@ -34,7 +34,7 @@ const Home = () => {
 
   return (
     (loading && <Loading />) || (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-7 p-20">
         {produtos.map((produto) => (
           <div key={produto.id} className="bg-white p-4 rounded-lg shadow-md">
             <Link to={`/produto/${produto.id}`}>
