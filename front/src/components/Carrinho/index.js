@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import Button from "../form/Button";
 import { CiTrash } from "react-icons/ci";
@@ -9,7 +9,7 @@ import Loading from "../../components/Loading";
 
 import { SearchContext } from "../../contexts/SearchContext";
 
-const Carrinho = () => {
+const Carrinho = ({ onClose }) => {
   const [totalCarrinho, setTotalCarrinho] = useState(0);
   const { loading, setLoading, carrinho, setCarrinho } = useContext(SearchContext);
 
@@ -21,7 +21,7 @@ const Carrinho = () => {
     setTotalCarrinho(total);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     setLoading(false)
-  }, [carrinho]);
+  }, [carrinho, setLoading]);
 
   const handleRemoveProd = (id) => {
     const newCarrinho = carrinho.filter((prod) => prod.id !== id);
@@ -120,10 +120,9 @@ const Carrinho = () => {
                   R$ {totalCarrinho.toFixed(2)}
                 </p>
               </div>
-              <Button
-                Text="Finalizar Compra"
-                className="w-full mt-6 rounded-lg py-2 px-4 transition duration-300"
-              ></Button>
+              <Link to="/pay" onClick={onClose}>
+                <Button Text="Finalizar Compra" className="w-full mt-6 rounded-lg py-2 px-4 transition duration-300" />
+              </Link>
             </div>
           </div>
         )}
