@@ -20,6 +20,7 @@ const Carrinho = () => {
     );
     setTotalCarrinho(total);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    setLoading(false)
   }, [carrinho]);
 
   const handleRemoveProd = (id) => {

@@ -12,7 +12,7 @@ const Endereco = ({ onClose, endereco }) => {
   const [cidades, setCidades] = useState([]);
   const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
 
-  const [estadoSelecionado, setEstadoSelecionado] = useState(endereco ? endereco.estadoId : "") ;
+  const [estadoSelecionado, setEstadoSelecionado] = useState(endereco ? endereco.estadoId : "");
   const [cidade, setCidade] = useState(endereco ? endereco.cidadeId : "")
   const [logradouro, setLogradouro] = useState(endereco ? endereco.logradouro : "")
   const [numero, setNumero] = useState(endereco ? endereco.numero : "")
@@ -40,6 +40,13 @@ const Endereco = ({ onClose, endereco }) => {
     fetchDados();
   }, []);
 
+  useEffect(() => {
+    if (estadoSelecionado) {
+      const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(estadoSelecionado, 10))
+      setCidadesFiltradas(filtrarCidades)
+    }
+  }, [estadoSelecionado, cidades])
+
   const handleSalvar = async (e) => {
     e.preventDefault()
 
@@ -56,16 +63,29 @@ const Endereco = ({ onClose, endereco }) => {
     }
 
     try {
-      await axios.post("http://localhost:3003/sistema/enderecos", {
-        logradouro,
-        numero,
-        complemento,
-        bairro,
-        cep,
-        cidadeId: cidade,
-        estadoId: estadoSelecionado,
-        usuarioId: user.id
-      })
+      if (endereco) {
+        await axios.put(`http://localhost:3003/sistema/enderecos/${endereco.id}`, {
+          logradouro,
+          numero,
+          complemento,
+          bairro,
+          cep,
+          cidadeId: cidade,
+          estadoId: estadoSelecionado,
+          usuarioId: user.id
+        })
+      } else {
+        await axios.post("http://localhost:3003/sistema/enderecos", {
+          logradouro,
+          numero,
+          complemento,
+          bairro,
+          cep,
+          cidadeId: cidade,
+          estadoId: estadoSelecionado,
+          usuarioId: user.id
+        })
+      }
     } catch (err) {
       console.error("Erro ao salvar dados:", err);
       console.log(estadoSelecionado, user.id)
@@ -82,6 +102,7 @@ const Endereco = ({ onClose, endereco }) => {
     const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(idEstado, 10));
 
     setCidadesFiltradas(filtrarCidades);
+    setCidade("")
   };
 
   const handleCep = (e) => {
@@ -126,6 +147,7 @@ const Endereco = ({ onClose, endereco }) => {
                 id="cidadeId"
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 disabled={!estadoSelecionado}
+                value={cidade}
                 onChange={(e) => setCidade(e.target.value)}
               >
                 <option value="" disabled>Selecione a cidade</option>
@@ -149,7 +171,7 @@ const Endereco = ({ onClose, endereco }) => {
               <label htmlFor="numero" className="block text-sm font-medium text-gray-700">Número</label>
               <input
                 id="numero"
-                type="text"
+                type="number"
                 placeholder="Número do endereço"
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
                 value={numero}
