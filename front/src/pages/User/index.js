@@ -8,6 +8,7 @@ import Modal from "../../components/Modal";
 import Endereco from "../Endereco";
 
 import { FaRegUserCircle } from "react-icons/fa";
+import Alerta from "../../components/Alerta";
 
 const User = () => {
   const { deslogar, user } = useAuth();
@@ -23,8 +24,11 @@ const User = () => {
 
   const { loading, setLoading } = useContext(SearchContext);
 
+  const [msg, setMsg] = useState("")
+  const [msgShow, setMsgShow] = useState(false)
+
   const openModal = (tipo, endereco = null) => {
-    setEnderecoEmEdicao(endereco) 
+    setEnderecoEmEdicao(endereco)
     setIsModalOpen(true);
   };
 
@@ -50,9 +54,10 @@ const User = () => {
         login,
         email,
       })
-      .then((response) => {
+      .then(() => {
         setEditando(false);
-        alert("Dados atualizados com sucesso!");
+        setMsg("Dados atualizados com sucesso.")
+        setMsgShow(true)
       })
       .catch((error) => {
         console.error(error);
@@ -66,13 +71,11 @@ const User = () => {
     setEnderecos(endereco)
   }
 
-  if (!user) {
-    return <Loading />;
-  }
-
   return (
     (loading && <Loading />) || (
       <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
+
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
             <div className="border rounded-lg p-6 bg-white shadow-md">

@@ -5,8 +5,7 @@ import Button from "../../components/form/Button";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 
-import Alert from '@mui/material/Alert'
-import Snackbar from '@mui/material/Snackbar';
+import Alerta from "../../components/Alerta";
 
 const Produto = () => {
   const { id } = useParams();
@@ -47,11 +46,9 @@ const Produto = () => {
   return (
     (loading && <Loading />) || (
       <div className="bg-background">
-        {msgShow && (
-          <Snackbar open={msgShow} autoHideDuration={3000} onClose={() => setMsgShow(false)}>
-            <Alert onClose={() => setMsgShow(false)} severity="success">{msg}</Alert>
-          </Snackbar>
-        )}
+
+        <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
+
         <section className="grid md:grid-cols-2 gap-8 px-4 md:px-6 py-12 md:py-20 max-w-6xl mx-auto">
           <div className="flex flex-col gap-6">
             <img
