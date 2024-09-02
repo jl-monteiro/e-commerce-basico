@@ -29,6 +29,7 @@ router.post("/produtos/delete-image", ProdutoController.DeleteImg);
 // Rotas da tabela endereco
 router.post("/enderecos", EnderecoController.Insert);
 router.get("/enderecos", EnderecoController.SearchAll);
+router.get("/enderecos/usuario/:idUser", EnderecoController.SearchByUser);
 router.get("/enderecos/:id", EnderecoController.SearchOne);
 router.put("/enderecos/:id", EnderecoController.Update);
 router.delete("/enderecos/:id", EnderecoController.Delete);

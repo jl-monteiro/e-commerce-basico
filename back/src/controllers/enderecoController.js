@@ -41,6 +41,30 @@ const EnderecoController = {
     }
   },
 
+  async SearchByUser(req, res) {
+    try {
+      const { idUser } = req.params
+      const enderecos = await Endereco.findAll({
+        include: [Cidade, Estado, Usuario],
+        where: {
+          usuarioId: idUser
+        },
+
+      }
+      )
+      if (enderecos) {
+        res.status(200).json({ enderecos });
+      }
+      else {
+        res.status(404).json({ message: "Endereco de usuario nao encontrado" });
+      }
+    }
+    catch (err) {
+      console.error('Erro ao buscar endereços:', err);
+      res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+  },
+
   async SearchOne(req, res) {
     try {
       const { id } = req.params;

@@ -66,7 +66,7 @@ const User = () => {
   };
 
   const fetchEndereco = async () => {
-    const resEndereco = await axios.get("http://localhost:3003/sistema/enderecos")
+    const resEndereco = await axios.get(`http://localhost:3003/sistema/enderecos/usuario/${user.id}`)
     const endereco = resEndereco.data.enderecos;
     setEnderecos(endereco)
   }
