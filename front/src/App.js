@@ -15,6 +15,7 @@ import Produto from "./pages/Produto";
 import GerenciaProdutos from "./pages/GerenciaProdutos";
 import { SearchProvider } from "./contexts/SearchContext";
 import Pagamento from "./pages/Pagamento";
+import Footer from "./components/layout/Footer";
 
 const Private = ({ Item, GoTo }) => {
   const { signed } = useAuth();
@@ -45,7 +46,7 @@ const RoutesApp = () => {
             element={<Private Item={User} GoTo={Login} />}
           />
 
-           <Route
+          <Route
             exact
             path="/pay"
             element={<Private Item={Pagamento} GoTo={Login} />}
@@ -72,6 +73,7 @@ const RoutesApp = () => {
 
           <Route path="*" element={<Private Item={Home} />} />
         </Routes>
+        <Footer />
       </Fragment>
     </BrowserRouter>
   );

@@ -1,15 +1,24 @@
-import React from 'react';
+import React from "react";
+import { cn } from "../../ui/lib/utils"; // Certifique-se de que a função cn está definida ou importada
 
-const Button = ({ Text, onClick, Type = "button", className}) => {
+const Button = React.forwardRef(({ variant = "black", className, Text, ...props }, ref) => {
+  const baseStyles = "px-4 py-2 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all";
+  const variants = {
+    black: "bg-black text-white hover:bg-gray-900 focus:ring-gray-800",
+    white: "bg-white text-black hover:bg-gray-100 focus:ring-gray-300 border border-gray-300",
+  };
+
   return (
     <button
-      type={Type}
-      onClick={onClick}
-      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded ${className}`}
+      ref={ref}
+      className={cn(baseStyles, variants[variant], className)}
+      {...props}
     >
       {Text}
     </button>
   );
-};
+});
+
+Button.displayName = "Button";
 
 export default Button;

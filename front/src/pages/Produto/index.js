@@ -38,7 +38,7 @@ const Produto = () => {
   }
 
   const handleAddCarrinho = (id, produto) => {
-    addCarrinho(id, produto)
+    addCarrinho(parseInt(id), produto)
     setMsg("Adicionado ao carrinho com sucesso.")
     setMsgShow(true)
   }
