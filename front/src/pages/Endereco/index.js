@@ -3,6 +3,7 @@ import axios from "axios";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import useAuth from "../../hooks/useAuth";
+import debounce from 'lodash/debounce'
 
 const Endereco = ({ onClose, endereco }) => {
   const { loading, setLoading } = useContext(SearchContext);
@@ -105,11 +106,36 @@ const Endereco = ({ onClose, endereco }) => {
     setCidade("")
   };
 
-  const handleCep = (e) => {
+  const cepComplete = async () => {
+    if (!cep) return
+    console.log(cep)
+
+    try {
+      const apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
+      const res = await axios.get(apiUrl)
+      const data = res.data
+
+      if (data.erro) {
+        setError("CEP não encontrado.")
+        setBairro("")
+        setLogradouro("")
+        return
+      }
+
+      setBairro(data.bairro || "")
+      setLogradouro(data.logradouro || "")
+      setError("")
+    }
+    catch (err) {
+      console.error("Erro ao buscar dados do CEP:", err);
+      setError("Erro ao buscar dados do CEP.");
+    }
+  }
+
+  const handleCep = async (e) => {
     const value = e.target.value
 
     const onlyNum = value.replace(/\D/g, "")
-
     let cepFormatado = onlyNum
     if (onlyNum.length > 5) {
       cepFormatado = `${onlyNum.slice(0, 5)}-${onlyNum.slice(5, 8)}`
@@ -117,6 +143,7 @@ const Endereco = ({ onClose, endereco }) => {
 
     setCep(cepFormatado)
   }
+
 
   return (
     (loading && <Loading />) || (
@@ -157,6 +184,18 @@ const Endereco = ({ onClose, endereco }) => {
               </select>
             </div>
             <div className="grid gap-2">
+              <label htmlFor="CEP" className="block text-sm font-medium text-gray-700">CEP</label>
+              <input
+                id="CEP"
+                type="text"
+                placeholder="00000-000"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={cep}
+                onChange={handleCep}
+                onBlur={cepComplete}
+              />
+            </div>
+            <div className="grid gap-2">
               <label htmlFor="logradouro" className="block text-sm font-medium text-gray-700">Logradouro</label>
               <input
                 id="logradouro"
@@ -165,6 +204,17 @@ const Endereco = ({ onClose, endereco }) => {
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
                 value={logradouro}
                 onChange={(e) => setLogradouro(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <label htmlFor="Bairro" className="block text-sm font-medium text-gray-700">Bairro</label>
+              <input
+                id="Bairro"
+                type="text"
+                placeholder="Bairro"
+                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
+                value={bairro}
+                onChange={(e) => setBairro(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -189,28 +239,8 @@ const Endereco = ({ onClose, endereco }) => {
                 onChange={(e) => setComplemento(e.target.value)}
               />
             </div>
-            <div className="grid gap-2">
-              <label htmlFor="Bairro" className="block text-sm font-medium text-gray-700">Bairro</label>
-              <input
-                id="Bairro"
-                type="text"
-                placeholder="Bairro"
-                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
-                value={bairro}
-                onChange={(e) => setBairro(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="CEP" className="block text-sm font-medium text-gray-700">CEP</label>
-              <input
-                id="CEP"
-                type="text"
-                placeholder="00000-000"
-                className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
-                value={cep}
-                onChange={handleCep}
-              />
-            </div>
+
+
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <div className="flex justify-end gap-4 mt-4">

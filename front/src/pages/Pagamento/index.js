@@ -4,7 +4,7 @@ import { SearchContext } from '../../contexts/SearchContext';
 import Loading from '../../components/Loading';
 import { IoMdClipboard } from "react-icons/io";
 
-import {QrCodePix} from 'qrcode-pix'
+import { QrCodePix } from 'qrcode-pix'
 
 const Pagamento = () => {
     const [totalCarrinho, setTotalCarrinho] = useState(0)
@@ -12,7 +12,7 @@ const Pagamento = () => {
     const [qrCode, setQrCode] = useState('');
     const [rawPix, setRawPix] = useState('');
 
-    
+
     useEffect(() => {
         const total = carrinho.reduce(
             (acc, prod) => acc + prod.preco_prod * prod.qtd,
@@ -62,7 +62,13 @@ const Pagamento = () => {
         generateDynamicPix();
     }, [totalCarrinho])
 
-    
+    function toBRL(preco) {
+        return preco.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
+        });
+    }
+
     return (
         (loading && <Loading />) || (
 
@@ -81,10 +87,10 @@ const Pagamento = () => {
 
                 <div className="relative mb-6">
                     <code className="block p-4 bg-gray-100 border border-gray-300 rounded-md text-gray-800 break-all">{rawPix}</code>
-                    <IoMdClipboard className="cursor-pointer" onClick={copyToClipboard}/>
+                    <IoMdClipboard className="cursor-pointer" onClick={copyToClipboard} />
                 </div>
 
-                <p className="font-semibold text-lg text-gray-800">Valor: R$ {totalCarrinho.toFixed(2)}</p>
+                <p className="font-semibold text-lg text-gray-800">Valor: R$ {toBRL(totalCarrinho)}</p>
             </div>
         ))
 }
