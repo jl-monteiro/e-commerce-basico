@@ -1,13 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 
 import Input from "../../form/Input";
+
 
 import { SearchContext } from "../../../contexts/SearchContext";
 
 const SearchBar = () => {
   const [valorSearch, setValorSearch] = useState("");
   const { setProdutos, setLoading } = useContext(SearchContext);
+
+  
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -33,6 +36,7 @@ const SearchBar = () => {
 
   return (
     <div className="relative w-full max-w-xs sm:max-w-md mx-auto">
+      
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <svg
           xmlns="http://www.w3.org/2000/svg"

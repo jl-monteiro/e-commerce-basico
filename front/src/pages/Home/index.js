@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Button from '../../components/form/Button'
 
 import Loading from "../../components/Loading";
-import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../../components/ui/index.js'
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../../components/ui/Card'
 import Alerta from "../../components/Alerta";
 
 import { SearchContext } from "../../contexts/SearchContext";
@@ -17,17 +17,51 @@ const Home = () => {
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
 
+  const [categorias, setCategorias] = useState([])
+  const [categoria, setCategoria] = useState("")
+  const [produtosOriginais, setProdutosOriginais] = useState([])
+
+  const fetchCategorias = async () => {
+    try {
+      const res = await axios.get("http://localhost:3003/sistema/categorias")
+      setCategorias(res.data)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchProdutos = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3003/sistema/produtos"
+      );
+      setProdutosOriginais(response.data)
+      setProdutos(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCategoriaChange = (e) => {
+    const categoriaSelecionada = e.target.value
+    setCategoria(categoriaSelecionada)
+
+    if (categoriaSelecionada === "todos") {
+      setProdutos(produtosOriginais)
+    }
+    else {
+      const produtosFiltrados = produtosOriginais.filter((produto) => produto.categoriaId === parseInt(categoriaSelecionada))
+      setProdutos(produtosFiltrados)
+    }
+  }
+
   useEffect(() => {
-    const fetchProdutos = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3003/sistema/produtos"
-        );
-        setProdutos(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    fetchCategorias()
+  }, [])
+
+  useEffect(() => {
+
     fetchProdutos();
     setLoading(false);
   }, []);
@@ -67,9 +101,26 @@ const Home = () => {
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <div className="container mx-auto px-4 md:px-6">
+
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-center mb-12 text-gray-800">
               Produtos
             </h2>
+            <label>Filtrar: </label>
+            <select
+              id="categoria"
+              value={categoria}
+              onChange={handleCategoriaChange}
+              className="w-24 h-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="todos">
+                Todos
+              </option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>
+                  {categoria.nome_categoria}
+                </option>
+              ))}
+            </select>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {produtos.map((produto) => (
                 <div key={produto.id}>

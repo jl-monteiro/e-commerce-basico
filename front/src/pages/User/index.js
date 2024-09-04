@@ -8,6 +8,10 @@ import Modal from "../../components/Modal";
 import Endereco from "../Endereco";
 
 import { FaRegUserCircle } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+
+import { Confirm } from 'react-admin'
+
 import Alerta from "../../components/Alerta";
 
 const User = () => {
@@ -17,10 +21,17 @@ const User = () => {
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+
   const [enderecos, setEnderecos] = useState([])
+
   const [editando, setEditando] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
+
+  const [openDialog, setOpenDialog] = useState(false)
+  const [idRemove, setIdRemove] = useState(null)
+
   const [error, setError] = useState("")
 
   const { loading, setLoading } = useContext(SearchContext);
@@ -66,6 +77,25 @@ const User = () => {
       });
   };
 
+  const handleExcluirEndereco = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3003/sistema/enderecos/${id}`)
+      fetchEndereco()
+    }
+    catch (error) {
+      console.error(error)
+    }
+    finally{
+      handleDialogClose()
+    }
+  }
+
+  const handleClick = (enderId) => {
+    setOpenDialog(true)
+    setIdRemove(enderId)
+  }
+  const handleDialogClose = () => setOpenDialog(false);
+
   const fetchEndereco = async () => {
     const resEndereco = await axios.get(`http://localhost:3003/sistema/enderecos/usuario/${user.id}`)
     const endereco = resEndereco.data.enderecos;
@@ -76,6 +106,16 @@ const User = () => {
     (loading && <Loading />) || (
       <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
+
+        <Confirm
+          isOpen={openDialog}
+          title={`Deletar endereco?`}
+          content="Tem certeza que deseja deletar este endereco?"
+          onConfirm={() => handleExcluirEndereco(idRemove)}
+          onClose={handleDialogClose}
+          confirm={"Deletar"}
+          cancel={"Cancelar"}
+        />
 
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
@@ -180,16 +220,24 @@ const User = () => {
               <div className="grid gap-4">
                 {enderecos.map((endereco) => (
                   <div key={endereco.id} className="grid gap-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between ">
                       <h3 className="text-lg font-medium">
                         {endereco.logradouro}
                       </h3>
-                      <button
-                        className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
-                        onClick={() => openModal("editar", endereco)}>
-                        Editar
-                      </button>
+                      <div className="flex gap-4 items-end justify-end">
+                        <button
+                          className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+                          onClick={() => openModal("editar", endereco)}>
+                          Editar
+                        </button>
+                        <button
+                          className="px-2 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+                          onClick={() => handleClick(endereco.id)}>
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
+
                     <p className="text-sm text-gray-500">{endereco.estado.nome_estado}, {endereco.cidade.nome_cidade}, {endereco.bairro}, {endereco.logradouro}, {endereco.numero}, {endereco.complemento}, {endereco.cep}</p>
                   </div>
                 ))}

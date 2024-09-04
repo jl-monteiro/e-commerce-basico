@@ -117,19 +117,21 @@ const CadProdutos = ({ onClose, produto }) => {
             className="mb-4"
           />
 
-          <label className="block mb-2">Categoria do Produto</label>
-          <select
-            id="categoriaId"
-            className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)}
-          >
-            <option value="" disabled>Selecione a categoria</option>
-            {categorias.map((categoria) => (
-              <option key={categoria.id} value={categoria.id}>{categoria.nome_categoria}</option>
-            ))}
-          </select>
+          <div className="py-4">
+            <label className="block mb-2">Categoria do Produto</label>
 
+            <select
+              id="categoriaId"
+              className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              value={categoriaId}
+              onChange={(e) => setCategoriaId(e.target.value)}
+            >
+              <option value="" disabled>Selecione a categoria</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>{categoria.nome_categoria}</option>
+              ))}
+            </select>
+          </div>
           <input
             type="file"
             id="image"

@@ -140,7 +140,7 @@ const Carrinho = ({ onClose }) => {
                                     R$ {totalCarrinho.toFixed(2)}
                                 </p>
                             </div>
-                            <Link to="/pay" onClick={onClose}>
+                            <Link to="/compra" onClick={onClose}>
                                 <Button Text="Finalizar Compra" className="w-full mt-6 rounded-lg py-2 px-4 transition duration-300" />
                             </Link>
                         </div>

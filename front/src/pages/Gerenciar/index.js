@@ -8,7 +8,7 @@ import CadProdutos from "../CadProdutos";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import CadCategoria from "../CadCategoria";
-import { Card, CardHeader, CardTitle } from "../../components/ui";
+import { Card, CardHeader, CardTitle } from "../../components/ui/Card";
 
 const Gerenciar = () => {
   const [isModalProdutoOpen, setIsModalProdutoOpen] = useState(false);
@@ -121,6 +121,7 @@ const Gerenciar = () => {
                   <th className="p-4 text-left">Nome</th>
                   <th className="p-4 text-left">Descricao</th>
                   <th className="p-4 text-left">Preco</th>
+                  <th className="p-4 text-left">Categoria</th>
                   <th className="p-4 text-left">Acoes</th>
                 </tr>
               </thead>
@@ -131,6 +132,7 @@ const Gerenciar = () => {
                     <td className="p-4">{produto.nome_prod}</td>
                     <td className="p-4">{produto.descricao_prod}</td>
                     <td className="p-4">{produto.preco_prod}</td>
+                    <td className="p-4">{produto.categoria}</td>
                     <td className="p-4 flex space-x-2">
                       <Button
                         Text="Editar"

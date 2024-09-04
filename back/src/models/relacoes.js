@@ -1,7 +1,7 @@
-const Usuario = require('./usuario'); 
-const Endereco = require('./endereco'); 
-const Estado = require('./estado'); 
-const Cidade = require('./cidade'); 
+const Usuario = require('./usuario');
+const Endereco = require('./endereco');
+const Estado = require('./estado');
+const Cidade = require('./cidade');
 const Categoria = require('./categoria');
 const Produto = require('./produto');
 
@@ -16,8 +16,8 @@ Estado.hasMany(Cidade, { foreignKey: 'estadoId' });
 Endereco.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 Usuario.hasMany(Endereco, { foreignKey: 'usuarioId' });
 
-Produto.belongsTo(Categoria, {foreignKey: 'categoriaId'})
-Categoria.hasMany(Produto, {foreignKey: 'categoriaId'})
+Produto.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'Categoria' })
+Categoria.hasMany(Produto, { foreignKey: 'categoriaId', as: 'Categoria' })
 
 module.exports = {
   Usuario,

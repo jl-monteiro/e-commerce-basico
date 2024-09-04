@@ -39,36 +39,44 @@ exports.Insert = async (req, res, next) => {
   }
 };
 
-exports.SearchAll = (req, res, next) => {
-  const searchQuery = req.query.search
+exports.SearchAll = async (req, res, next) => {
+  try {
+    const searchQuery = req.query.search;
 
-  let whereCondition = {}
+    const whereCondition = searchQuery
+      ? {
+          nome_prod: {
+            [Op.like]: `%${searchQuery}%`,
+          },
+        }
+      : {};
 
-  if (searchQuery) {
-    whereCondition = {
-      nome_prod: {
-        [Op.like]: `%${searchQuery}%`,
-      }
-    }
+    const produtos = await Produto.findAll({
+      where: whereCondition,
+      include: [{
+        model: Categoria,
+        as: 'Categoria', 
+      }],
+    });
+
+    const produtosUrl = produtos.map((produto) => ({
+      id: produto.id,
+      nome_prod: produto.nome_prod,
+      descricao_prod: produto.descricao_prod,
+      preco_prod: produto.preco_prod,
+      imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
+      categoriaId: produto.categoriaId,
+      categoria: produto.Categoria, 
+      createdAt: produto.createdAt,
+      updatedAt: produto.updatedAt,
+    }));
+
+    res.status(status.OK).json(produtosUrl);
+  } catch (error) {
+    next(error);
   }
-
-  Produto.findAll({ where: whereCondition })
-    .then((produtos) => {
-      const produtosUrl = produtos.map((produto) => ({
-        id: produto.id,
-        nome_prod: produto.nome_prod,
-        descricao_prod: produto.descricao_prod,
-        preco_prod: produto.preco_prod,
-        imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
-        categoriaId: produto.categoriaId,
-        createdAt: produto.createdAt,
-        updatedAt: produto.updatedAt,
-      }));
-
-      res.status(status.OK).send(produtosUrl);
-    })
-    .catch((error) => next(error));
 };
+
 
 exports.SearchOne = (req, res, next) => {
   const id = req.params.id;

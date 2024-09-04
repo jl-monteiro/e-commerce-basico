@@ -1,7 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //import { useContext } from "react";
+import axios from "axios";
+
 import useAuth from "../../../hooks/useAuth";
+
 
 import { RxAvatar } from "react-icons/rx";
 import { CiShoppingCart } from "react-icons/ci";
@@ -15,8 +18,30 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { signed, user } = useAuth();
   const { carrinho } = useContext(SearchContext)
+
+  const [categorias, setCategorias] = useState([])
+  const [categoria, setCategoria] = useState("")
+
   const isAdmin = user && user.tipo === "admin";
 
+  const fetchCategorias = async () => {
+    try {
+      const res = await axios.get("http://localhost:3003/sistema/categorias")
+      setCategorias(res.data)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleCategoriaChange = (e) => {
+    setCategoria(e.target.value)
+  }
+
+  useEffect(() => {
+    fetchCategorias()
+  }, [])
+  
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -24,6 +49,7 @@ const Header = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
 
   return (
     <>
@@ -34,8 +60,10 @@ const Header = () => {
               JL
             </Link>
           </div>
+          <div className="flex items-center gap-2">
 
-          <SearchBar />
+            <SearchBar />
+          </div>
 
           <div className="flex items-center space-x-4">
             {isAdmin && (
@@ -86,7 +114,7 @@ const Header = () => {
         </div>
       </header>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Carrinho onClose={closeModal}/>
+        <Carrinho onClose={closeModal} />
       </Modal>
     </>
   );

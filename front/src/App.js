@@ -16,6 +16,7 @@ import Gerenciar from "./pages/Gerenciar";
 import { SearchProvider } from "./contexts/SearchContext";
 import Pagamento from "./pages/Pagamento";
 import Footer from "./components/layout/Footer";
+import ConfirmCompra from "./pages/ConfirmCompra";
 
 const Private = ({ Item, GoTo }) => {
   const { signed } = useAuth();
@@ -44,6 +45,12 @@ const RoutesApp = () => {
             exact
             path="/user"
             element={<Private Item={User} GoTo={Login} />}
+          />
+
+          <Route
+            exact
+            path="/compra"
+            element={<Private Item={ConfirmCompra} GoTo={Login} />}
           />
 
           <Route
