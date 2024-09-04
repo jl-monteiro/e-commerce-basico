@@ -7,13 +7,19 @@ import Button from "../../components/form/Button";
 const CadCategoria = ({ onClose, categoria }) => {
     const [nome_categoria, setNome_categoria] = useState(categoria ? categoria.nome_categoria : "")
     const [error, setError] = useState("")
+
     const handleSalvar = async () => {
-        if(!nome_categoria){
+        if (!nome_categoria) {
             setError("Preencha os campos!")
             return
         }
         try {
-            await axios.post("http://localhost:3003/sistema/categorias", {nome_categoria})
+            if (categoria) {
+                await axios.put(`http://localhost:3003/sistema/categorias/${categoria.id}`)
+            }
+            else {
+                await axios.post("http://localhost:3003/sistema/categorias", { nome_categoria })
+            }
             onClose()
         }
         catch (error) {

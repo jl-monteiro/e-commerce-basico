@@ -84,15 +84,15 @@ const Home = () => {
                       </CardHeader>
                       <CardContent>
                         <CardTitle className="text-gray-800">{produto.nome_prod}</CardTitle>
-                        <CardDescription className="text-gray-600 line-clamp-2">
+                        <CardDescription className="text-gray-600 line-clamp-1">
                           {produto.descricao_prod}
                         </CardDescription>
                       </CardContent>
                     </Link>
                     <CardFooter className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
+                      <span className="text-sm font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
                       {user && (
-                        <Button Text={"Adicionar ao Carrinho"} variant="black" onClick={() => (handleAddCarrinho(produto.id, produto))} />
+                        <Button Text={"Adicionar ao Carrinho"} className={""} variant="black" onClick={() => (handleAddCarrinho(produto.id, produto))} />
                       )}
                     </CardFooter>
                   </Card>

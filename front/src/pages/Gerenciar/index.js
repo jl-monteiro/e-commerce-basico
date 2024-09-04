@@ -8,6 +8,7 @@ import CadProdutos from "../CadProdutos";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import CadCategoria from "../CadCategoria";
+import { Card, CardHeader, CardTitle } from "../../components/ui";
 
 const Gerenciar = () => {
   const [isModalProdutoOpen, setIsModalProdutoOpen] = useState(false);
@@ -18,6 +19,8 @@ const Gerenciar = () => {
 
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([])
+
+  const [error, setError] = useState("")
 
   const { loading, setLoading } = useContext(SearchContext);
 
@@ -52,10 +55,12 @@ const Gerenciar = () => {
       setProdutos(response.data);
     } catch (err) {
       console.error(err);
+
     }
   };
 
   const handleExcluirCategoria = async (id) => {
+    console.log(id)
     try {
       await axios.delete(`http://localhost:3003/sistema/categorias/${id}`)
       const response = await axios.get(
@@ -64,7 +69,8 @@ const Gerenciar = () => {
       setCategorias(response.data);
     }
     catch (error) {
-      console.error(error)
+      console.error("erro: ",error)
+      setError(error.response.data.error)
     }
   }
 
@@ -90,7 +96,7 @@ const Gerenciar = () => {
     fetchCategorias()
     fetchProdutos();
     setLoading(false);
-  }, [isModalProdutoOpen]);
+  }, [isModalProdutoOpen, isModalCategoriaOpen]);
 
   return (
     (loading && <Loading />) || (
@@ -104,10 +110,14 @@ const Gerenciar = () => {
 
         <div className="flex flex-wrap justify-center space-x-8">
           {/* CRUD PRODUTOS */}
-          <div className="w-full max-w-4xl">
+          <Card>
+            <CardHeader>
+              <CardTitle>PRODUTOS</CardTitle>
+            </CardHeader>
             <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
               <thead>
                 <tr className="border-b">
+                  <th className="p-4 text-left">ID</th>
                   <th className="p-4 text-left">Nome</th>
                   <th className="p-4 text-left">Descricao</th>
                   <th className="p-4 text-left">Preco</th>
@@ -117,6 +127,7 @@ const Gerenciar = () => {
               <tbody>
                 {produtos.map((produto) => (
                   <tr key={produto.id} className="border-b">
+                    <td className="p-4">{produto.id}</td>
                     <td className="p-4">{produto.nome_prod}</td>
                     <td className="p-4">{produto.descricao_prod}</td>
                     <td className="p-4">{produto.preco_prod}</td>
@@ -136,23 +147,25 @@ const Gerenciar = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+          </Card>
 
           {/* CRUD CATEGORIAS */}
-          <div className="w-full max-w-2xl">
-            <h2 className="text-2xl font-semibold mb-4">Categorias</h2>
+          <Card>
+            <CardHeader>
+              <CardTitle>CATEGORIAS</CardTitle>
+            </CardHeader>
             <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
               <thead>
                 <tr className="border-b">
+                  <th className="p-4 text-left">ID</th>
                   <th className="p-4 text-left">Nome</th>
-                  <th className="p-4 text-left">Descricao</th>
-                  <th className="p-4 text-left">Preco</th>
                   <th className="p-4 text-left">Acoes</th>
                 </tr>
               </thead>
               <tbody>
                 {categorias.map((categoria) => (
                   <tr key={categoria.id} className="border-b">
+                    <td className="p-4">{categoria.id}</td>
                     <td className="p-4">{categoria.nome_categoria}</td>
                     <td className="p-4 flex space-x-2">
                       <Button
@@ -170,14 +183,15 @@ const Gerenciar = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+          </Card>
         </div>
+        <label className="block mb-2 text-red-500">{error}</label>
 
         <Modal isOpen={isModalProdutoOpen} onClose={closeModal}>
           <CadProdutos onClose={closeModal} produto={produtoEmEdicao} />
         </Modal>
         <Modal isOpen={isModalCategoriaOpen} onClose={closeModal}>
-          <CadCategoria onClose={closeModal} produto={produtoEmEdicao} />
+          <CadCategoria onClose={closeModal} categoria={categoriaEmEdicao} />
         </Modal>
       </div>
     )

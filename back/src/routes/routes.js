@@ -48,6 +48,6 @@ router.post("/categorias", CategoriaController.Insert)
 router.get("/categorias", CategoriaController.SearchAll)
 router.get("/categorias/:id", CategoriaController.SearchOne)
 router.put("/categorias/:id", CategoriaController.Update)
-router.delete("/categoria/:id", CategoriaController.Delete)
+router.delete("/categorias/:id", CategoriaController.Delete)
 
 module.exports = router;

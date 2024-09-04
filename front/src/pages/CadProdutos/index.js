@@ -20,8 +20,9 @@ const CadProdutos = ({ onClose, produto }) => {
 
   const fetchCategoria = async () => {
     try {
-      const res = await axios.get("http://localhost:3003/sistema/categoria")
+      const res = await axios.get("http://localhost:3003/sistema/categorias")
       setCategorias(res.data)
+
     }
     catch (error) {
       console.error(error)
