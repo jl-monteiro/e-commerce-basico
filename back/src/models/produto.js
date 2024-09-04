@@ -23,6 +23,14 @@ const Produto = conexao.define("produto", {
     imagem_prod: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    categoriaId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: "categoria",
+            key: "id"
+        },
+        allowNull: false
     }
 })
 

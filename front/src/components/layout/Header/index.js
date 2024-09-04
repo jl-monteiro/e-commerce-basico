@@ -40,10 +40,10 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             {isAdmin && (
               <Link
-                to="/gerenciaProd"
+                to="/gerenciar"
                 className="text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
               >
-                Gerenciar produtos
+                Gerenciar
               </Link>
             )}
             <button

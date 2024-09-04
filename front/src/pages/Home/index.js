@@ -9,9 +9,11 @@ import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 import Alerta from "../../components/Alerta";
 
 import { SearchContext } from "../../contexts/SearchContext";
+import useAuth from "../../hooks/useAuth.js";
 
 const Home = () => {
   const { produtos, setProdutos, loading, setLoading, addCarrinho } = useContext(SearchContext);
+  const { user } = useAuth()
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
 
@@ -71,27 +73,29 @@ const Home = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {produtos.map((produto) => (
                 <div key={produto.id}>
-                <Card className="hover:shadow-lg transition-transform duration-300 hover:scale-105">
-                  <Link to={`/produto/${produto.id}`} key={produto.id}>
-                    <CardHeader className="p-0 bg-white ">
-                      <img
-                        src={produto.imagem_prod}
-                        alt={produto.nome_prod}
-                        className="w-full h-48 object-contain rounded-t-lg "
-                      />
-                    </CardHeader>
-                    <CardContent>
-                      <CardTitle className="text-gray-800">{produto.nome_prod}</CardTitle>
-                      <CardDescription className="text-gray-600 line-clamp-2">
-                        {produto.descricao_prod}
-                      </CardDescription>
-                    </CardContent>
-                  </Link>
-                  <CardFooter className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
-                    <Button Text={"Adicionar ao Carrinho"} variant="black" size="sm" onClick={() => (handleAddCarrinho(produto.id, produto))} />
-                  </CardFooter>
-                </Card>
+                  <Card className="hover:shadow-lg transition-transform duration-300 hover:scale-105">
+                    <Link to={`/produto/${produto.id}`} key={produto.id}>
+                      <CardHeader className="p-0 bg-white ">
+                        <img
+                          src={produto.imagem_prod}
+                          alt={produto.nome_prod}
+                          className="w-full h-48 object-contain rounded-t-lg "
+                        />
+                      </CardHeader>
+                      <CardContent>
+                        <CardTitle className="text-gray-800">{produto.nome_prod}</CardTitle>
+                        <CardDescription className="text-gray-600 line-clamp-2">
+                          {produto.descricao_prod}
+                        </CardDescription>
+                      </CardContent>
+                    </Link>
+                    <CardFooter className="flex justify-between items-center">
+                      <span className="text-lg font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
+                      {user && (
+                        <Button Text={"Adicionar ao Carrinho"} variant="black" onClick={() => (handleAddCarrinho(produto.id, produto))} />
+                      )}
+                    </CardFooter>
+                  </Card>
                 </div>
               ))}
             </div>

@@ -1,4 +1,4 @@
-const Produto = require("../models/produto");
+const { Produto, Categoria } = require("../models/relacoes");
 const status = require("http-status");
 const { Op } = require("sequelize");
 const fs = require("fs");
@@ -10,12 +10,14 @@ exports.Insert = async (req, res, next) => {
     const descricao_prod = req.body.descricao_prod;
     const preco_prod = req.body.preco_prod;
     const imagem_prod = req.file.filename;
+    const categoriaId = req.body.categoriaId
 
     await Produto.create({
       nome_prod: nome_prod,
       descricao_prod: descricao_prod,
       preco_prod: preco_prod,
       imagem_prod: imagem_prod,
+      categoriaId: categoriaId,
     })
       .then((produto) => {
         if (produto) {
@@ -42,7 +44,7 @@ exports.SearchAll = (req, res, next) => {
 
   let whereCondition = {}
 
-  if(searchQuery){
+  if (searchQuery) {
     whereCondition = {
       nome_prod: {
         [Op.like]: `%${searchQuery}%`,
@@ -50,7 +52,7 @@ exports.SearchAll = (req, res, next) => {
     }
   }
 
-  Produto.findAll({ where: whereCondition})
+  Produto.findAll({ where: whereCondition })
     .then((produtos) => {
       const produtosUrl = produtos.map((produto) => ({
         id: produto.id,
@@ -58,6 +60,7 @@ exports.SearchAll = (req, res, next) => {
         descricao_prod: produto.descricao_prod,
         preco_prod: produto.preco_prod,
         imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
+        categoriaId: produto.categoriaId,
         createdAt: produto.createdAt,
         updatedAt: produto.updatedAt,
       }));
@@ -70,7 +73,7 @@ exports.SearchAll = (req, res, next) => {
 exports.SearchOne = (req, res, next) => {
   const id = req.params.id;
 
-  Produto.findByPk(id)
+  Produto.findByPk(id, { include: [Categoria] })
     .then((produto) => {
       const produtoUrl = {
         id: produto.id,
@@ -78,6 +81,7 @@ exports.SearchOne = (req, res, next) => {
         descricao_prod: produto.descricao_prod,
         preco_prod: produto.preco_prod,
         imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
+        categoriaId: produto.categoriaId,
         createdAt: produto.createdAt,
         updatedAt: produto.updatedAt,
       };
@@ -92,8 +96,8 @@ exports.Update = (req, res, next) => {
   const nome_prod = req.body.nome_prod;
   const descricao_prod = req.body.descricao_prod;
   const preco_prod = req.body.preco_prod;
-  const imagem_prod = req.file ? req.file.filename : null;
-
+  const imagem_prod = req.file.filename
+  const categoriaId = req.body.categoriaId
   Produto.findByPk(id)
     .then((produto) => {
       if (produto) {
@@ -104,6 +108,7 @@ exports.Update = (req, res, next) => {
               descricao_prod: descricao_prod,
               preco_prod: preco_prod,
               imagem_prod: imagem_prod,
+              categoriaId: categoriaId
             },
             {
               where: { id: id },

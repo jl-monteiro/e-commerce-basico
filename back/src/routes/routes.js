@@ -6,6 +6,7 @@ const EnderecoController = require("../controllers/enderecoController");
 const EstadoController = require("../controllers/estadoController");
 const CidadeController = require("../controllers/cidadeController");
 const uploadUser = require("../../middlewares/uploadImg");
+const CategoriaController = require("../controllers/categoriaController");
 
 //rotas da tabela usuarios
 router.post("/usuarios", UsuarioController.Insert);
@@ -41,5 +42,12 @@ router.get("/estados/:id", EstadoController.SearchOne);
 // Rotas da tabela cidade
 router.get("/cidades", CidadeController.SearchAll);
 router.get("/cidades/:id", CidadeController.SearchOne);
+
+// rotas tabela categoria
+router.post("/categorias", CategoriaController.Insert)
+router.get("/categorias", CategoriaController.SearchAll)
+router.get("/categorias/:id", CategoriaController.SearchOne)
+router.put("/categorias/:id", CategoriaController.Update)
+router.delete("/categoria/:id", CategoriaController.Delete)
 
 module.exports = router;

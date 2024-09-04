@@ -13,23 +13,38 @@ const CadProdutos = ({ onClose, produto }) => {
   const [preco_prod, setPreco_prod] = useState(
     produto ? produto.descricao_prod : ""
   );
+  const [categoriaId, setCategoriaId] = useState(produto ? produto.categoriaId : "")
   const [image, setImage] = useState("");
+  const [categorias, setCategorias] = useState([])
   const [error, setError] = useState("");
 
-  //const navigate = useNavigate();
+  const fetchCategoria = async () => {
+    try {
+      const res = await axios.get("http://localhost:3003/sistema/categoria")
+      setCategorias(res.data)
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategoria()
+  }, [])
 
   useEffect(() => {
     if (produto) {
       setNome_prod(produto.nome_prod);
       setDescricao_prod(produto.descricao_prod);
       setPreco_prod(produto.preco_prod);
+      setCategoriaId(produto.categoriaId)
     }
   }, [produto]);
 
   const handleSalvar = async (e) => {
     e.preventDefault();
     console.log(image)
-    if (!nome_prod || !descricao_prod || !preco_prod) {
+    if (!nome_prod || !descricao_prod || !preco_prod || !categoriaId) {
       setError("Preencha todos os campos");
       return;
     }
@@ -42,6 +57,7 @@ const CadProdutos = ({ onClose, produto }) => {
     formData.append("nome_prod", nome_prod);
     formData.append("descricao_prod", descricao_prod);
     formData.append("preco_prod", preco_prod);
+    formData.append("categoriaId", categoriaId);
     if (image) formData.append("image", image);
 
     try {
@@ -99,6 +115,19 @@ const CadProdutos = ({ onClose, produto }) => {
             onChange={(e) => [setPreco_prod(e.target.value), setError("")]}
             className="mb-4"
           />
+
+          <label className="block mb-2">Categoria do Produto</label>
+          <select
+            id="categoriaId"
+            className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            value={categoriaId}
+            onChange={(e) => setCategoriaId(e.target.value)}
+          >
+            <option value="" disabled>Selecione a categoria</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id} value={categoria.id}>{categoria.nome_categoria}</option>
+            ))}
+          </select>
 
           <input
             type="file"

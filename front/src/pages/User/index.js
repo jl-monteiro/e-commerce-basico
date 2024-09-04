@@ -21,6 +21,7 @@ const User = () => {
   const [editando, setEditando] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
+  const [error, setError] = useState("")
 
   const { loading, setLoading } = useContext(SearchContext);
 
@@ -61,7 +62,7 @@ const User = () => {
       })
       .catch((error) => {
         console.error(error);
-        alert("Erro ao atualizar os dados.");
+        setError("Erro ao atualizar os dados. Tente outro dado ou mais tarde.")
       });
   };
 
@@ -165,6 +166,8 @@ const User = () => {
                   <span className="absolute inset-0 bg-blue-700 opacity-30 rounded-md"></span>
                   <span className="relative">Salvar</span>
                 </button>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+
               </div>
             </div>
           </div>

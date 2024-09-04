@@ -28,13 +28,6 @@ const CidadeController = {
     }
   },
 
-  async Update(req, res) {
-    res.status(405).json({ message: "Método não permitido para este recurso" });
-  },
-
-  async Delete(req, res) {
-    res.status(405).json({ message: "Método não permitido para este recurso" });
-  },
 };
 
 module.exports = CidadeController;

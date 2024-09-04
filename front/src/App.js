@@ -12,7 +12,7 @@ import Registrar from "./pages/Registrar";
 import User from "./pages/User";
 import Produto from "./pages/Produto";
 
-import GerenciaProdutos from "./pages/GerenciaProdutos";
+import Gerenciar from "./pages/Gerenciar";
 import { SearchProvider } from "./contexts/SearchContext";
 import Pagamento from "./pages/Pagamento";
 import Footer from "./components/layout/Footer";
@@ -28,7 +28,7 @@ const PrivateAdmin = ({ Item }) => {
 
   const isAdmin = user && user.tipo === "admin";
 
-  return signed && isAdmin > 0 ? <Item /> : <Login />;
+  return signed && isAdmin > 0 ? <Item /> : <Home />;
 };
 
 const RoutesApp = () => {
@@ -54,8 +54,8 @@ const RoutesApp = () => {
 
           <Route
             exact
-            path="/gerenciaProd"
-            element={<PrivateAdmin Item={GerenciaProdutos} />}
+            path="/gerenciar"
+            element={<PrivateAdmin Item={Gerenciar} />}
           />
 
           <Route
