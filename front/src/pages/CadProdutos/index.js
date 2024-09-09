@@ -11,7 +11,7 @@ const CadProdutos = ({ onClose, produto }) => {
     produto ? produto.descricao_prod : ""
   );
   const [preco_prod, setPreco_prod] = useState(
-    produto ? produto.descricao_prod : ""
+    produto ? produto.preco_prod : ""
   );
   const [categoriaId, setCategoriaId] = useState(produto ? produto.categoriaId : "")
   const [image, setImage] = useState("");
@@ -22,7 +22,7 @@ const CadProdutos = ({ onClose, produto }) => {
     try {
       const res = await axios.get("http://localhost:3003/sistema/categorias")
       setCategorias(res.data)
-
+      console.log(res.data)
     }
     catch (error) {
       console.error(error)
@@ -52,6 +52,9 @@ const CadProdutos = ({ onClose, produto }) => {
     if (!image) {
       setError("Insira uma imagem");
       return;
+    }
+    if(descricao_prod.length < 300){
+      setError("Descricao excedeu o limite de caracteres.")
     }
 
     const formData = new FormData();
@@ -106,6 +109,7 @@ const CadProdutos = ({ onClose, produto }) => {
             onChange={(e) => [setDescricao_prod(e.target.value), setError("")]}
             rows={5}
             className="w-full p-2 border rounded mb-4"
+            maxLength={300}
           />
 
           <label className="block mb-2">Preço do Produto</label>

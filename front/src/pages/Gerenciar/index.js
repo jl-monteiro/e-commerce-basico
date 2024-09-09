@@ -8,7 +8,7 @@ import CadProdutos from "../CadProdutos";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import CadCategoria from "../CadCategoria";
-import { Card, CardHeader, CardTitle } from "../../components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card";
 
 const Gerenciar = () => {
   const [isModalProdutoOpen, setIsModalProdutoOpen] = useState(false);
@@ -21,6 +21,7 @@ const Gerenciar = () => {
   const [categorias, setCategorias] = useState([])
 
   const [error, setError] = useState("")
+  const [expandedText, setExpandedText] = useState(null);
 
   const { loading, setLoading } = useContext(SearchContext);
 
@@ -69,7 +70,7 @@ const Gerenciar = () => {
       setCategorias(response.data);
     }
     catch (error) {
-      console.error("erro: ",error)
+      console.error("erro: ", error)
       setError(error.response.data.error)
     }
   }
@@ -98,9 +99,47 @@ const Gerenciar = () => {
     setLoading(false);
   }, [isModalProdutoOpen, isModalCategoriaOpen]);
 
+  const menosTexto = (text, qtdMax) => {
+    if (text.length <= qtdMax) return text;
+
+    const isExpanded = expandedText === text;
+    return (
+      <div className="relative">
+        <span>
+          {isExpanded ? text : text.substr(0, qtdMax)}
+        </span>
+        {!isExpanded && (
+          <button
+            className="text-blue-700 ml-2"
+            onClick={() => setExpandedText(text)}
+          >
+            (Ler mais)
+          </button>
+        )}
+        {isExpanded && (
+          <button
+            className="text-blue-700 ml-2"
+            onClick={() => setExpandedText(null)}
+          >
+            (Ler menos)
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  const maisTexto = (text) => {
+    console.log(text)
+    return (
+      <>
+        {text}
+      </>
+    )
+  }
+
   return (
     (loading && <Loading />) || (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col container mx-auto p-4 items-center justify-center">
         <h1 className="text-3xl font-bold mb-6">Gerenciamento de Produtos e Categoria</h1>
 
         <div className="flex space-x-4 mb-6">
@@ -108,83 +147,91 @@ const Gerenciar = () => {
           <Button Text="Cadastrar Categoria" onClick={openModalCategoria} />
         </div>
 
-        <div className="flex flex-wrap justify-center space-x-8">
+        <div className="grid md:grid-cols-2 gap-4">
           {/* CRUD PRODUTOS */}
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>PRODUTOS</CardTitle>
             </CardHeader>
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-              <thead>
-                <tr className="border-b">
-                  <th className="p-4 text-left">ID</th>
-                  <th className="p-4 text-left">Nome</th>
-                  <th className="p-4 text-left">Descricao</th>
-                  <th className="p-4 text-left">Preco</th>
-                  <th className="p-4 text-left">Categoria</th>
-                  <th className="p-4 text-left">Acoes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {produtos.map((produto) => (
-                  <tr key={produto.id} className="border-b">
-                    <td className="p-4">{produto.id}</td>
-                    <td className="p-4">{produto.nome_prod}</td>
-                    <td className="p-4">{produto.descricao_prod}</td>
-                    <td className="p-4">{produto.preco_prod}</td>
-                    <td className="p-4">{produto.categoria}</td>
-                    <td className="p-4 flex space-x-2">
-                      <Button
-                        Text="Editar"
-                        onClick={() => openModalProduto("editar", produto)}
-                      />
-                      <Button
-                        Text="Excluir"
-                        onClick={() =>
-                          handleExcluirProduto(produto.id, produto.imagem_prod)
-                        }
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <CardContent>
+              <div className="">
+                <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="p-4 text-left">ID</th>
+                      <th className="p-4 text-left">Nome</th>
+                      <th className="p-4 text-left">Descricao</th>
+                      <th className="p-4 text-left">Preco</th>
+                      <th className="p-4 text-left">Categoria</th>
+                      <th className="p-4 text-left">Acoes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {produtos.map((produto) => (
+                      <tr key={produto.id} className="border-b">
+                        <td className="p-4">{produto.id}</td>
+                        <td className="p-4">{produto.nome_prod}</td>
+                        <td className="p-4">
+                          {menosTexto(produto.descricao_prod, 30)}
+                        </td>
+                        <td className="p-4">{produto.preco_prod}</td>
+                        <td className="p-4">{produto.categoriaId}</td>
+                        <td className="p-4 flex space-x-2">
+                          <Button
+                            Text="Editar"
+                            onClick={() => openModalProduto("editar", produto)}
+                          />
+                          <Button
+                            Text="Excluir"
+                            onClick={() =>
+                              handleExcluirProduto(produto.id, produto.imagem_prod)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
           </Card>
 
           {/* CRUD CATEGORIAS */}
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>CATEGORIAS</CardTitle>
             </CardHeader>
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-              <thead>
-                <tr className="border-b">
-                  <th className="p-4 text-left">ID</th>
-                  <th className="p-4 text-left">Nome</th>
-                  <th className="p-4 text-left">Acoes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categorias.map((categoria) => (
-                  <tr key={categoria.id} className="border-b">
-                    <td className="p-4">{categoria.id}</td>
-                    <td className="p-4">{categoria.nome_categoria}</td>
-                    <td className="p-4 flex space-x-2">
-                      <Button
-                        Text="Editar"
-                        onClick={() => openModalCategoria("editar", categoria)}
-                      />
-                      <Button
-                        Text="Excluir"
-                        onClick={() =>
-                          handleExcluirCategoria(categoria.id)
-                        }
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <CardContent>
+              <div className="">
+                <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="p-4 text-left">ID</th>
+                      <th className="p-4 text-left">Nome</th>
+                      <th className="p-4 text-left">Acoes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {categorias.map((categoria) => (
+                      <tr key={categoria.id} className="border-b">
+                        <td className="p-4">{categoria.id}</td>
+                        <td className="p-4">{categoria.nome_categoria}</td>
+                        <td className="p-4 flex space-x-2">
+                          <Button
+                            Text="Editar"
+                            onClick={() => openModalCategoria("editar", categoria)}
+                          />
+                          <Button
+                            Text="Excluir"
+                            onClick={() => handleExcluirCategoria(categoria.id)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
           </Card>
         </div>
         <label className="block mb-2 text-red-500">{error}</label>
