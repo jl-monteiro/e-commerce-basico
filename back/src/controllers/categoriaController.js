@@ -50,7 +50,7 @@ const CategoriaController = {
                 res.status(200).json(categoria)
             }
             else {
-                res.status(404).json({ message: "Endereco não encontrado" });
+                res.status(404).json({ message: "Categoria não encontrado" });
             }
         }
         catch (error) {

@@ -17,29 +17,12 @@ import { SearchContext } from "../../../contexts/SearchContext";
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { signed, user } = useAuth();
-  const [categorias, setCategorias] = useState([])
-  const [categoria, setCategoria] = useState("")
+
+  const { carrinho } = useContext(SearchContext)
+
 
   const isAdmin = user && user.tipo === "admin";
 
-  const fetchCategorias = async () => {
-    try {
-      const res = await axios.get("http://localhost:3003/sistema/categorias")
-      setCategorias(res.data)
-    }
-    catch (error) {
-      console.error(error)
-    }
-  }
-
-  const handleCategoriaChange = (e) => {
-    setCategoria(e.target.value)
-  }
-
-  useEffect(() => {
-    fetchCategorias()
-  }, [])
-  
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -89,7 +72,7 @@ const Header = () => {
                     <CiShoppingCart size="25px"></CiShoppingCart>
 
                     <p className="absolute top-1 right-1 rounded-full bg-red-500 p-0.1 px-1 text-sm text-red-50">
-                      {/*carrinho.length*/}
+                      {carrinho.length}
                     </p>
                   </div>
                   <Link

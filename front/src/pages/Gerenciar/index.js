@@ -128,14 +128,6 @@ const Gerenciar = () => {
     );
   };
 
-  const maisTexto = (text) => {
-    console.log(text)
-    return (
-      <>
-        {text}
-      </>
-    )
-  }
 
   return (
     (loading && <Loading />) || (
@@ -154,7 +146,7 @@ const Gerenciar = () => {
               <CardTitle>PRODUTOS</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="">
+              <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
                   <thead>
                     <tr className="border-b">
@@ -175,7 +167,7 @@ const Gerenciar = () => {
                           {menosTexto(produto.descricao_prod, 30)}
                         </td>
                         <td className="p-4">{produto.preco_prod}</td>
-                        <td className="p-4">{produto.categoriaId}</td>
+                        <td className="p-4">{produto.categoria.nome_categoria}</td>
                         <td className="p-4 flex space-x-2">
                           <Button
                             Text="Editar"

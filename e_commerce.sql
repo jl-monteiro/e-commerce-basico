@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2024 at 09:13 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Tempo de geração: 11/09/2024 às 21:40
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,54 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `e_commerce`
+-- Banco de dados: `e_commerce`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cidades`
+-- Estrutura para tabela `carrinho`
+--
+
+CREATE TABLE `carrinho` (
+  `id` int(11) NOT NULL,
+  `usuarioId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `carrinho`
+--
+
+INSERT INTO `carrinho` (`id`, `usuarioId`) VALUES
+(1, 1),
+(2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `id` int(11) NOT NULL,
+  `nome_categoria` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `categoria`
+--
+
+INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUES
+(1, 'Eletrônicos', '2024-09-11 16:42:22', '2024-09-11 18:55:04'),
+(2, 'Eletrodomésticos', '2024-09-11 18:18:02', '2024-09-11 18:55:09'),
+(3, 'Acessorios', '2024-09-11 18:19:47', '2024-09-11 18:19:47');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cidades`
 --
 
 CREATE TABLE `cidades` (
@@ -36,7 +77,7 @@ CREATE TABLE `cidades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cidades`
+-- Despejando dados para a tabela `cidades`
 --
 
 INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`) VALUES
@@ -5611,7 +5652,7 @@ INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `enderecos`
+-- Estrutura para tabela `enderecos`
 --
 
 CREATE TABLE `enderecos` (
@@ -5628,18 +5669,10 @@ CREATE TABLE `enderecos` (
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `enderecos`
---
-
-INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, `cep`, `cidadeId`, `estadoId`, `usuarioId`, `createdAt`, `updatedAt`) VALUES
-(1, 'Rua Inexistente', '2000', 'Andar 2, Apartamento 1', 'Santa Efigênia', '30260-080', 25, 2, 1, '2024-08-25 15:23:54', '2024-08-25 15:23:54'),
-(2, 'C. Falsa', '445', 'Entre calle Volcán y calle Montes Celestes, cerca de la estación de metro', 'Lomas de Chapultepec', '11001', 193, 4, 1, '2024-08-25 15:32:59', '2024-08-25 15:32:59');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `estados`
+-- Estrutura para tabela `estados`
 --
 
 CREATE TABLE `estados` (
@@ -5651,7 +5684,7 @@ CREATE TABLE `estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `estados`
+-- Despejando dados para a tabela `estados`
 --
 
 INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) VALUES
@@ -5686,7 +5719,31 @@ INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `produtos`
+-- Estrutura para tabela `itens_carrinho`
+--
+
+CREATE TABLE `itens_carrinho` (
+  `id` int(11) NOT NULL,
+  `carrinhoId` int(11) NOT NULL,
+  `produtoId` int(11) NOT NULL,
+  `qtd` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `itens_carrinho`
+--
+
+INSERT INTO `itens_carrinho` (`id`, `carrinhoId`, `produtoId`, `qtd`) VALUES
+(27, 1, 2, 1),
+(28, 1, 5, 3),
+(29, 1, 8, 1),
+(30, 2, 6, 1),
+(31, 2, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `produtos`
 --
 
 CREATE TABLE `produtos` (
@@ -5695,28 +5752,30 @@ CREATE TABLE `produtos` (
   `descricao_prod` varchar(255) NOT NULL,
   `preco_prod` float NOT NULL,
   `imagem_prod` varchar(255) NOT NULL,
+  `categoriaId` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL
+  `updatedAt` datetime NOT NULL,
+  `produtoId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `produtos`
+-- Despejando dados para a tabela `produtos`
 --
 
-INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imagem_prod`, `createdAt`, `updatedAt`) VALUES
-(1, 'Smart TV Samsung 55', 'Tela de 55 polegadas, resolução 4K, suporte a HDR.', 3500, '1724610629193_shopping.png', '2024-08-25 18:30:29', '2024-08-25 18:30:29'),
-(2, 'Notebook Dell Inspiron 15, 11ª Geração', 'Processador Intel Core i5, 8 GB de RAM, 256 GB de SSD', 5500, '1724610738518_download.jpg', '2024-08-25 18:32:08', '2024-08-25 18:32:18'),
-(3, 'Fone de Ouvido JBL Tune 225TWS', 'Bluetooth, som JBL Pure Bass, autonomia de 25 horas', 500, '1724610770477_download (1).jpg', '2024-08-25 18:32:50', '2024-08-25 18:32:50'),
-(4, 'Smartwatch Amazfit GTS 2 Mini', 'Tela AMOLED de 1,55 polegadas, monitoramento de saúde, 70 modos esportivos.', 700, '1724610792645_download (2).jpg', '2024-08-25 18:33:12', '2024-08-25 18:33:12'),
-(5, 'Aspirador de pó Xiaomi Mi Vacuum Cleaner G10', 'Bateria de 3.200 mAh, potência de sucção de 15.000 Pa.', 1499, '1724610812101_download (3).jpg', '2024-08-25 18:33:32', '2024-08-25 18:33:32'),
-(6, 'Cafeteira Expresso De\'Longhi ECAM22.110.B', 'Capacidade de 1,8 litros, 15 bares de pressão, sistema de calda Thermoblock.', 2199, '1724610837909_download (4).jpg', '2024-08-25 18:33:57', '2024-08-25 18:33:57'),
-(7, 'Fogão de Gás Brastemp 5 Bocas', 'Fogo duplo, forno com temporizador, grelha de aço inoxidável.', 1699, '1724610859525_download (5).jpg', '2024-08-25 18:34:19', '2024-08-25 18:34:19'),
-(8, 'Micro-ondas LG MH6535BS', 'Potência de 900 W, capacidade de 25 litros, sistema de aquecimento Smart Inverter.', 899, '1724610880173_download (6).jpg', '2024-08-25 18:34:40', '2024-08-25 18:34:40');
+INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imagem_prod`, `categoriaId`, `createdAt`, `updatedAt`, `produtoId`) VALUES
+(1, 'TV Tudo em 1 Samsung', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 3500, '1726078672133_1724610629193_shopping.png', 1, '2024-09-11 16:42:40', '2024-09-11 18:17:52', NULL),
+(2, 'Notebook Dell', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1500, '1726078754869_1724610728467_download.jpg', 1, '2024-09-11 18:19:14', '2024-09-11 18:19:14', NULL),
+(3, 'Smartwatch rosa', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 150, '1726081026887_1724610792645_download (2).jpg', 3, '2024-09-11 18:19:40', '2024-09-11 18:57:06', NULL),
+(4, 'Fone de ouvido Bluetooth Preto', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 120, '1726080821223_1724610770477_download (1).jpg', 1, '2024-09-11 18:53:41', '2024-09-11 18:53:41', NULL),
+(5, 'Fogao 5 bocas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2200, '1726081058676_1724610859525_download (5).jpg', 2, '2024-09-11 18:57:38', '2024-09-11 18:57:38', NULL),
+(6, 'Aspirador', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1799, '1726081152633_1724610812101_download (3).jpg', 2, '2024-09-11 18:58:58', '2024-09-11 18:59:12', NULL),
+(7, 'Air Fryer Tecnologico', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 799, '1726081174917_1724610837909_download (4).jpg', 2, '2024-09-11 18:59:34', '2024-09-11 18:59:34', NULL),
+(8, 'Microondas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2999, '1726081226463_1724610880173_download (6).jpg', 2, '2024-09-11 19:00:26', '2024-09-11 19:00:26', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estrutura para tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -5732,25 +5791,39 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuarios`
+-- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `login`, `email`, `senha`, `tipo`, `token`, `createdAt`, `updatedAt`) VALUES
-(1, 'joao lucas', 'joal', 'joao@gmail.com', '$2a$10$B4ElCLagfyu0pz4ZWXAGsuKda67nXW0IGsjh9VsPLbywuCOivFC2G', 'admin', '761pyl6gb7l', '2024-08-25 15:14:09', '2024-08-25 15:14:09');
+(1, 'joao luca', 'joaol', 'joao@gmail.com', '$2a$10$NCh5g0aV7Oingtbl.3qqG.59u23jv1RfooudNcKP9Bv7hgNUIKIra', 'admin', '9yp2xwaq0b9', '2024-09-11 16:42:01', '2024-09-11 16:42:01'),
+(2, 'teste1', 'teste1', 'teste1@gmail.com', '$2a$10$ItUzYXsNirC2RyzIWLdhYeteqm9mY7YaexrP5krI8y4a3impmI5B.', 'usuario', 'tqi433zgeve', '2024-09-11 19:31:47', '2024-09-11 19:31:47');
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `cidades`
+-- Índices de tabela `carrinho`
+--
+ALTER TABLE `carrinho`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuarioId` (`usuarioId`);
+
+--
+-- Índices de tabela `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `cidades`
 --
 ALTER TABLE `cidades`
   ADD PRIMARY KEY (`id`),
   ADD KEY `estadoId` (`estadoId`);
 
 --
--- Indexes for table `enderecos`
+-- Índices de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
   ADD PRIMARY KEY (`id`),
@@ -5759,77 +5832,128 @@ ALTER TABLE `enderecos`
   ADD KEY `usuarioId` (`usuarioId`);
 
 --
--- Indexes for table `estados`
+-- Índices de tabela `estados`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `sigla` (`sigla`);
+  ADD UNIQUE KEY `sigla` (`sigla`),
+  ADD UNIQUE KEY `sigla_2` (`sigla`);
 
 --
--- Indexes for table `produtos`
+-- Índices de tabela `itens_carrinho`
+--
+ALTER TABLE `itens_carrinho`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carrinhoId` (`carrinhoId`),
+  ADD KEY `produtoId` (`produtoId`);
+
+--
+-- Índices de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `produtos_produtoId_foreign_idx` (`produtoId`),
+  ADD KEY `categoriaId` (`categoriaId`);
 
 --
--- Indexes for table `usuarios`
+-- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `login` (`login`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `login_2` (`login`),
+  ADD UNIQUE KEY `email_2` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `cidades`
+-- AUTO_INCREMENT de tabela `carrinho`
+--
+ALTER TABLE `carrinho`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `cidades`
 --
 ALTER TABLE `cidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5561;
 
 --
--- AUTO_INCREMENT for table `enderecos`
+-- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `estados`
+-- AUTO_INCREMENT de tabela `estados`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `produtos`
+-- AUTO_INCREMENT de tabela `itens_carrinho`
+--
+ALTER TABLE `itens_carrinho`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Restrições para tabelas despejadas
 --
 
 --
--- Constraints for table `cidades`
+-- Restrições para tabelas `carrinho`
+--
+ALTER TABLE `carrinho`
+  ADD CONSTRAINT `carrinho_ibfk_1` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `cidades`
 --
 ALTER TABLE `cidades`
   ADD CONSTRAINT `cidades_ibfk_1` FOREIGN KEY (`estadoId`) REFERENCES `estados` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `enderecos`
+-- Restrições para tabelas `enderecos`
 --
 ALTER TABLE `enderecos`
-  ADD CONSTRAINT `enderecos_ibfk_1` FOREIGN KEY (`cidadeId`) REFERENCES `cidades` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `enderecos_ibfk_2` FOREIGN KEY (`estadoId`) REFERENCES `estados` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `enderecos_ibfk_3` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `enderecos_ibfk_4` FOREIGN KEY (`cidadeId`) REFERENCES `cidades` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `enderecos_ibfk_5` FOREIGN KEY (`estadoId`) REFERENCES `estados` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `enderecos_ibfk_6` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `itens_carrinho`
+--
+ALTER TABLE `itens_carrinho`
+  ADD CONSTRAINT `itens_carrinho_ibfk_3` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `itens_carrinho_ibfk_4` FOREIGN KEY (`produtoId`) REFERENCES `produtos` (`id`);
+
+--
+-- Restrições para tabelas `produtos`
+--
+ALTER TABLE `produtos`
+  ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`categoriaId`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `produtos_produtoId_foreign_idx` FOREIGN KEY (`produtoId`) REFERENCES `itens_carrinho` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

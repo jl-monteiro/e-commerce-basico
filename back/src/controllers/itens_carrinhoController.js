@@ -20,9 +20,9 @@ const itens_carrinhoController = {
     },
     async UpdateQtd(req, res) {
         try {
-            const { qtd, carrinhoId, produtoId } = req.body
-
-            const item_carrinho = await Itens_carrinho.findOne({ where: { carrinhoId, produtoId } })
+            const { qtd } = req.body
+            const { carrinhoId, produtoId } = req.params
+            const item_carrinho = await Itens_carrinho.findOne({ where: { carrinhoId: carrinhoId, produtoId: produtoId } })
             if (item_carrinho) {
                 await item_carrinho.update({
                     qtd
@@ -43,7 +43,7 @@ const itens_carrinhoController = {
             const { carrinhoId } = req.params
 
             const item_carrinho = await Itens_carrinho.findAll({
-                where: { carrinhoId: carrinhoId }
+                where: { carrinhoId: carrinhoId }, include: [{ model: Produto }]
             })
             if (item_carrinho) {
                 res.status(200).json(item_carrinho)
@@ -57,25 +57,22 @@ const itens_carrinhoController = {
         }
     },
 
-
-
     async DeleteItem(req, res) {
         try {
-            const { carrinhoId, produtoId } = req.body
-
-            const item_carrinho = await Itens_carrinho.findOne({ where: { carrinhoId, produtoId } })
+            const { carrinhoId, produtoId } = req.params;
+            const item_carrinho = await Itens_carrinho.findOne({ where: { carrinhoId, produtoId } });
             if (item_carrinho) {
-                item_carrinho.destroy()
+                await item_carrinho.destroy();
+                res.status(200).json({ message: "Item deletado com sucesso." });
+            } else {
+                res.status(404).json({ message: "Item não encontrado para deletar." });
             }
-            else {
-                res.status(404).json({ message: "Erro ao procurar item para deletar: " })
-
-            }
-        }
-        catch (error) {
-            res.status(500).json({ error: "Erro ao deletar item: ", error })
+        } catch (error) {
+            res.status(500).json({ error: "Erro ao deletar item: ", error });
         }
     }
+
+
 }
 
 module.exports = itens_carrinhoController

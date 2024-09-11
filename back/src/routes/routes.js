@@ -60,7 +60,7 @@ router.delete("/carrinho/:id", carrinhoController.Delete)
 // rotas tabela itens carrinho
 router.post("/itens-carrinho", itens_carrinhoController.InsertItem)
 router.get("/itens-carrinho/:carrinhoId", itens_carrinhoController.SearchByCarrinho)
-router.put("/itens-carrinho", itens_carrinhoController.UpdateQtd)
-router.delete("/itens-carrinho", itens_carrinhoController.DeleteItem)
+router.put("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.UpdateQtd)
+router.delete("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.DeleteItem)
 
 module.exports = router;

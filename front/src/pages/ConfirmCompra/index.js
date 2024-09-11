@@ -41,16 +41,14 @@ const ConfirmCompra = () => {
         setLoading(false)
     }, [])
 
+
     useEffect(() => {
-        const total = carrinho.reduce(
-            (acc, prod) => acc + prod.preco_prod * prod.qtd,
-            0
-        );
+        const total = carrinho.reduce((acc, prod) => acc + prod.produto.preco_prod * prod.qtd, 0);
         setTotalCarrinho(total);
-        localStorage.setItem("carrinho", JSON.stringify(carrinho));
-        setLoading(false)
+        setLoading(false);
     }, [carrinho, setLoading]);
 
+    const base_url = "http://localhost:3003/sistema/produtos/files/users/"
 
     return (
         loading && <Loading /> || (
@@ -103,21 +101,21 @@ const ConfirmCompra = () => {
                                     >
                                         <div>
                                             <img
-                                                className="h-16 w-full object-cover md:w-16"
-                                                src={prod.imagem_prod}
-                                                alt={prod.nome_prod}
+                                                className="h-16 w-full object-contain md:w-16"
+                                                src={`${base_url}${prod.produto.imagem_prod}`}
+                                                alt={prod.produto.nome_prod}
                                             />
                                             <h3 className="text-lg font-semibold text-gray-800">
-                                                {prod.nome_prod}
+                                                {prod.produto.nome_prod}
                                             </h3>
                                             <p className="text-gray-600">
-                                                {prod.qtd} x R$ {prod.preco_prod.toFixed(2)}
+                                                {prod.qtd} x R$ {parseFloat(prod.produto.preco_prod).toFixed(2)}
                                             </p>
                                         </div>
                                         <div className="flex flex-col items-center">
                                             <div className="text-right">
                                                 <p className="font-semibold text-gray-800">
-                                                    R$ {(prod.preco_prod * prod.qtd).toFixed(2)}
+                                                    R$ {(prod.produto.preco_prod * prod.qtd).toFixed(2)}
                                                 </p>
                                             </div>
 

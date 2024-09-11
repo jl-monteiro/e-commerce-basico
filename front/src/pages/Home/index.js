@@ -12,7 +12,7 @@ import { SearchContext } from "../../contexts/SearchContext";
 import useAuth from "../../hooks/useAuth.js";
 
 const Home = () => {
-  const { produtos, setProdutos, loading, setLoading, addCarrinho } = useContext(SearchContext);
+  const { produtos, setProdutos, loading, setLoading, addCarrinho, carrinho, carrinhoId } = useContext(SearchContext);
   const { user } = useAuth()
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
@@ -20,7 +20,7 @@ const Home = () => {
   const [categorias, setCategorias] = useState([])
   const [categoria, setCategoria] = useState("")
   const [produtosOriginais, setProdutosOriginais] = useState([])
- 
+
   const fetchCategorias = async () => {
     try {
       const res = await axios.get("http://localhost:3003/sistema/categorias")
@@ -55,12 +55,10 @@ const Home = () => {
       setProdutos(produtosFiltrados)
     }
   }
+  
 
   useEffect(() => {
     fetchCategorias()
-  }, [])
-
-  useEffect(() => {
 
     fetchProdutos();
     setLoading(false);
@@ -73,8 +71,8 @@ const Home = () => {
     });
   }
 
-  const handleAddCarrinho = (id, produto) => {
-    addCarrinho(id, produto)
+  const handleAddCarrinho = (id, carrinhoId) => {
+    addCarrinho(id, carrinhoId)
     setMsg("Adicionado ao carrinho com sucesso.")
     setMsgShow(true)
   }
@@ -143,7 +141,7 @@ const Home = () => {
                     <CardFooter className="flex justify-between items-center">
                       <span className="text-sm font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
                       {user && (
-                        <Button Text={"Adicionar ao Carrinho"} className={""} variant="black" onClick={() => (handleAddCarrinho(produto.id, produto))} />
+                        <Button Text={"Adicionar ao Carrinho"} className={""} variant="black" onClick={() => (handleAddCarrinho(produto.id, carrinhoId))} />
                       )}
                     </CardFooter>
                   </Card>

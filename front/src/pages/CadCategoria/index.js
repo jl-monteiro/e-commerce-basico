@@ -15,7 +15,7 @@ const CadCategoria = ({ onClose, categoria }) => {
         }
         try {
             if (categoria) {
-                await axios.put(`http://localhost:3003/sistema/categorias/${categoria.id}`)
+                await axios.put(`http://localhost:3003/sistema/categorias/${categoria.id}`, { nome_categoria })
             }
             else {
                 await axios.post("http://localhost:3003/sistema/categorias", { nome_categoria })

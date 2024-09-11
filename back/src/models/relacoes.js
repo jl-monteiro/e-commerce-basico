@@ -22,6 +22,7 @@ Categoria.hasMany(Produto, { foreignKey: 'categoriaId', as: 'Categoria' })
 
 Usuario.hasOne(Carrinho, { foreignKey: "usuarioId" })
 Carrinho.hasMany(Itens_carrinho, { foreignKey: "carrinhoId" })
+Itens_carrinho.belongsTo(Produto, {foreignKey: "produtoId"})
 Produto.hasMany(Itens_carrinho, {foreignKey: "produtoId"})
 
 module.exports = {  
