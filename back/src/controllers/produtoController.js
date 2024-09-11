@@ -45,17 +45,17 @@ exports.SearchAll = async (req, res, next) => {
 
     const whereCondition = searchQuery
       ? {
-          nome_prod: {
-            [Op.like]: `%${searchQuery}%`,
-          },
-        }
+        nome_prod: {
+          [Op.like]: `%${searchQuery}%`,
+        },
+      }
       : {};
 
     const produtos = await Produto.findAll({
       where: whereCondition,
       include: [{
         model: Categoria,
-        as: 'Categoria', 
+        as: 'Categoria',
       }],
     });
 
@@ -66,7 +66,7 @@ exports.SearchAll = async (req, res, next) => {
       preco_prod: produto.preco_prod,
       imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
       categoriaId: produto.categoriaId,
-      categoria: produto.Categoria, 
+      categoria: produto.Categoria,
       createdAt: produto.createdAt,
       updatedAt: produto.updatedAt,
     }));
@@ -81,7 +81,12 @@ exports.SearchAll = async (req, res, next) => {
 exports.SearchOne = (req, res, next) => {
   const id = req.params.id;
 
-  Produto.findByPk(id, { include: [Categoria] })
+  Produto.findByPk(id, {
+    include: [{
+      model: Categoria,
+      as: 'Categoria',
+    }]
+  })
     .then((produto) => {
       const produtoUrl = {
         id: produto.id,
@@ -90,6 +95,7 @@ exports.SearchOne = (req, res, next) => {
         preco_prod: produto.preco_prod,
         imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
         categoriaId: produto.categoriaId,
+        categoria: produto.Categoria,
         createdAt: produto.createdAt,
         updatedAt: produto.updatedAt,
       };

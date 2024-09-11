@@ -1,45 +1,39 @@
 import React, { createContext, useState, useEffect } from "react";
 import propTypes from "prop-types";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 export const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [carrinho, setCarrinho] = useState([])
+  const { user } = useAuth()
 
-  const addCarrinho = (id, produto) => {
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-
-    const produtoCarrinho = carrinho.findIndex((prod) => prod.id === id);
-
-    if (produtoCarrinho > -1) {
-      carrinho[produtoCarrinho].qtd += 1;
-    } else {
-      carrinho.push({
-        id: id,
-        nome_prod: produto.nome_prod,
-        preco_prod: produto.preco_prod,
-        imagem_prod: produto.imagem_prod,
-        qtd: 1,
-      });
+  const addCarrinho = async (id, carrinhoId) => {
+    if (!carrinhoId) {
+      console.error("Carrinho ID não está definido");
+      return;
     }
-    setCarrinho(carrinho)
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-  };
+    try {
+      const response = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${carrinhoId}`)
+      const qtd = response.data.qtd
+      const newQtd = qtd + 1
+      await axios.put("http://localhost:3003/sistema/itens-carrinho", { qtd: newQtd, carrinhoId, produtoId: id })
 
-  useEffect(() => {
-    const carrinhoStorage = JSON.parse(localStorage.getItem("carrinho"));
-    setCarrinho(carrinhoStorage || []);
-  }, []);
+    }
+    catch (error) {
+      const response = await axios.post("http://localhost:3003/sistema/itens-carrinho", { carrinhoId: carrinhoId, produtoId: id, qtd: 1 })
+      console.log(response.data)
+      console.log("CARRINHO ID: ", carrinhoId)
+    }
+  };
 
   const value = {
     produtos,
     setProdutos,
     loading,
     setLoading,
-    carrinho,
-    setCarrinho,
     addCarrinho,
   };
 

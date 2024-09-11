@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import Button from "../form/Button";
 import { CiTrash } from "react-icons/ci";
@@ -9,12 +10,17 @@ import { Confirm } from 'react-admin'
 import Loading from "../../components/Loading";
 
 import { SearchContext } from "../../contexts/SearchContext";
+import useAuth from "../../hooks/useAuth";
 
 const Carrinho = ({ onClose }) => {
     const [totalCarrinho, setTotalCarrinho] = useState(0);
+    const [carrinhoId, setCarrinhoId] = useState("")
+    const [carrinho, setCarrinho] = useState([])
     const [openDialog, setOpenDialog] = useState(false)
     const [idRemove, setidRemove] = useState(null)
-    const { loading, setLoading, carrinho, setCarrinho } = useContext(SearchContext);
+
+    const { loading, setLoading } = useContext(SearchContext);
+    const { user } = useAuth
 
     useEffect(() => {
         const total = carrinho.reduce(
@@ -22,10 +28,38 @@ const Carrinho = ({ onClose }) => {
             0
         );
         setTotalCarrinho(total);
-        localStorage.setItem("carrinho", JSON.stringify(carrinho));
         setLoading(false)
     }, [carrinho, setLoading]);
 
+    useEffect(() => {
+        const fetchCarrinho = async () => {
+            if (user) {
+                try {
+                    const response = await axios.get(`http://localhost:3003/sistema/carrinho/${user.id}`)
+                    console.log("Carrinho encontrado: ", response.data)
+                    setCarrinhoId(response.data.id)
+
+                    const itens = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${response.data.id}`)
+                    console.log("itens do carrinho:  ", itens.data)
+                    setCarrinho(itens.data)
+                }
+                catch (error) {
+                    if (error.response && error.response.status === 404) {
+                        try {
+                            const response = await axios.post("http://localhost:3003/sistema/carrinho", { usuarioId: user.id })
+                            console.log("carrinho criado: ", response.data)
+                            setCarrinhoId(response.data.id)
+                            
+                        }
+                        catch (postError) {
+                            console.error("Erro ao criar carrinho: ", postError)
+                        }
+                    }
+                }
+            }
+        }
+        fetchCarrinho()
+    }, [user]);
 
     const handleClick = (prodId) => {
         setOpenDialog(true)

@@ -17,8 +17,6 @@ import { SearchContext } from "../../../contexts/SearchContext";
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { signed, user } = useAuth();
-  const { carrinho } = useContext(SearchContext)
-
   const [categorias, setCategorias] = useState([])
   const [categoria, setCategoria] = useState("")
 
@@ -91,7 +89,7 @@ const Header = () => {
                     <CiShoppingCart size="25px"></CiShoppingCart>
 
                     <p className="absolute top-1 right-1 rounded-full bg-red-500 p-0.1 px-1 text-sm text-red-50">
-                      {carrinho.length}
+                      {/*carrinho.length*/}
                     </p>
                   </div>
                   <Link

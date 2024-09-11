@@ -7,6 +7,8 @@ const EstadoController = require("../controllers/estadoController");
 const CidadeController = require("../controllers/cidadeController");
 const uploadUser = require("../../middlewares/uploadImg");
 const CategoriaController = require("../controllers/categoriaController");
+const carrinhoController = require("../controllers/carrinhoController");
+const itens_carrinhoController = require("../controllers/Itens_carrinhoController");
 
 //rotas da tabela usuarios
 router.post("/usuarios", UsuarioController.Insert);
@@ -49,5 +51,16 @@ router.get("/categorias", CategoriaController.SearchAll)
 router.get("/categorias/:id", CategoriaController.SearchOne)
 router.put("/categorias/:id", CategoriaController.Update)
 router.delete("/categorias/:id", CategoriaController.Delete)
+
+// rotas tabela carrinho
+router.post("/carrinho", carrinhoController.Insert)
+router.get("/carrinho/:usuarioId", carrinhoController.SearchCarrinho)
+router.delete("/carrinho/:id", carrinhoController.Delete)
+
+// rotas tabela itens carrinho
+router.post("/itens-carrinho", itens_carrinhoController.InsertItem)
+router.get("/itens-carrinho/:carrinhoId", itens_carrinhoController.SearchByCarrinho)
+router.put("/itens-carrinho", itens_carrinhoController.UpdateQtd)
+router.delete("/itens-carrinho", itens_carrinhoController.DeleteItem)
 
 module.exports = router;

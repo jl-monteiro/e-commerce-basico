@@ -6,12 +6,16 @@ import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 
 import Alerta from "../../components/Alerta";
+import useAuth from "../../hooks/useAuth";
 
 const Produto = () => {
   const { id } = useParams();
   const [produto, setProduto] = useState({});
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
+  const [carrinhoId, setCarrinhoId] = useState("")
+
+  const {user} = useAuth()
 
   const { loading, setLoading, addCarrinho } = useContext(SearchContext);
 
@@ -30,6 +34,34 @@ const Produto = () => {
     setLoading(false);
   }, [id]);
 
+  
+  useEffect(() => {
+    const fetchCarrinho = async () => {
+      if (user) {
+        try {
+          const response = await axios.get(`http://localhost:3003/sistema/carrinho/${user.id}`)
+          console.log("Carrinho encontrado: ", response.data)
+          setCarrinhoId(response.data.id)
+
+        }
+        catch (error) {
+          if (error.response && error.response.status === 404) {
+            try {
+              const response = await axios.post("http://localhost:3003/sistema/carrinho", { usuarioId: user.id })
+              console.log("carrinho criado: ", response.data)
+              setCarrinhoId(response.data.id)
+
+            }
+            catch (postError) {
+              console.error("Erro ao criar carrinho: ", postError)
+            }
+          }
+        }
+      }
+    }
+    fetchCarrinho()
+  }, [user]);
+
   function toBRL(preco) {
     return parseInt(preco).toLocaleString("pt-br", {
       style: "currency",
@@ -37,8 +69,8 @@ const Produto = () => {
     });
   }
 
-  const handleAddCarrinho = (id, produto) => {
-    addCarrinho(parseInt(id), produto)
+  const handleAddCarrinho = (id, carrinhoId) => {
+    addCarrinho(parseInt(id), carrinhoId)
     setMsg("Adicionado ao carrinho com sucesso.")
     setMsgShow(true)
   }
@@ -74,7 +106,7 @@ const Produto = () => {
               </div>
               <Button
                 Text="Adicionar ao carrinho"
-                onClick={() => (handleAddCarrinho(id, produto))}
+                onClick={() => (handleAddCarrinho(id, carrinhoId))}
               />
             </div>
           </div>

@@ -20,7 +20,7 @@ const Home = () => {
   const [categorias, setCategorias] = useState([])
   const [categoria, setCategoria] = useState("")
   const [produtosOriginais, setProdutosOriginais] = useState([])
-
+ 
   const fetchCategorias = async () => {
     try {
       const res = await axios.get("http://localhost:3003/sistema/categorias")
