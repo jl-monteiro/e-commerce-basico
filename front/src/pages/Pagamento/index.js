@@ -6,6 +6,9 @@ import { IoMdClipboard } from "react-icons/io";
 
 import { QrCodePix } from 'qrcode-pix'
 
+import { initMercadoPago } from '@mercadopago/sdk-react'
+initMercadoPago('APP_USR-15eb2b97-8397-4e03-a0cb-efe245ed9274');
+
 const Pagamento = () => {
     const [totalCarrinho, setTotalCarrinho] = useState(0)
     const { loading, setLoading, carrinho } = useContext(SearchContext)
