@@ -17,13 +17,11 @@ const Carrinho = ({ onClose }) => {
     const { loading, setLoading, carrinho, setCarrinho, carrinhoId } = useContext(SearchContext);
     const { user } = useAuth();
 
-
-
     useEffect(() => {
         const total = carrinho.reduce((acc, prod) => acc + prod.produto.preco_prod * prod.qtd, 0);
         setTotalCarrinho(total);
         setLoading(false);
-    }, [carrinho, setLoading]);
+    }, [carrinho, setLoading, user]);
 
     const handleClick = (prodId) => {
         setOpenDialog(true);

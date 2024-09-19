@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { Card, CardTitle, CardHeader, CardDescription, CardContent, CardFooter } from "../../components/ui/Card";
 import Input from "../../components/form/Input";
@@ -7,6 +8,9 @@ import Button from "../../components/form/Button";
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Loading";
 import { SearchContext } from "../../contexts/SearchContext";
+import Endereco from "../Endereco";
+import Modal from "../../components/Modal";
+
 
 const ConfirmCompra = () => {
     const { user } = useAuth()
@@ -18,6 +22,12 @@ const ConfirmCompra = () => {
     const [enderecos, setEnderecos] = useState([])
     const [endereco, setEndereco] = useState("")
 
+    const [error, setError] = useState("")
+    const navigate = useNavigate();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
+
     const fetchEndereco = async () => {
         const resEndereco = await axios.get(`http://localhost:3003/sistema/enderecos/usuario/${user.id}`)
         let enderecoss = resEndereco.data.enderecos
@@ -26,20 +36,37 @@ const ConfirmCompra = () => {
 
     const handleChangeEndereco = (e) => {
         setEndereco(e.target.value)
+        setError("")
     }
 
     const handleChangeNome = (e) => {
         setNome(e.target.value)
+        setError("")
     }
 
     const handleSalvar = (e) => {
+        if (!nome || !endereco) {
+            setError("Preencha todos os campos!")
+            return
+        }
 
+        navigate("/pay")
     }
+
+    const openModal = (tipo, endereco = null) => {
+        setEnderecoEmEdicao(endereco)
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setEnderecoEmEdicao(null)
+    };
 
     useEffect(() => {
         fetchEndereco()
         setLoading(false)
-    }, [])
+    }, [isModalOpen])
 
 
     useEffect(() => {
@@ -52,7 +79,7 @@ const ConfirmCompra = () => {
 
     return (
         loading && <Loading /> || (
-            <div className="flex flex-col items-center justify-center  bg-gray-100 p-4">
+            <div className="flex flex-col items-center justify-center p-4">
                 <div className="flex flex-wrap justify-center space-x-8">
                     <Card>
                         <CardHeader>
@@ -69,21 +96,34 @@ const ConfirmCompra = () => {
                                         onChange={handleChangeNome}
                                     />
                                 </div>
-                                <select
-                                    id="enderecoId"
-                                    className="block h-10 w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    value={endereco}
-                                    onChange={handleChangeEndereco}
-                                >
-                                    <option value="" disabled>Selecione um endereço</option>
-                                    {enderecos.map((endereco) => (
-                                        <option key={endereco.id} value={endereco.id}>{endereco.logradouro}</option>
-                                    ))}
-                                </select>
+                                {enderecos.length > 0 ? (
+                                    <select
+                                        id="enderecoId"
+                                        className="block h-10 w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        value={endereco}
+                                        onChange={handleChangeEndereco}
+                                    >
+                                        <option value="" disabled>Selecione um endereço</option>
+                                        {enderecos.map((endereco) => (
+                                            <option key={endereco.id} value={endereco.id}>{endereco.logradouro}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+
+                                    <button
+                                        className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
+                                        onClick={openModal}
+                                    >
+                                        Adicionar novo endereço
+                                    </button>
+                                )}
                             </div>
+                            {error && <p className="text-red-500 text-sm">{error}</p>}
+
                         </CardContent>
+
                         <CardFooter>
-                            <Button Text="Confirmar" onClick={handleSalvar} />
+                            <Button Text="Ir para o pagamento" onClick={handleSalvar} />
                         </CardFooter>
                     </Card>
 
@@ -131,9 +171,14 @@ const ConfirmCompra = () => {
                                 R$ {totalCarrinho.toFixed(2)}
                             </p>
                         </CardFooter>
+
                     </Card>
                 </div>
+                <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <Endereco onClose={closeModal} endereco={enderecoEmEdicao} />
+                </Modal>
             </div>
+
         ))
 }
 

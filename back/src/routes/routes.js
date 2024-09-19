@@ -9,6 +9,8 @@ const uploadUser = require("../../middlewares/uploadImg");
 const CategoriaController = require("../controllers/categoriaController");
 const carrinhoController = require("../controllers/carrinhoController");
 const itens_carrinhoController = require("../controllers/Itens_carrinhoController");
+const { createPreference } = require("../services/preferenceMercadoPago")
+const { createPagamento } = require("../services/pagamentoMercadoPago")
 
 //rotas da tabela usuarios
 router.post("/usuarios", UsuarioController.Insert);
@@ -62,5 +64,30 @@ router.post("/itens-carrinho", itens_carrinhoController.InsertItem)
 router.get("/itens-carrinho/:carrinhoId", itens_carrinhoController.SearchByCarrinho)
 router.put("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.UpdateQtd)
 router.delete("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.DeleteItem)
+
+// rota pagamento servico mercado pago
+router.post('/create-preference', async (req, res) => {
+  try {
+    const { items } = req.body;
+    const preferenceId = await createPreference(items);
+    res.json({ preferenceId });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao criar preferência' });
+  }
+});
+
+router.post("/pagamento", async (req, res) => {
+  try {
+    console.log(req.body)
+    const { body } = req.body
+    const pagamento = await createPagamento(body)
+    console.log(pagamento)
+    res.json({pagamento})
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Erro ao realizar pagamento' })
+  }
+})
+
 
 module.exports = router;

@@ -80,7 +80,6 @@ const RoutesApp = () => {
 
           <Route path="*" element={<Private Item={Home} />} />
         </Routes>
-        <Footer />
       </Fragment>
     </BrowserRouter>
   );
@@ -88,10 +87,13 @@ const RoutesApp = () => {
 
 const App = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <AuthProvider>
         <SearchProvider>
-          <RoutesApp />
+          <main className="flex-grow">
+            <RoutesApp />
+          </main>
+          <Footer />
         </SearchProvider>
       </AuthProvider>
     </div>

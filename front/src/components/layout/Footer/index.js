@@ -3,7 +3,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-800 py-6">
+    <footer className="bg-gray-100 border-t text-gray-800 py-6 w-full">
       <div className="container mx-auto flex justify-between items-center">
         <p className="text-sm">&copy; 2024 JL Commerce. Todos os direitos reservados.</p>
         <div className="flex space-x-4">

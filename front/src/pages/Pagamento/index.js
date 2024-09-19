@@ -1,66 +1,43 @@
 import React, { useContext, useState, useEffect } from 'react'
+import axios from 'axios';
+
 import { SearchContext } from '../../contexts/SearchContext';
 
 import Loading from '../../components/Loading';
-import { IoMdClipboard } from "react-icons/io";
 
-import { QrCodePix } from 'qrcode-pix'
+import { initMercadoPago, Payment } from '@mercadopago/sdk-react'
+initMercadoPago('APP_USR-19f717dd-90a0-4188-b22e-50ddff24e4f6');
 
 const Pagamento = () => {
     const [totalCarrinho, setTotalCarrinho] = useState(0)
-    const { loading, setLoading, carrinho } = useContext(SearchContext)
-    const [qrCode, setQrCode] = useState('');
-    const [rawPix, setRawPix] = useState('');
-
+    const { loading, setLoading, carrinho, setCarrinho, carrinhoId } = useContext(SearchContext)
+    const [preferenceId, setPreferenceId] = useState(null)
 
     useEffect(() => {
-        const total = carrinho.reduce(
-            (acc, prod) => acc + prod.preco_prod * prod.qtd,
-            0
-        );
+        const total = carrinho.reduce((acc, prod) => acc + prod.produto.preco_prod * prod.qtd, 0);
         setTotalCarrinho(total);
-        localStorage.setItem("carrinho", JSON.stringify(carrinho));
-        setLoading(false)
+
+        const createPreference = async () => {
+            try {
+                const items = await carrinho.map(prod => ({
+                    id: `${prod.produto.id}`,
+                    title: prod.produto.nome_prod,
+                    quantity: prod.qtd,
+                    unit_price: prod.produto.preco_prod
+                }));
+                console.log(items)
+                const response = await axios.post("http://localhost:3003/sistema/create-preference", { items })
+
+                setPreferenceId(response.data.preferenceId)
+            }
+            catch (error) {
+                console.error("Erro ao criar a preferência de pagamento:", error);
+            }
+        }
+
+        createPreference()
+        setLoading(false);
     }, [carrinho, setLoading]);
-
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(rawPix);
-            console.log('Texto copiado para a área de transferência');
-        } catch (err) {
-            console.log('Falha ao copiar o texto', err);
-        }
-    };
-
-    useEffect(() => {
-        async function generateDynamicPix() {
-            /*
-                version: '01' //versão do pix (não altere)
-                key: chave pix
-                name: seu nome/empresa
-                city: sua cidade
-                transactionId: é o identificador que aparecerá no momento do pix (max: 25 caracteres)
-                message: mensagem que aparecerá no momento do pix (opcional)
-                value: valor que você quer cobrar (opcional)
-            */
-            const qrCodePix = QrCodePix({
-                version: '01',
-                key: 'a1e4b310-aa65-469a-bf57-e2cad6923b54',
-                name: 'Joao Lucas Monteiro Pantaleao',
-                city: 'Criciuma',
-                transactionId: 'jlcommerce',
-                value: totalCarrinho,
-            })
-
-            const rawPixStr = qrCodePix.payload()
-            const qrCodeBase64 = await qrCodePix.base64()
-
-            setRawPix(rawPixStr)
-            setQrCode(qrCodeBase64)
-        }
-
-        generateDynamicPix();
-    }, [totalCarrinho])
 
     function toBRL(preco) {
         return preco.toLocaleString("pt-br", {
@@ -69,28 +46,68 @@ const Pagamento = () => {
         });
     }
 
+    const initialization = {
+        amount: totalCarrinho,
+    };
+    const customization = {
+        paymentMethods: {
+            ticket: "all",
+            bankTransfer: "all",
+            creditCard: "all",
+            debitCard: "all",
+            mercadoPago: "all",
+        },
+    };
+    const onSubmit = async (
+        { selectedPaymentMethod, formData }
+    ) => {
+        // callback chamado ao clicar no botão de submissão dos dados
+        return new Promise((resolve, reject) => {
+            console.log(JSON.stringify(formData))
+            fetch("http://localhost:3003/sistema/pagamento", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    // receber o resultado do pagamento
+                    resolve();
+                })
+                .catch((error) => {
+                    // lidar com a resposta de erro ao tentar criar o pagamento
+                    reject();
+                });
+        });
+    };
+    const onError = async (error) => {
+        // callback chamado para todos os casos de erro do Brick
+        console.log(error);
+    };
+    const onReady = async () => {
+        console.log("brick protno")
+    };
+
     return (
         (loading && <Loading />) || (
-
             <div className="w-full max-w-md p-6 mx-auto bg-white shadow-md rounded-lg">
-                <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Pagamento via Pix</h1>
-                <p className="mb-4 text-gray-700">
-                    Para concluir o pagamento, utilize o QR Code abaixo ou copie os dados para fazer o pagamento via Pix.
-                </p>
-                <p className="mt-4 mb-6 text-gray-700">
-                    Ou copie os dados abaixo:
-                </p>
+                {preferenceId ? (
+                    <>
+                        <Payment
+                            initialization={initialization}
+                            customization={customization}
+                            onSubmit={onSubmit}
+                            onReady={onReady}
+                            onError={onError}
+                        />
+                        <p className="font-semibold text-lg text-gray-800">Valor: {toBRL(totalCarrinho)}</p>
+                    </>
+                ) : (
+                    <Loading />
+                )}
 
-                <div className="flex justify-center mb-4">
-                    <img src={qrCode} alt='QR Code pix' />
-                </div>
-
-                <div className="relative mb-6">
-                    <code className="block p-4 bg-gray-100 border border-gray-300 rounded-md text-gray-800 break-all">{rawPix}</code>
-                    <IoMdClipboard className="cursor-pointer" onClick={copyToClipboard} />
-                </div>
-
-                <p className="font-semibold text-lg text-gray-800">Valor: R$ {toBRL(totalCarrinho)}</p>
             </div>
         ))
 }
