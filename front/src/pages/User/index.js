@@ -251,14 +251,6 @@ const User = () => {
             </div>
           </div>
         </div>
-        <div className="text-center mt-4">
-          <button
-            onClick={() => [deslogar(), navigate("/login")]}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-          >
-            Sair
-          </button>
-        </div>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <Endereco onClose={closeModal} endereco={enderecoEmEdicao} />

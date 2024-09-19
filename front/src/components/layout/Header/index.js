@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import { useContext } from "react";
 import axios from "axios";
 
 import useAuth from "../../../hooks/useAuth";
+
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 
 
 import { RxAvatar } from "react-icons/rx";
@@ -16,7 +18,8 @@ import { SearchContext } from "../../../contexts/SearchContext";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { signed, user } = useAuth();
+  const { signed, user, deslogar } = useAuth();
+  const navigate = useNavigate()
 
   const { carrinho } = useContext(SearchContext)
 
@@ -75,12 +78,19 @@ const Header = () => {
                       {carrinho.length}
                     </p>
                   </div>
-                  <Link
-                    to="/user"
-                    className="text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
-                  >
-                    <RxAvatar size="25px" />
-                  </Link>
+                  <Dropdown>
+                    <DropdownTrigger className="outline-none">
+                      <button className="p-2">
+                        <RxAvatar size="25px" />
+                      </button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Static Actions">
+                      <DropdownItem key="profile" onClick={() => navigate("/user")}>Perfil</DropdownItem>
+                      <DropdownItem key="logout" className="text-danger" color="danger" onClick={() => deslogar()}>
+                        Sair
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
                 </>
               ) : (
                 <Link
