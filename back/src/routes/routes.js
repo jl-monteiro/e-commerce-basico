@@ -76,18 +76,7 @@ router.post('/create-preference', async (req, res) => {
   }
 });
 
-router.post("/pagamento", async (req, res) => {
-  try {
-    console.log(req.body)
-    const { body } = req.body
-    const pagamento = await createPagamento(body)
-    console.log(pagamento)
-    res.json({pagamento})
-  }
-  catch (error) {
-    res.status(500).json({ error: 'Erro ao realizar pagamento' })
-  }
-})
+router.post("/pagamento", createPagamento)
 
 
 module.exports = router;

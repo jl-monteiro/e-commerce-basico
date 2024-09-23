@@ -50,7 +50,7 @@ const ConfirmCompra = () => {
             return
         }
 
-        navigate("/pay")
+        navigate("/meioPagamento")
     }
 
     const openModal = (tipo, endereco = null) => {
