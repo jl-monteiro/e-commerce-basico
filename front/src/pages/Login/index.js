@@ -5,6 +5,9 @@ import useAuth from '../../hooks/useAuth';
 import Input from '../../components/form/Input';
 import Button from '../../components/form/Button';
 
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+
 const Login = () => {
   const { logar } = useAuth();
   const navigate = useNavigate();
@@ -12,7 +15,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
+  const [passShow, setPassShow] = useState(false)
 
+  const handlePassShow = () => {
+    if (passShow) {
+      setPassShow(false)
+    }
+    else {
+      setPassShow(true)
+    }
+  }
   const handleLogin = async () => {
     if (!email || !senha) {
       setError("Preencha todos os campos");
@@ -52,7 +64,7 @@ const Login = () => {
               onChange={(e) => [setEmail(e.target.value), setError('')]}
             />
           </div>
-          <div className="space-y-2">
+          <div className="relative space-y-2">
             <div className="flex items-center justify-between">
               <label
                 className="text-sm font-medium leading-none"
@@ -69,11 +81,19 @@ const Login = () => {
             </div>
             <Input
               className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="password"
+              type={passShow ? "text" : "password"}
               placeholder="Digite sua senha"
               value={senha}
               onChange={(e) => [setSenha(e.target.value), setError('')]}
             />
+            <button
+              type='button'
+              className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
+              onClick={handlePassShow}
+            >
+              {passShow && <FaRegEyeSlash />}
+              {!passShow && <FaRegEye />}
+            </button>
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}

@@ -21,6 +21,7 @@ const ConfirmCompra = () => {
     const [nome, setNome] = useState("")
     const [enderecos, setEnderecos] = useState([])
     const [endereco, setEndereco] = useState("")
+    const [cpf, setCpf] = useState("")
 
     const [error, setError] = useState("")
     const navigate = useNavigate();
@@ -34,23 +35,26 @@ const ConfirmCompra = () => {
         setEnderecos(enderecoss)
     }
 
-    const handleChangeEndereco = (e) => {
-        setEndereco(e.target.value)
-        setError("")
-    }
-
-    const handleChangeNome = (e) => {
-        setNome(e.target.value)
-        setError("")
-    }
-
-    const handleSalvar = (e) => {
+    const handleSalvar = () => {
         if (!nome || !endereco) {
             setError("Preencha todos os campos!")
             return
         }
 
         navigate("/meioPagamento")
+    }
+
+    const handleCpf = async (e) => {
+        const value = e.target.value
+
+        const onlyNum = value.replace(/\D/g, "")
+        let cpfFormatado = onlyNum
+        if (onlyNum.length > 3) {
+            cpfFormatado = `${onlyNum.slice(0, 3)}.${onlyNum.slice(3, 6)}.${onlyNum.slice(6, 9)}-${onlyNum.slice(9, 11)}`
+        }
+
+        setCpf(cpfFormatado)
+        setError('')
     }
 
     const openModal = (tipo, endereco = null) => {
@@ -89,11 +93,20 @@ const ConfirmCompra = () => {
                         <CardContent>
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col space-y-1.5">
-                                    <label htmlFor="name">Nome do recebedor</label>
+                                    <label htmlFor="nome">Nome do recebedor</label>
                                     <Input
-                                        id="name"
+                                        id="nome"
                                         placeholder="Nome do recebedor da entrega."
-                                        onChange={handleChangeNome}
+                                        onChange={(e) => [setNome(e.target.value), setError('')]}
+                                    />
+                                </div>
+                                <div className="flex flex-col space-y-1.5">
+                                    <label htmlFor="cpf">CPF do recebedor</label>
+                                    <Input
+                                        id="cpf"
+                                        placeholder="CPF do recebedor da entrega."
+                                        onChange={handleCpf}
+                                        value={cpf}
                                     />
                                 </div>
                                 {enderecos.length > 0 ? (
@@ -101,7 +114,7 @@ const ConfirmCompra = () => {
                                         id="enderecoId"
                                         className="block h-10 w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         value={endereco}
-                                        onChange={handleChangeEndereco}
+                                        onChange={(e) => [setEndereco(e.target.value), setError('')]}
                                     >
                                         <option value="" disabled>Selecione um endereço</option>
                                         {enderecos.map((endereco) => (

@@ -4,6 +4,8 @@ import useAuth from '../../hooks/useAuth';
 
 import Input from '../../components/form/Input';
 import Button from '../../components/form/Button';
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 const Registrar = () => {
   const [nome, setNome] = useState("");
@@ -11,20 +13,43 @@ const Registrar = () => {
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
   const [senha, setSenha] = useState("");
+  const [senhaConf, setSenhaConf] = useState("")
   const [error, setError] = useState("");
+
+  const [passShow, setPassShow] = useState(false)
+  const [passShowConf, setPassShowConf] = useState(false)
 
   const navigate = useNavigate();
   const { registrar } = useAuth();
 
-  const handleRegistra = async () => {
+  const handlePassShow = () => {
+    if (passShow) {
+      setPassShow(false)
+    }
+    else {
+      setPassShow(true)
+    }
+  }
+  const handlePassShowConf = () => {
+    if (passShowConf) {
+      setPassShowConf(false)
+    }
+    else {
+      setPassShowConf(true)
+    }
+  }
 
-    //validacoes
-    if (!nome || !login || !email || !emailConf || !senha) {
+  const handleRegistra = async () => {
+    if (!nome || !login || !email || !emailConf || !senha || !senhaConf) {
       setError("Preencha todos os campos.");
-      return;
+      return
     } else if (email !== emailConf) {
       setError("Os e-mails não coincidem.");
-      return;
+      return
+    }
+    else if (senha !== senhaConf) {
+      setError("As senhas não coincidem")
+      return
     }
     if (nome.length < 3) {
       setError("O nome deve ter pelo menos 3 caracteres")
@@ -45,7 +70,6 @@ const Registrar = () => {
     }
 
     const res = await registrar(nome, login, email, senha);
-
 
     if (res) {
       setError(res);
@@ -126,7 +150,7 @@ const Registrar = () => {
               onChange={(e) => [setEmailConf(e.target.value), setError('')]}
             />
           </div>
-          <div className="space-y-2">
+          <div className="relative space-y-2">
             <div className="flex items-center justify-between">
               <label
                 className="text-sm font-medium leading-none"
@@ -136,14 +160,46 @@ const Registrar = () => {
               </label>
             </div>
             <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="password"
+              className="mt-1 p-2 w-full border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md pr-10"
+              type={passShow ? "text" : "password"}
               placeholder="Digite sua senha"
               value={senha}
               onChange={(e) => [setSenha(e.target.value), setError('')]}
             />
+            <button
+              type='button'
+              className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
+              onClick={handlePassShow}
+            >
+              {passShow && <FaRegEyeSlash />}
+              {!passShow && <FaRegEye />}
+            </button>
           </div>
-
+          <div className='relative space-y-2'>
+            <div className='flex items-center justify-between'>
+              <label
+                className='text-sm font-medium leading-none'
+                htmlFor='password'
+              >
+                Confirmar senha
+              </label>
+            </div>
+            <Input
+              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              type={passShowConf ? "text" : "password"}
+              placeholder="Confirme sua senha"
+              value={senhaConf}
+              onChange={(e) => [setSenhaConf(e.target.value), setError('')]}
+            />
+            <button
+              type='button'
+              className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
+              onClick={handlePassShowConf}
+            >
+              {passShowConf && <FaRegEyeSlash />}
+              {!passShowConf && <FaRegEye />}
+            </button>
+          </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <Button
             Text="Registrar"
