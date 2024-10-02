@@ -1,5 +1,6 @@
 const { Produto, Categoria } = require("../models/relacoes");
 const status = require("http-status");
+const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
@@ -77,6 +78,62 @@ exports.SearchAll = async (req, res, next) => {
   }
 };
 
+exports.SearchAscPreco = async (req, res, next) => {
+  try {
+    const produtos = await Produto.findAll({
+      order: [['preco_prod', 'ASC']],
+      include: [{
+        model: Categoria,
+        as: 'Categoria',
+      }],
+    });
+
+    const produtosUrl = produtos.map((produto) => ({
+      id: produto.id,
+      nome_prod: produto.nome_prod,
+      descricao_prod: produto.descricao_prod,
+      preco_prod: produto.preco_prod,
+      imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
+      categoriaId: produto.categoriaId,
+      categoria: produto.Categoria,
+      createdAt: produto.createdAt,
+      updatedAt: produto.updatedAt,
+    }));
+
+    res.status(status.OK).json(produtosUrl);
+  } catch (error) {
+    console.error("Erro:", error);
+    next(error);
+  }
+}
+
+exports.SearchDescPreco = async (req, res, next) => {
+  try {
+    const produtos = await Produto.findAll({
+      order: [['preco_prod', 'DESC']],
+      include: [{
+        model: Categoria,
+        as: 'Categoria',
+      }],
+    });
+    const produtosUrl = produtos.map((produto) => ({
+      id: produto.id,
+      nome_prod: produto.nome_prod,
+      descricao_prod: produto.descricao_prod, 
+      preco_prod: produto.preco_prod,
+      imagem_prod: `http://localhost:3003/sistema/produtos/files/users/${produto.imagem_prod}`,
+      categoriaId: produto.categoriaId,
+      categoria: produto.Categoria,
+      createdAt: produto.createdAt,
+      updatedAt: produto.updatedAt,
+    }));
+
+    res.status(status.OK).json(produtosUrl);
+  } catch (error) {
+    console.error("Erro:", error);
+    next(error);
+  }
+}
 
 exports.SearchOne = (req, res, next) => {
   const id = req.params.id;

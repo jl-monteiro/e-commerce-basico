@@ -22,6 +22,8 @@ router.delete("/usuarios/:id", UsuarioController.Delete);
 //rotas da tabela produto
 router.post("/produtos", uploadUser.single("image"), ProdutoController.Insert);
 router.get("/produtos", ProdutoController.SearchAll);
+router.get("/produtos/desc", ProdutoController.SearchDescPreco);
+router.get("/produtos/asc", ProdutoController.SearchAscPreco);
 router.get("/produtos/:id", ProdutoController.SearchOne);
 router.put(
   "/produtos/:id",

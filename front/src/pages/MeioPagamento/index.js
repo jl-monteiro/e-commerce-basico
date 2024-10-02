@@ -51,7 +51,6 @@ const MeioPagamento = () => {
     };
     const customization = {
         paymentMethods: {
-            ticket: "all",
             bankTransfer: "all",
             creditCard: "all",
             debitCard: "all",
