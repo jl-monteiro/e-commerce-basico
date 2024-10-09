@@ -53,7 +53,7 @@ const CadProdutos = ({ onClose, produto }) => {
       setError("Insira uma imagem");
       return;
     }
-    if(descricao_prod.length < 300){
+    if (descricao_prod.length < 300) {
       setError("Descricao excedeu o limite de caracteres.")
     }
 

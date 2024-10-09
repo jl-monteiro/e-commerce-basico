@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Button from "../../components/form/Button";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../../components/ui/Card'
+import { Carousel } from 'primereact/carousel';
 
 import Alerta from "../../components/Alerta";
 import useAuth from "../../hooks/useAuth";
@@ -15,9 +17,20 @@ const Produto = () => {
   const [msgShow, setMsgShow] = useState(false)
   const [carrinhoId, setCarrinhoId] = useState("")
 
-  const {user} = useAuth()
+  const { user } = useAuth()
 
-  const { loading, setLoading, addCarrinho } = useContext(SearchContext);
+  const { loading, setLoading, addCarrinho, produtos, setProdutos } = useContext(SearchContext);
+
+  const fetchProdutos = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3003/sistema/produtos"
+      );
+      setProdutos(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchProduto = async () => {
@@ -31,10 +44,11 @@ const Produto = () => {
       }
     };
     fetchProduto();
+    fetchProdutos()
     setLoading(false);
   }, [id]);
 
-  
+
   useEffect(() => {
     const fetchCarrinho = async () => {
       if (user) {
@@ -75,42 +89,92 @@ const Produto = () => {
     setMsgShow(true)
   }
 
+  const responsiveOptions = [
+    {
+      breakpoint: '1400px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1199px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '767px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '575px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
+
+  const produtoTemplate = (produto) => {
+    return (
+      <div key={produto.id} className="p-5">
+        <Card className="">
+          <Link to={`/produto/${produto.id}`} key={produto.id}>
+            <CardHeader className="p-0 bg-white ">
+              <img
+                src={produto.imagem_prod}
+                alt={produto.nome_prod}
+                className="w-full h-48 object-contain rounded-t-lg "
+              />
+            </CardHeader>
+            <CardContent>
+              <CardTitle className="text-gray-800">{produto.nome_prod}</CardTitle>
+              <CardDescription className="text-gray-600 line-clamp-1">
+                {produto.descricao_prod}
+              </CardDescription>
+            </CardContent>
+          </Link>
+          <CardFooter className="flex justify-between items-center bg-white">
+            <span className="text-sm font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
+            {user && (
+              <Button Text={"Adicionar ao Carrinho"} className={"size-20"} variant="black" onClick={() => (handleAddCarrinho(produto.id, carrinhoId))} />
+            )}
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     (loading && <Loading />) || (
-      <div className="bg-background">
-
+      <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
         <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
-
-        <section className="grid md:grid-cols-2 gap-8 px-4 md:px-6 py-12 md:py-20 max-w-6xl mx-auto">
-          <div className="flex flex-col gap-6">
+        <div className="max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="flex flex-col md:flex-row">
             <img
               src={produto.imagem_prod}
               alt={produto.nome_prod}
-              width={600}
-              height={600}
-              className="rounded-lg object-none w-full aspect-square "
+              className="w-full md:w-1/2 object-none h-96"
             />
-          </div>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <h1 className="text-3xl md:text-4xl font-bold">
-                {produto.nome_prod}
-              </h1>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p className="text-muted-foreground text-base">
-                {produto.descricao_prod}
-              </p>
-              <div className="flex items-center gap-4">
-                <p className="text-4xl font-bold">{toBRL(produto.preco_prod)}</p>
+            <div className="p-6 flex flex-col justify-between">
+              <h1 className="text-3xl font-bold text-gray-800">{produto.nome_prod}</h1>
+              <p className="text-gray-600 mt-2">{produto.descricao_prod}</p>
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-2xl font-bold text-blue-600">{toBRL(produto.preco_prod)}</p>
+                <Button
+                  Text="Adicionar ao carrinho"
+                  onClick={() => handleAddCarrinho(id, carrinhoId)}
+
+                />
               </div>
-              <Button
-                Text="Adicionar ao carrinho"
-                onClick={() => (handleAddCarrinho(id, carrinhoId))}
-              />
             </div>
           </div>
-        </section>
+        </div>
+        <h1>Produtos similiares</h1>
+        <Carousel
+          value={produtos.filter(produtoLista => produtoLista.categoriaId === produto.categoriaId)}
+          numVisible={5}
+          numScroll={3}
+          responsiveOptions={responsiveOptions}
+          itemTemplate={produtoTemplate}
+        />
       </div>
     )
   );
