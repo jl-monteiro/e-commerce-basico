@@ -161,13 +161,12 @@ const Produto = () => {
                 <Button
                   Text="Adicionar ao carrinho"
                   onClick={() => handleAddCarrinho(id, carrinhoId)}
-
                 />
               </div>
             </div>
           </div>
         </div>
-        <h1>Produtos similiares</h1>
+        <h1 className="mt-8 text-2xl font-semibold">Produtos similiares</h1>
         <Carousel
           value={produtos.filter(produtoLista => produtoLista.categoriaId === produto.categoriaId)}
           numVisible={5}

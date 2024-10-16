@@ -131,9 +131,6 @@ const Home = () => {
           </Link>
           <CardFooter className="flex justify-between items-center bg-white">
             <span className="text-sm font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
-            {user && (
-              <Button Text={"Adicionar ao Carrinho"} className={"size-20"} variant="black" onClick={() => (handleAddCarrinho(produto.id, carrinhoId))} />
-            )}
           </CardFooter>
         </Card>
       </div>
@@ -148,8 +145,9 @@ const Home = () => {
             <h3 className="px-10 font-semibold">{categoria.nome_categoria}</h3>
             <Carousel
               value={produtos.filter(produto => produto.categoriaId === categoria.id)}
-              numVisible={5}
-              numScroll={3}
+              numVisible={4}
+              numScroll={2}
+              autoplayInterval={8000}
               responsiveOptions={responsiveOptions}
               itemTemplate={produtoTemplate}
             />
@@ -178,12 +176,22 @@ const Home = () => {
     )
   }
 
+  const Categorias = () => {
+    return (
+      <div>
+        <h1>Todas as categorias</h1>
+      </div>
+    )
+  }
+
   return (
     (loading && <Loading />) || (
       <div className="flex-1">
         <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
 
         <BemVindo />
+
+        <Categorias />
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 ">
           <div className="container mx-auto px-4 md:px-6">

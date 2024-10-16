@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11/09/2024 às 21:40
+-- Tempo de geração: 16/10/2024 às 16:14
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -60,7 +60,9 @@ CREATE TABLE `categoria` (
 INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUES
 (1, 'Eletrônicos', '2024-09-11 16:42:22', '2024-09-11 18:55:04'),
 (2, 'Eletrodomésticos', '2024-09-11 18:18:02', '2024-09-11 18:55:09'),
-(3, 'Acessorios', '2024-09-11 18:19:47', '2024-09-11 18:19:47');
+(4, 'Móveis', '2024-10-16 11:37:10', '2024-10-16 11:37:10'),
+(5, 'Utilidades domésticas', '2024-10-16 11:40:10', '2024-10-16 11:40:10'),
+(6, 'Automotivo', '2024-10-16 11:58:10', '2024-10-16 11:58:10');
 
 -- --------------------------------------------------------
 
@@ -5669,6 +5671,13 @@ CREATE TABLE `enderecos` (
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `enderecos`
+--
+
+INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, `cep`, `cidadeId`, `estadoId`, `usuarioId`, `createdAt`, `updatedAt`) VALUES
+(1, 'Rua Dolário dos Santos', '123', 'casa', 'Centro', '88802-080', 4483, 24, 1, '2024-10-16 12:07:23', '2024-10-16 12:07:23');
+
 -- --------------------------------------------------------
 
 --
@@ -5734,11 +5743,9 @@ CREATE TABLE `itens_carrinho` (
 --
 
 INSERT INTO `itens_carrinho` (`id`, `carrinhoId`, `produtoId`, `qtd`) VALUES
-(27, 1, 2, 1),
-(28, 1, 5, 3),
-(29, 1, 8, 1),
 (30, 2, 6, 1),
-(31, 2, 2, 1);
+(31, 2, 2, 1),
+(32, 1, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -5765,12 +5772,30 @@ CREATE TABLE `produtos` (
 INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imagem_prod`, `categoriaId`, `createdAt`, `updatedAt`, `produtoId`) VALUES
 (1, 'TV Tudo em 1 Samsung', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 3500, '1726078672133_1724610629193_shopping.png', 1, '2024-09-11 16:42:40', '2024-09-11 18:17:52', NULL),
 (2, 'Notebook Dell', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1500, '1726078754869_1724610728467_download.jpg', 1, '2024-09-11 18:19:14', '2024-09-11 18:19:14', NULL),
-(3, 'Smartwatch rosa', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 150, '1726081026887_1724610792645_download (2).jpg', 3, '2024-09-11 18:19:40', '2024-09-11 18:57:06', NULL),
 (4, 'Fone de ouvido Bluetooth Preto', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 120, '1726080821223_1724610770477_download (1).jpg', 1, '2024-09-11 18:53:41', '2024-09-11 18:53:41', NULL),
 (5, 'Fogao 5 bocas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2200, '1726081058676_1724610859525_download (5).jpg', 2, '2024-09-11 18:57:38', '2024-09-11 18:57:38', NULL),
 (6, 'Aspirador', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1799, '1726081152633_1724610812101_download (3).jpg', 2, '2024-09-11 18:58:58', '2024-09-11 18:59:12', NULL),
 (7, 'Air Fryer Tecnologico', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 799, '1726081174917_1724610837909_download (4).jpg', 2, '2024-09-11 18:59:34', '2024-09-11 18:59:34', NULL),
-(8, 'Microondas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2999, '1726081226463_1724610880173_download (6).jpg', 2, '2024-09-11 19:00:26', '2024-09-11 19:00:26', NULL);
+(8, 'Microondas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2999, '1726081226463_1724610880173_download (6).jpg', 2, '2024-09-11 19:00:26', '2024-09-11 19:00:26', NULL),
+(9, 'Armário de Cozinha Aéreo 2 Portas de Correr de Vidro Reflex com Nicho Aberto Rustic Emilly Madesa', 'O Armário Aéreo de 105 cm com nicho aberto da linha Emilly da Madesa é fabricado com materiais de ótima qualidade e conta com duas portas de correr em vidro reflex, que podem revelar sutilmente o interior do móvel ou refletir o espaço, variando conforme a', 256.49, '1729078676284_b32fade8f7010c4457e6527d92783ae3.png', 4, '2024-10-16 11:37:56', '2024-10-16 11:37:56', NULL),
+(10, 'Puff Colchonete Dobrável / Sofá 3 em 1 Solteiro BF Colchões', 'Pensando na sua praticidade, A BF Colchões desenvolveu o Puff Multiuso 3x1 para você usar como preferir. Produto versátil, dobrável, compacto, além de oferecer melhor aproveitamento de espaço. Produzido com uma espuma de alta qualidade que garante todo co', 185.99, '1729078748662_b32fade8f7010c4457e6527d92783ae3.png', 4, '2024-10-16 11:39:08', '2024-10-16 11:39:08', NULL),
+(11, 'Panela Frigideira De Indução E Fogão A Gás Antiaderente De Cerâmica Reforçada Linha Premium - HYLLIS/HOME GOODS', 'A linha de frigideiras possui 4 camadas, 2 camadas de revestimento cerâmico(mármore) e 2 camadas de aço inox resistente a alta temperatura. Com estrutura de inox as panelas possuem 4 mm de espessura que proporciona uma maior durabilidade do produto, como ', 69.99, '1729079323357_4a93e35c4dc0e518a702149c4e55fca2.png', 5, '2024-10-16 11:40:39', '2024-10-16 11:48:43', NULL),
+(12, 'Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa Opções de Kits', 'Aparelho de Jantar Rústico Marrom Tramontina Jogo de Pratos Rasos, Fundos e Sobremesa com Opções de Kits\r\n\r\n\r\nMonte Seu Próprio Kit de Pratos de Porcelana Rústico Marrom!\r\n\r\nPersonalize seu conjunto de porcelana escolhendo os itens que mais combinam com s', 152.9, '1729079339339_fa506308d6f5c0d2be0a6ee918dd8c1f.png', 5, '2024-10-16 11:42:31', '2024-10-16 11:48:59', NULL),
+(13, 'Conjunto 6 Xícaras De Café Com Pires Em Porcelana 80ml - Hauskraft', 'Conjunto 6 Xícaras De Café Com Pires Em Porcelana 80ml\r\nConjunto de Xícaras com Pires 80ml\r\n\r\nMedidas das Canecas:\r\n\r\nAltura: 5 cm\r\n\r\nLargura: 7,5cm\r\n\r\nVolume: 80 ml\r\n\r\nMedidas dos Pires:\r\n\r\nLargura: 11,5cm\r\n\r\nAltura: 1,5cm\r\n\r\nCaracterísticas:\r\n\r\nMaterial', 69.9, '1729079347098_c4736dbb0a88ff660ca78bd7f2b3d55f.png', 5, '2024-10-16 11:43:49', '2024-10-16 11:49:07', NULL),
+(14, 'Jogo de Panelas Tramontina Turim em Alumínio com Revestimento Interno e Externo em Antiaderente Starflon Max Vermelho 11 Peças', 'A linha Turim é ideal para quem adora cozinhar e receber com estilo. Feito em alumínio com revestimento antiaderente Starflon Max em Vermelho, este conjunto de 10 peças oferece um cozimento uniforme e é extremamente fácil de limpar, tornando cada refeição', 279.99, '1729079356210_756a8905524caa3c455afb7de487620d.png', 5, '2024-10-16 11:44:37', '2024-10-16 11:49:16', NULL),
+(15, 'Jogo de Taças de Vidro 330ml 6 Peças Haus - Bico de Jaca Empire', 'Seja em grandes momentos ao lado de amigos, ou mesmo no dia a dia, contar com utensílios corretos para cada ocasião faz toda a diferença não é mesmo? Por isso vale a pena conferir o Jogo de Taças Bico de Jaca Empire, da Haus. Um lindo jogo composto por 6 ', 43.55, '1729079362267_3b647d996d17b7f8dbc9269d4e370e32.png', 5, '2024-10-16 11:45:16', '2024-10-16 11:49:22', NULL),
+(16, 'Sofá Retrátil Reclinável 3 Lugares Suede - Phormatta Evolution SMP', 'Ter móveis em casa que proporcionam conforto e sensação de aconchego, faz toda a diferença. Os móveis da SMP vão deixar sua casa mais bonita e decorada. O sofá Phormatta Evolution de 3 lugares é retrátil e reclinável, ideal para quem gosta de conforto nas', 1049.99, '1729079366234_b31e6ec4fbf559c4fdc1e1f2128ba6df (1).png', 4, '2024-10-16 11:47:25', '2024-10-16 11:49:26', NULL),
+(17, 'Sofá Retrátil Reclinável 3 Lugares Veludo Medelín Besthouse', 'Se você procura mais conforto e sofisticação para a sua sala de estar, o Sofá de 3 Lugares Medelín da Besthouse é a escolha certa. Robusto e aconchegante para garantir a composição do ambiente com um estilo clássico e muito elegância. O sofá é espaçoso, g', 1247.99, '1729079408046_9fbfccc35a1cd2a27739465f680a8fdb.png', 4, '2024-10-16 11:50:08', '2024-10-16 11:50:08', NULL),
+(18, 'Cadeira de Escritório Secretária Base Cromada com Rodinha Fortt Lisboa - CSF02', 'Cadeira de Escritório Secretária Base Cromada com Rodinha Fortt Lisboa Preta - CSF02-P\r\n\r\nA cadeira ideal para qualquer tipo de ambiente\r\nSeja para trabalhar, estudar ou para seu lazer, a cadeira tornou-se um item essencial para o dia a dia. Agora ela não', 179.9, '1729079482202_744efd7c84aa85ee048e7af645da604e.png', 4, '2024-10-16 11:51:22', '2024-10-16 11:51:22', NULL),
+(19, 'Escrivaninha 1 Gaveta 1 Porta Demóbile Office - Morada', 'Unindo utilidade e elegância a escrivaninha Morada da linha Office da Demóbile oferece tudo o que você precisa para dias de trabalho produtivos e confortáveis. Amplo espaço para organizar as atividades e tornar tudo mais prático, ela ainda conta com 1 gav', 224.91, '1729079720730_fcca3fd533311efbaf1e2003051b6884.png', 4, '2024-10-16 11:55:20', '2024-10-16 11:55:20', NULL),
+(20, 'Escrivaninha 2 Gavetas Politorno Office Lindóia', 'Escrivaninha 2 Gavetas Politorno Office Lindóia\r\nMesa para estudo ou trabalho, para casa ou escritório e ainda uma penteadeira. O produto Lindóia da Politorno, possui 2 gavetas com corrediças metálicas. A estrutura do móvel, inclusive as costas são em MDP', 252.1, '1729079777248_6cd6099c44b2283c702013052d6e5269.png', 4, '2024-10-16 11:56:17', '2024-10-16 11:56:17', NULL),
+(21, 'Pneu Westlake Aro 15 185/60R15 84H Z108 CR65764', 'Pneu Westlake Aro 15 185/60R15 84H Z108 CR65764\r\n\r\nPneu ideal para veículos de passeio. Possui desenho assimétrico e tecnologia convencional. Tem índice de velocidade H, que suporta rodar até 210 km por hora. Além disso, é um pneu com bom custo-benefício,', 233.99, '1729079912670_e73a41be629baaffbcd1b548d94ec148.png', 6, '2024-10-16 11:58:32', '2024-10-16 11:58:32', NULL),
+(22, 'Central Multimídia Mp5 2 Din Espelhamento Android Auto Carplay Ios Câmera Ré Bluetooth Usb Sd Aux Logo Montadora Carro - First Option', 'Central Multimídia MP5 2 Din com Bluetooth, Porta USB, SD e Espelhamento Via Cabo e Câmera de Ré Colorida\r\n\r\nEspelhamento do celular através dos APPs Android Auto e Carplay para usar os aplicativos do celular direto na tela da MP5.\r\n\r\n\r\n\r\nPossui excelente', 333.33, '1729079961366_6a384fed4b2d094626df83d05a5881df.png', 6, '2024-10-16 11:59:21', '2024-10-16 11:59:21', NULL),
+(23, 'Central Multimídia Evolve Multi Tela 7pol. com Espelhamento iOS Android - GP348', 'Um novo conceito em som automotivo. Muito mais tecnologia, entretenimento e qualidade de som para você e seu carro. Tenha maior precisão e suavidade ao toque na tela Capacitiva Touch 7”. Entradas AUX, Micro SD, USB, Controlador FM dedicado e memória para ', 179.99, '1729080000094_c80db9cb664b39ec10b3164e76ab5fe5.png', 6, '2024-10-16 12:00:00', '2024-10-16 12:00:00', NULL),
+(24, 'Central Multimídia Universal 2 Din Mp5 Bt Espelha Chevrolet - First Option', 'Central Multimídia Universal 2 Din Mp5 Bt Espelha Chevrolet\r\nVocê pretende ter um Multimídia no seu carro? Saiba quais as vantagens de obter esse Multimídia!\r\n\r\n\r\n\r\nEssa Central Multimídia além de proporcionar conforto e funcionalidade também agrega valor', 235.15, '1729080058653_50e03ce4ec826a3488a8eb57b7b42669.png', 6, '2024-10-16 12:00:58', '2024-10-16 12:00:58', NULL),
+(25, 'Frigobar Brastemp 76L Branco Retrô BRA08HB', 'O frigobar Brastemp Retrô BRA08HB branco transforma qualquer ambiente no seu mundo. O design inconfundível conta com os acabamentos vintage com pés palito estilo retrô, puxadores metálicos e o icônico logo Brastemp dos anos 50. Com capacidade líquida tota', 1994.99, '1729080168677_b0daa38907a16e01337516ea634109c3.png', 2, '2024-10-16 12:02:48', '2024-10-16 12:02:48', NULL),
+(26, 'Lavadora de Roupas Brastemp 13kg Cesto Inox - 12 Programas de Lavagem Branca BWK13', 'Lavadora de Roupas Brastemp 13kg Cesto Inox\r\nHoje em dia não dá nem pra imaginar viver sem uma Lavadora de Roupas, não é mesmo? Além de praticidade as lavadoras são capazes de deixar diversos tipos de tecidos e peças limpinhas e cheirosas. Vem conhecer es', 1994.94, '1729080204813_85bd62db25067b0c81d21d9e3251dddb.png', 2, '2024-10-16 12:03:24', '2024-10-16 12:03:24', NULL),
+(27, 'Forno Elétrico de Bancada Multifuncional Mondial - 52L Branco Grand Family II FR-52-W', 'Forno Elétrico de Bancada Multifuncional Mondial\r\nO forno elétrico de bancada Grand Family II FR-52-W da Mondial é a escolha ideal para quem busca um produto multifuncional, com alta potência e capacidade para preparar receitas para toda a família. Com ca', 408.49, '1729080272582_d22ceedf5325d4de2ec0f75672cba0ee.png', 2, '2024-10-16 12:04:32', '2024-10-16 12:04:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -5879,7 +5904,7 @@ ALTER TABLE `carrinho`
 -- AUTO_INCREMENT de tabela `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `cidades`
@@ -5891,7 +5916,7 @@ ALTER TABLE `cidades`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `estados`
@@ -5903,13 +5928,13 @@ ALTER TABLE `estados`
 -- AUTO_INCREMENT de tabela `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`

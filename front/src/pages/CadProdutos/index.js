@@ -109,7 +109,7 @@ const CadProdutos = ({ onClose, produto }) => {
             onChange={(e) => [setDescricao_prod(e.target.value), setError("")]}
             rows={5}
             className="w-full p-2 border rounded mb-4"
-            maxLength={300}
+            maxLength={1000}
           />
 
           <label className="block mb-2">Preço do Produto</label>
