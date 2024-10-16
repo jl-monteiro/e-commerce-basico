@@ -133,9 +133,6 @@ const Produto = () => {
           </Link>
           <CardFooter className="flex justify-between items-center bg-white">
             <span className="text-sm font-bold text-blue-600">{toBRL(produto.preco_prod)}</span>
-            {user && (
-              <Button Text={"Adicionar ao Carrinho"} className={"size-20"} variant="black" onClick={() => (handleAddCarrinho(produto.id, carrinhoId))} />
-            )}
           </CardFooter>
         </Card>
       </div>

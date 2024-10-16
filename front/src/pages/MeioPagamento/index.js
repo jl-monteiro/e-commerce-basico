@@ -15,7 +15,7 @@ const MeioPagamento = () => {
 
     useEffect(() => {
         const total = carrinho.reduce((acc, prod) => acc + prod.produto.preco_prod * prod.qtd, 0);
-        setTotalCarrinho(total);
+        setTotalCarrinho(total + 7);
 
         const createPreference = async () => {
             try {
@@ -90,7 +90,7 @@ const MeioPagamento = () => {
         console.log("brick protno")
     };
 
-    if(paymentId){
+    if (paymentId) {
         return <Pagamento paymentId={paymentId} />
     }
 
