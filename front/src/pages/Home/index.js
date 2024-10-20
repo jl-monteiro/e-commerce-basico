@@ -1,29 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import Button from '../../components/form/Button'
-
 import Loading from "../../components/Loading";
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../../components/ui/Card'
 import Alerta from "../../components/Alerta";
 import { Carousel } from 'primereact/carousel';
 
 import { SearchContext } from "../../contexts/SearchContext";
-import useAuth from "../../hooks/useAuth.js";
 
 const Home = () => {
-  const { produtos, setProdutos, loading, setLoading, addCarrinho, carrinho, carrinhoId } = useContext(SearchContext);
-  const { user } = useAuth()
-
+  const { produtos, setProdutos, loading, setLoading } = useContext(SearchContext);
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
 
   const [showFiltro, setShowFiltro] = useState(false)
   const [categorias, setCategorias] = useState([])
   const [categoria, setCategoria] = useState("")
-  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([])
-  const [produtosOriginais, setProdutosOriginais] = useState([])
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState({})
+  const [produtosFiltrados, setProdutosFiltrados] = useState([])
+
+  const navigate = useNavigate()
 
   const fetchCategorias = async () => {
     try {
@@ -40,21 +38,12 @@ const Home = () => {
       const response = await axios.get(
         "http://localhost:3003/sistema/produtos"
       );
-      setProdutosOriginais(response.data)
       setProdutos(response.data);
+      setProdutosFiltrados(response.data)
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleCheckbox = (e) => {
-    const { value, checked } = e.target
-    if (checked) {
-      setCategoriasSelecionadas((prev) => [...prev, value]);
-    } else {
-      setCategoriasSelecionadas((prev) => prev.filter(id => id !== value));
-    }
-  }
 
   useEffect(() => {
     fetchCategorias()
@@ -69,23 +58,6 @@ const Home = () => {
       currency: "BRL",
     });
   }
-
-  const handleAddCarrinho = (id, carrinhoId) => {
-    addCarrinho(id, carrinhoId)
-    setMsg("Adicionado ao carrinho com sucesso.")
-    setMsgShow(true)
-  }
-
-  const aplicarFiltros = () => {
-    if (categoriasSelecionadas.length === 0) {
-      setProdutos(produtosOriginais);
-    } else {
-      const produtosFiltrados = produtosOriginais.filter(produto =>
-        categoriasSelecionadas.includes(produto.categoriaId.toString())
-      );
-      setProdutos(produtosFiltrados);
-    }
-  };
 
   const responsiveOptions = [
     {
@@ -140,22 +112,54 @@ const Home = () => {
   const MapProdutos = () => {
     return (
       <div className="space-y-12">
-        {categorias.map((categoria) => (
-          <div key={categoria.id}>
-            <h3 className="px-10 font-semibold">{categoria.nome_categoria}</h3>
-            <Carousel
-              value={produtos.filter(produto => produto.categoriaId === categoria.id)}
-              numVisible={4}
-              numScroll={2}
-              autoplayInterval={8000}
-              responsiveOptions={responsiveOptions}
-              itemTemplate={produtoTemplate}
-            />
+        {produtosFiltrados.length === produtos.length ? (
+          categorias.map((categoria) => (
+            <div key={categoria.id}>
+              <h3 className="px-10 font-semibold">{categoria.nome_categoria}</h3>
+              <Carousel
+                value={produtos.filter((produto) => produto.categoriaId === categoria.id)}
+                numVisible={4}
+                numScroll={2}
+                autoplayInterval={8000}
+                responsiveOptions={responsiveOptions}
+                itemTemplate={produtoTemplate}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-10">
+            {produtosFiltrados.map((produto) => (
+              <div key={produto.id}>
+                <Card className="hover:shadow-lg transition-shadow duration-200">
+                  <Link to={`/produto/${produto.id}`}>
+                    <CardHeader className="p-0 bg-white">
+                      <img
+                        src={produto.imagem_prod}
+                        alt={produto.nome_prod}
+                        className="w-full h-48 object-contain rounded-t-lg"
+                      />
+                    </CardHeader>
+                    <CardContent>
+                      <CardTitle className="text-gray-800">{produto.nome_prod}</CardTitle>
+                      <CardDescription className="text-gray-600 line-clamp-2">
+                        {produto.descricao_prod}
+                      </CardDescription>
+                    </CardContent>
+                  </Link>
+                  <CardFooter className="flex justify-between items-center bg-white">
+                    <span className="text-sm font-bold text-blue-600">
+                      {toBRL(produto.preco_prod)}
+                    </span>
+                  </CardFooter>
+                </Card>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     );
   };
+  
 
   const BemVindo = () => {
     return (
@@ -176,11 +180,35 @@ const Home = () => {
     )
   }
 
+  const handleCategoria = (e) => {
+    setCategoriaSelecionada(e.target.value)
+
+    setProdutosFiltrados(
+      e.target.value === "todas"
+        ? produtos
+        : produtos.filter((produto) => e.target.value === produto.categoria.nome_categoria))
+  }
+
   const Categorias = () => {
     return (
-      <div>
-        <h1>Todas as categorias</h1>
-      </div>
+      <nav className="flex">
+        <ol className="inline-flex items-center ">
+          <li aria-current="page">
+            <select
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              onChange={handleCategoria}
+              value={categoriaSelecionada}
+            >
+              <option value="todas">Todas as categorias</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.nome_categoria}>
+                  {categoria.nome_categoria}
+                </option>
+              ))}
+            </select>
+          </li>
+        </ol>
+      </nav>
     )
   }
 
@@ -191,13 +219,12 @@ const Home = () => {
 
         <BemVindo />
 
-        <Categorias />
-
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 ">
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-center mb-12 text-gray-800 ">
               Produtos
             </h2>
+            <Categorias />
 
             <MapProdutos />
           </div>

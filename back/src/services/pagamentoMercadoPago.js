@@ -11,7 +11,7 @@ const createPagamento = async (req, res) => {
     try {
         const idempotencyKey = uuidv4()
         const body = req.body
-
+        console.log(body)
         const response = await payment.create({
             body: {
                 transaction_amount: body.transaction_amount,
