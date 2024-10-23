@@ -18,6 +18,7 @@ import MeioPagamento from "./pages/MeioPagamento";
 import Footer from "./components/layout/Footer";
 import ConfirmCompra from "./pages/ConfirmCompra";
 import Pagamento from "./pages/Pagamento";
+import EsqueceuSenha from "./pages/EsqueceuSenha";
 
 const Private = ({ Item, GoTo }) => {
   const { signed } = useAuth();
@@ -78,6 +79,8 @@ const RoutesApp = () => {
             element={<Private Item={Produto} GoTo={Login} />}
           />
 
+          <Route path="/esqueceuSenha" element={<Private Item={EsqueceuSenha} GoTo={EsqueceuSenha} />} />
+
           <Route path="/login" element={<Private Item={Home} GoTo={Login} />} />
           <Route
             exact
@@ -87,6 +90,8 @@ const RoutesApp = () => {
 
           <Route path="*" element={<Private Item={Home} />} />
         </Routes>
+        <Footer />
+
       </Fragment>
     </BrowserRouter>
   );
@@ -100,7 +105,6 @@ const App = () => {
           <main className="flex-grow">
             <RoutesApp />
           </main>
-          <Footer />
         </SearchProvider>
       </AuthProvider>
     </div>

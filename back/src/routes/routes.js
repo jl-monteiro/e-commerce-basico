@@ -10,7 +10,8 @@ const CategoriaController = require("../controllers/categoriaController");
 const carrinhoController = require("../controllers/carrinhoController");
 const itens_carrinhoController = require("../controllers/Itens_carrinhoController");
 const { createPreference } = require("../services/preferenceMercadoPago")
-const { createPagamento } = require("../services/pagamentoMercadoPago")
+const { createPagamento } = require("../services/pagamentoMercadoPago");
+const sendEmail = require("../services/sendEmail");
 
 //rotas da tabela usuarios
 router.post("/usuarios", UsuarioController.Insert);
@@ -80,5 +81,11 @@ router.post('/create-preference', async (req, res) => {
 
 router.post("/pagamento", createPagamento)
 
+//recuperacao OTP
+router.post("/recuperar_senha_email", (req, res) => {
+  sendEmail(req.body)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message))
+})
 
 module.exports = router;
