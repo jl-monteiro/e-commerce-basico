@@ -20,7 +20,7 @@ const createPagamento = async (req, res) => {
                     email: body.payer.email
                 }
             }, requestOptions: { idempotencyKey: idempotencyKey }
-        })
+        }).then(console.log).catch(console.log)
         res.status(201).json(response)
     } catch (error) {
         res.status(500).json({ error: "Erro ao criar pagamento: ", error })
@@ -48,4 +48,4 @@ payment.create({ body: {
     }}, requestOptions: { idempotencyKey: '<SOME_UNIQUE_VALUE>' } 
 }).then(console.log).catch(console.log);*/
 
-module.exports = { createPagamento }
+module.exports = createPagamento 

@@ -10,7 +10,7 @@ const CategoriaController = require("../controllers/categoriaController");
 const carrinhoController = require("../controllers/carrinhoController");
 const itens_carrinhoController = require("../controllers/Itens_carrinhoController");
 const { createPreference } = require("../services/preferenceMercadoPago")
-const { createPagamento } = require("../services/pagamentoMercadoPago");
+const createPagamento = require("../services/pagamentoMercadoPago");
 const sendEmail = require("../services/sendEmail");
 
 //rotas da tabela usuarios
