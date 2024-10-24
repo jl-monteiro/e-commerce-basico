@@ -122,7 +122,7 @@ const EsqueceuSenha = () => {
     </div>
   );
 
-  if (codigoCorreto) return <MudarSenha />
+  if (codigoCorreto) return <MudarSenha email={email} />
   return codigoEnviado ? (
     <div className="flex justify-center items-center w-screen h-screen bg-gray-50">
       <div className="bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
