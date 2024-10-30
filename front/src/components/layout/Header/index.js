@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-//import { useContext } from "react";
-import axios from "axios";
 
 import useAuth from "../../../hooks/useAuth";
 
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
-
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import { RxAvatar } from "react-icons/rx";
 import { CiShoppingCart } from "react-icons/ci";
@@ -51,12 +48,17 @@ const Header = () => {
 
           <div className="flex items-center space-x-4">
             {isAdmin && (
-              <Link
-                to="/gerenciar"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-2"
-              >
-                Gerenciar
-              </Link>
+              <Dropdown>
+                <DropdownTrigger className="outline-none">
+                  <button className="p-2">
+                    Admin
+                  </button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem key="profile" onClick={() => navigate("/gerenciarProd")}>Gerenciar Produtos</DropdownItem>
+                  <DropdownItem key="profile" onClick={() => navigate("/gerenciarCateg")}>Gerenciar Categorias</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             )}
             <button
               className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 rounded-full"

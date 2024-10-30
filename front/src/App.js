@@ -12,7 +12,8 @@ import Registrar from "./pages/Registrar";
 import User from "./pages/User";
 import Produto from "./pages/Produto";
 
-import Gerenciar from "./pages/Gerenciar";
+import GerenciarProdutos from "./pages/GerenciarProdutos";
+import GerenciarCategorias from "./pages/GerenciarCategorias";
 import { SearchProvider } from "./contexts/SearchContext";
 import MeioPagamento from "./pages/MeioPagamento";
 import Footer from "./components/layout/Footer";
@@ -69,8 +70,14 @@ const RoutesApp = () => {
 
           <Route
             exact
-            path="/gerenciar"
-            element={<PrivateAdmin Item={Gerenciar} />}
+            path="/gerenciarProd"
+            element={<PrivateAdmin Item={GerenciarProdutos} />}
+          />
+
+          <Route
+            exact
+            path="/gerenciarCateg"
+            element={<PrivateAdmin Item={GerenciarCategorias} />}
           />
 
           <Route

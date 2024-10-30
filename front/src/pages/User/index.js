@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
@@ -15,8 +14,7 @@ import { Confirm } from 'react-admin'
 import Alerta from "../../components/Alerta";
 
 const User = () => {
-  const { deslogar, user } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
@@ -85,7 +83,7 @@ const User = () => {
     catch (error) {
       console.error(error)
     }
-    finally{
+    finally {
       handleDialogClose()
     }
   }

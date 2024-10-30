@@ -12,6 +12,7 @@ const itens_carrinhoController = require("../controllers/Itens_carrinhoControlle
 const { createPreference } = require("../services/preferenceMercadoPago")
 const createPagamento = require("../services/pagamentoMercadoPago");
 const sendEmail = require("../services/sendEmail");
+const pedidosController = require("../controllers/pedidosController");
 
 //rotas da tabela usuarios
 router.post("/usuarios", UsuarioController.Insert);
@@ -67,6 +68,12 @@ router.post("/itens-carrinho", itens_carrinhoController.InsertItem)
 router.get("/itens-carrinho/:carrinhoId", itens_carrinhoController.SearchByCarrinho)
 router.put("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.UpdateQtd)
 router.delete("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController.DeleteItem)
+
+// rota tabela pedidos
+router.post("/pedidos", pedidosController.Insert)
+router.get("/pedidos", pedidosController.SearchAll)
+router.get("/pedidos/:carrinhoId", pedidosController.SearchOne)
+router.delete("/pedidos/:carrinhoId", pedidosController.Delete)
 
 // rota pagamento servico mercado pago
 router.post('/create-preference', async (req, res) => {
