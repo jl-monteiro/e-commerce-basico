@@ -36,13 +36,28 @@ const ConfirmCompra = () => {
         setEnderecos(enderecoss)
     }
 
-    const handleSalvar = () => {
+    const handleSalvar = async () => {
         if (!nome || !endereco) {
             setError("Preencha todos os campos!")
             return
         }
-
-        navigate("/meioPagamento")
+        try{
+            const response = await axios.post("http://localhost:3003/sistema/pedidos", {
+                nome_recebedor: nome,
+                cpf_recebedor: cpf,
+                valorTotal : totalCarrinho,
+                carrinhoId: carrinho[0].carrinhoId,
+                usuarioId: user.id,
+                enderecoId: endereco
+            })
+            if(response){
+                navigate("/meioPagamento")
+            }
+        }
+        catch(err){
+            setError("Erro ao confirmar pagamento")
+            console.error(err)
+        }
     }
 
     const handleCpf = async (e) => {
@@ -81,7 +96,7 @@ const ConfirmCompra = () => {
     }, [carrinho, setLoading, frete]);
 
     const base_url = "http://localhost:3003/sistema/produtos/files/users/"
-
+    
     return (
         loading ? <Loading /> : (
             <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

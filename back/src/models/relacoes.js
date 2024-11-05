@@ -26,6 +26,11 @@ Carrinho.hasMany(Itens_carrinho, { foreignKey: "carrinhoId" })
 Itens_carrinho.belongsTo(Produto, { foreignKey: "produtoId" })
 Produto.hasMany(Itens_carrinho, { foreignKey: "produtoId" })
 
+
+Pedidos.belongsTo(Carrinho, { foreignKey: "carrinhoId" });  
+Carrinho.hasOne(Pedidos, { foreignKey: "carrinhoId" });    
+Pedidos.belongsTo(Endereco, { foreignKey: "enderecoId" });
+Endereco.hasMany(Pedidos, { foreignKey: "enderecoId" });
 Pedidos.belongsTo(Usuario, { foreignKey: "usuarioId" });
 Usuario.hasMany(Pedidos, { foreignKey: "usuarioId" });
 

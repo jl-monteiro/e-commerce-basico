@@ -1,14 +1,17 @@
 const Carrinho = require('../models/carrinho');
+const Endereco = require('../models/endereco');
 const Pedidos = require('../models/pedidos');
+const Usuario = require('../models/usuario');
 
 const pedidosController = {
     async Insert(req, res) {
         try {
-            const { carrinhoId } = req.body;
+            const { nome_recebedor, cpf_recebedor, valorTotal, carrinhoId, usuarioId, enderecoId } = req.body;
 
             const pedido = await Pedidos.create({
-                carrinhoId
+                nome_recebedor, cpf_recebedor, valorTotal, carrinhoId, usuarioId, enderecoId
             });
+            console.log(pedido)
             res.status(201).json(pedido);
         } catch (error) {
             res.status(500).json({ error: "Erro ao inserir pedido", details: error.message });
@@ -18,7 +21,7 @@ const pedidosController = {
     async SearchAll(req, res) {
         try {
             const pedidos = await Pedidos.findAll({
-                include: [Carrinho]
+                include: [Carrinho, Usuario, Endereco]
             });
             res.status(200).json(pedidos);
         } catch (error) {
@@ -32,8 +35,8 @@ const pedidosController = {
 
             const pedido = await Pedidos.findOne({
                 where: { carrinhoId },
-                include: [Carrinho]
-            }); 
+                include: [Carrinho, Usuario, Endereco]
+            });
             if (pedido) {
                 res.status(200).json(pedido);
             } else {

@@ -8,9 +8,18 @@ const Pedidos = conexao.define("pedidos", {
         primaryKey: true,
         allowNull: false,
     },
+    nome_recebedor: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    cpf_recebedor: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     status: {
         type: Sequelize.ENUM("pendente", "aprovado"),
-        allowNull: false
+        defaultValue: "pendente",
+        allowNull: false,
     },
     valorTotal: {
         type: Sequelize.FLOAT,
@@ -31,6 +40,13 @@ const Pedidos = conexao.define("pedidos", {
             key: "id"
         },
         onDelete: "SET NULL"
+    },
+    enderecoId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'enderecos',
+            key: "id"
+        }
     }
 },
 
