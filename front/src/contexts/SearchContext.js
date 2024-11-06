@@ -33,7 +33,7 @@ export const SearchProvider = ({ children }) => {
         await axios.post("http://localhost:3003/sistema/itens-carrinho", { carrinhoId, produtoId: id, qtd: 1 })
 
       }
-      
+
       const updatedItens = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${carrinhoId}`);
       setCarrinho(updatedItens.data);
 
@@ -43,33 +43,33 @@ export const SearchProvider = ({ children }) => {
     }
   };
 
+  const fetchCarrinho = async () => {
+    if (user) {
+      try {
+        const response = await axios.get(`http://localhost:3003/sistema/carrinho/${user.id}`);
+        let data = response.data
+        setCarrinhoId(data[data.length - 1].id)
 
-  useEffect(() => {
-    const fetchCarrinho = async () => {
-      if (user) {
-        try {
-          const response = await axios.get(`http://localhost:3003/sistema/carrinho/${user.id}`);
-          //console.log("Carrinho encontrado: ", response.data);
-          setCarrinhoId(response.data.id);
-
-          const itens = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${response.data.id}`);
-          //console.log("Itens do carrinho: ", itens.data);
-          setCarrinho(itens.data);
-        } catch (error) {
-          if (error.response && error.response.status === 404) {
-            try {
-              const response = await axios.post("http://localhost:3003/sistema/carrinho", { usuarioId: user.id });
-              //console.log("Carrinho criado: ", response.data);
-              setCarrinhoId(response.data.id);
-            } catch (postError) {
-              console.error("Erro ao criar carrinho: ", postError);
-            }
-          } else {
-            console.error("Erro ao buscar carrinho: ", error);
+        const itens = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${data[data.length - 1].id}`);
+        //console.log("Itens do carrinho: ", itens.data);
+        setCarrinho(itens.data);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          try {
+            const response = await axios.post("http://localhost:3003/sistema/carrinho", { usuarioId: user.id });
+            //console.log("Carrinho criado: ", response.data);
+            setCarrinhoId(response.data.id);
+          } catch (postError) {
+            console.error("Erro ao criar carrinho: ", postError);
           }
+        } else {
+          console.error("Erro ao buscar carrinho: ", error);
         }
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     fetchCarrinho()
   }, [user])
 

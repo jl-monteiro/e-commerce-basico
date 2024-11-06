@@ -11,6 +11,9 @@ const pedidosController = {
             const pedido = await Pedidos.create({
                 nome_recebedor, cpf_recebedor, valorTotal, carrinhoId, usuarioId, enderecoId
             });
+            const carrinho = await Carrinho.create({
+                usuarioId
+            })
             console.log(pedido)
             res.status(201).json(pedido);
         } catch (error) {
@@ -28,19 +31,18 @@ const pedidosController = {
             res.status(500).json({ error: "Erro ao buscar pedidos", details: error.message });
         }
     },
-
-    async SearchOne(req, res) {
+    async SearchByUser(req, res) {
         try {
-            const { carrinhoId } = req.params;
+            const { usuarioId } = req.params;
 
-            const pedido = await Pedidos.findOne({
-                where: { carrinhoId },
+            const pedido = await Pedidos.findAll({
+                where: { usuarioId },
                 include: [Carrinho, Usuario, Endereco]
             });
             if (pedido) {
                 res.status(200).json(pedido);
             } else {
-                res.status(404).json({ message: "Pedido não encontrado para o carrinhoId fornecido" });
+                res.status(404).json({ message: "Pedido não encontrado para o usuarioId fornecido" });
             }
         } catch (error) {
             res.status(500).json({ error: "Erro ao procurar pedido", details: error.message });

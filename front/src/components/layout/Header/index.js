@@ -20,7 +20,7 @@ const Header = () => {
 
   const { carrinho } = useContext(SearchContext)
 
-
+  
   const isAdmin = user && user.tipo === "admin";
 
   const openModal = () => {

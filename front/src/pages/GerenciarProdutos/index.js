@@ -72,7 +72,7 @@ const GerenciarProdutos = () => {
           <Button Text="Cadastrar Produto" onClick={openModalProduto} />
         </div>
 
-        <div className="">
+        <div>
           <Card className="w-full shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl font-semibold">PRODUTOS</CardTitle>

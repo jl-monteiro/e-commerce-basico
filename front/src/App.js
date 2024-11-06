@@ -95,7 +95,7 @@ const RoutesApp = () => {
             element={<Private Item={Home} GoTo={Registrar} />}
           />
 
-          <Route path="*" element={<Private Item={Home} />} />
+          <Route path="*" element={<Private Item={Home} GoTo={Home} />} />
         </Routes>
         <Footer />
 

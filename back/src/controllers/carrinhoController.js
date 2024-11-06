@@ -20,7 +20,7 @@ const carrinhoController = {
         try {
             const { usuarioId } = req.params
 
-            const carrinho = await Carrinho.findOne({ where: { usuarioId: usuarioId } }, { include: [Usuario] })
+            const carrinho = await Carrinho.findAll({ where: { usuarioId: usuarioId } }, { include: [Usuario] })
             if (carrinho) {
                 res.status(200).json(carrinho)
             }

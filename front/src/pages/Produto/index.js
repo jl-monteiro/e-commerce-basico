@@ -54,9 +54,8 @@ const Produto = () => {
       if (user) {
         try {
           const response = await axios.get(`http://localhost:3003/sistema/carrinho/${user.id}`)
-          console.log("Carrinho encontrado: ", response.data)
-          setCarrinhoId(response.data.id)
-
+          let data = response.data
+          setCarrinhoId(data[data.length - 1].id)
         }
         catch (error) {
           if (error.response && error.response.status === 404) {
