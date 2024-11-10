@@ -6,38 +6,69 @@ import { SearchContext } from '../../contexts/SearchContext';
 import Loading from '../../components/Loading';
 import { Payment } from '@mercadopago/sdk-react';
 import Pagamento from '../Pagamento';
-
+import useAuth from '../../hooks/useAuth';
+import { useParams } from 'react-router-dom';
 const MeioPagamento = () => {
-    const [totalCarrinho, setTotalCarrinho] = useState(0)
-    const { loading, setLoading, carrinho, setCarrinho, carrinhoId } = useContext(SearchContext)
+    const { id } = useParams()
+    const { loading, setLoading } = useContext(SearchContext)
+    const { user } = useAuth()
     const [preferenceId, setPreferenceId] = useState(null)
     const [paymentId, setPaymentId] = useState(null)
+    const [pedido, setPedido] = useState({})
+    const [itensPedido, setItensPedido] = useState([])
 
     useEffect(() => {
-        const total = carrinho.reduce((acc, prod) => acc + prod.produto.preco_prod * prod.qtd, 0);
-        setTotalCarrinho(total + 7);
-
-        const createPreference = async () => {
+        const fetchPedido = async () => {
             try {
-                const items = await carrinho.map(prod => ({
-                    id: `${prod.produto.id}`,
-                    title: prod.produto.nome_prod,
-                    quantity: prod.qtd,
-                    unit_price: prod.produto.preco_prod
-                }));
-                console.log(items)
-                const response = await axios.post("http://localhost:3003/sistema/create-preference", { items })
-
-                setPreferenceId(response.data.preferenceId)
+                const response = await axios.get(`http://localhost:3003/sistema/pedidos/${user.id}/${id}`)
+                setPedido(response.data)
             }
-            catch (error) {
-                console.error("Erro ao criar a preferência de pagamento:", error);
+            catch (err) {
+                console.error(err)
             }
         }
 
-        createPreference()
+
+        fetchPedido()
         setLoading(false);
-    }, [carrinho, setLoading]);
+    }, [id, user.id]);
+    const fetchItensPedido = async () => {
+        if (!pedido) return
+        try {
+            const response = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${pedido.carrinhoId}`)
+            setItensPedido(response.data)
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+
+    const createPreference = async () => {
+        if (!itensPedido || !pedido) return;
+        try {
+            const items = await itensPedido.map(prod => ({
+                id: `${prod.produto.id}`,
+                title: prod.produto.nome_prod,
+                quantity: prod.qtd,
+                unit_price: prod.produto.preco_prod
+            }));
+            console.log(items)
+            const response = await axios.post("http://localhost:3003/sistema/create-preference", { items })
+
+            setPreferenceId(response.data.preferenceId)
+        }
+        catch (error) {
+            console.error("Erro ao criar a preferência de pagamento:", error);
+        }
+    }
+
+    useEffect(() => {
+        if (pedido) fetchItensPedido()
+    }, [pedido])
+
+    useEffect(() => {
+        if (pedido) createPreference()
+    }, [itensPedido])
 
     function toBRL(preco) {
         return preco.toLocaleString("pt-br", {
@@ -45,10 +76,6 @@ const MeioPagamento = () => {
             currency: "BRL",
         });
     }
-
-    const initialization = {
-        amount: totalCarrinho,
-    };
     const customization = {
         paymentMethods: {
             bankTransfer: "all",
@@ -96,24 +123,29 @@ const MeioPagamento = () => {
 
     return (
         (loading && <Loading />) || (
-            <div className="w-full max-w-md p-6 mx-auto bg-white shadow-md rounded-lg">
-                {preferenceId ? (
-                    <>
+            <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                {preferenceId && pedido ? (
+
+                    <div className="max-w-7xl mx-auto">
                         <Payment
-                            initialization={initialization}
+                            initialization={{
+                                amount: parseFloat(pedido.valorTotal),
+                            }}
                             customization={customization}
                             onSubmit={onSubmit}
                             onReady={onReady}
                             onError={onError}
                         />
-                        <p className="font-semibold text-lg text-gray-800">Valor: {toBRL(totalCarrinho)}</p>
-                    </>
+                        <p className="font-semibold text-lg text-gray-800">Valor: {toBRL(pedido.valorTotal)}</p>
+                       
+                    </div>
+
                 ) : (
                     <Loading />
                 )}
-
             </div>
-        ))
+        )
+    );
 }
 
 export default MeioPagamento

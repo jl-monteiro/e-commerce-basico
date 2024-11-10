@@ -41,6 +41,10 @@ const ConfirmCompra = () => {
             setError("Preencha todos os campos!")
             return
         }
+        if(carrinho.length === 0){
+            setError("Carrinho vazio.")
+            return
+        }
         try{
             const response = await axios.post("http://localhost:3003/sistema/pedidos", {
                 nome_recebedor: nome,
@@ -51,7 +55,7 @@ const ConfirmCompra = () => {
                 enderecoId: endereco
             })
             if(response){
-                navigate("/meioPagamento")
+                navigate(`/meioPagamento/${response.data.id}`)
             }
         }
         catch(err){

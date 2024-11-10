@@ -73,7 +73,8 @@ router.delete("/itens-carrinho/:carrinhoId/:produtoId", itens_carrinhoController
 router.post("/pedidos", pedidosController.Insert)
 router.get("/pedidos", pedidosController.SearchAll)
 router.get("/pedidos/:usuarioId", pedidosController.SearchByUser)
-router.delete("/pedidos/:usuarioId", pedidosController.Delete)
+router.get("/pedidos/:usuarioId/:id", pedidosController.SearchUniqueByUser)
+router.delete("/pedidos/:id", pedidosController.Delete)
 
 // rota pagamento servico mercado pago
 router.post('/create-preference', async (req, res) => {

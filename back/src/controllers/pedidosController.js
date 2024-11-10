@@ -48,6 +48,23 @@ const pedidosController = {
             res.status(500).json({ error: "Erro ao procurar pedido", details: error.message });
         }
     },
+    async SearchUniqueByUser(req, res) {
+        try {
+            const { usuarioId, id } = req.params;
+
+            const pedido = await Pedidos.findOne({
+                where: { id, usuarioId },
+                include: [Carrinho, Usuario, Endereco]
+            });
+            if (pedido) {
+                res.status(200).json(pedido);
+            } else {
+                res.status(404).json({ message: "Pedido não encontrado " });
+            }
+        } catch (error) {
+            res.status(500).json({ error: "Erro ao procurar pedido", details: error.message });
+        }
+    },
 
     async Delete(req, res) {
         try {

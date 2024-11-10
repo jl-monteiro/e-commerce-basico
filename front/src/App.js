@@ -58,7 +58,7 @@ const RoutesApp = () => {
 
           <Route
             exact
-            path="/meioPagamento"
+            path="/meioPagamento/:id"
             element={<Private Item={MeioPagamento} GoTo={Login} />}
           />
 

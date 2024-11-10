@@ -6,13 +6,16 @@ import Loading from "../../components/Loading";
 import Modal from "../../components/Modal";
 import Endereco from "../Endereco";
 
-import { FaRegUserCircle, FaHome, FaShoppingCart, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
+import { FaRegUserCircle, FaShoppingCart, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
 import { Confirm } from 'react-admin'
 
+import Button from '../../components/form/Button'
 import Alerta from "../../components/Alerta";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const { user } = useAuth();
+  const navigate = useNavigate()
 
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
@@ -100,6 +103,26 @@ const User = () => {
   }
   const handleDialogClose = () => setOpenDialog(false);
 
+  const handleDetalhes = () => {
+
+  }
+
+  const handlePendente = (id) => {
+    navigate(`/meioPagamento/${id}`)
+  }
+
+
+  const handleExcluirPedido = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3003/sistema/pedidos/${id}`)
+      fetchPedidos()
+    }
+    catch (error) {
+      console.error(error)
+      setError("Não foi possível excluir o pedido. Contate o suporte.")
+    }
+  }
+
   function toBRL(preco) {
     return parseInt(preco).toLocaleString("pt-br", {
       style: "currency",
@@ -119,7 +142,7 @@ const User = () => {
 
   return (
     (loading && <Loading />) || (
-      <div className="flex h-screen">
+      <div className="flex">
         <div className="w-64 flex flex-col items-center py-6">
           <div className="w-full flex flex-col items-start space-y-4">
             <button
@@ -308,26 +331,49 @@ const User = () => {
                     <p className="text-center text-gray-500">Você ainda não fez nenhum pedido.</p>
                   ) : (
                     pedidos.map((pedido) => (
-                      <div className="border-b pb-4 mb-4" key={pedido.id}>
+                      <div
+                        className="relative border-b pb-4 mb-4 p-4 bg-white rounded-lg shadow-md"
+                        key={pedido.id}
+                      >
                         <div className="flex justify-between">
                           <h3 className="text-lg font-medium">Pedido #{pedido.id}</h3>
-                          <span className="text-base text-gray-600">Feito em: {formatDate(pedido.createdAt)}</span>
+                          <span className="text-base text-gray-600">
+                            Feito em: {formatDate(pedido.createdAt)}
+                          </span>
                         </div>
-                        <div className="mt-2">
+                        <div className="py-4 text-gray-700">
+                          <p>Nome do recebedor: {pedido.nome_recebedor}</p>
+                          <p>CPF do recebedor: {pedido.cpf_recebedor}</p>
                           <div className="flex items-center gap-2">
-                            <label className="text-base text-gray-600">Status: </label>
+                            <label className="text-base">Status:</label>
                             {pedido.status === "pendente" ? (
-                              <>
-                                <p className="text-sm text-red-400">Pendente - Aguardando processamento.</p>
-                              </>
+                              <p className="text-sm text-red-400">Pendente - Aguardando processamento.</p>
                             ) : (
-                              <>
-                                <p className="text-sm text-green-400">Aprovado - Pedido confirmado.</p>
-                              </>
+                              <p className="text-sm text-green-400">Aprovado - Pedido confirmado.</p>
                             )}
                           </div>
-                          <p>Total: {toBRL(pedido.valorTotal)}</p>
+
+                          <p>Endereço: {pedido.endereco.logradouro}, {pedido.endereco.numero}, {pedido.endereco.bairro}</p>
+                          <p className="font-bold">Total: {toBRL(pedido.valorTotal)}</p>
                         </div>
+
+                        {pedido.status === "pendente" && (
+                          <div className="flex mt-4">
+                            <Button
+                              onClick={() => handlePendente(pedido.id)}
+                              Text="Realizar Pagamento"
+                            />
+                            <div className="px-6">
+                              <button
+                                onClick={() => handleExcluirPedido(pedido.id)}
+                                className="p-2  bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                                title="Excluir Pedido"
+                              >
+                                <FaTrash size={16} />
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))
                   )}
@@ -335,7 +381,6 @@ const User = () => {
               </div>
             </div>
           )}
-
 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <Endereco onClose={closeModal} endereco={enderecoEmEdicao} />
