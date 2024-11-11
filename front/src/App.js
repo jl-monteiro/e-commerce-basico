@@ -14,6 +14,7 @@ import Produto from "./pages/Produto";
 
 import GerenciarProdutos from "./pages/GerenciarProdutos";
 import GerenciarCategorias from "./pages/GerenciarCategorias";
+import GerenciarPedidos from "./pages/GerenciarPedidos";
 import { SearchProvider } from "./contexts/SearchContext";
 import MeioPagamento from "./pages/MeioPagamento";
 import Footer from "./components/layout/Footer";
@@ -66,6 +67,12 @@ const RoutesApp = () => {
             exact
             path="/pagamento"
             element={<Private Item={Pagamento} GoTo={Login} />}
+          />
+
+          <Route
+            exact
+            path="/gerenciarPedidos"
+            element={<PrivateAdmin Item={GerenciarPedidos} />}
           />
 
           <Route

@@ -57,6 +57,7 @@ const Header = () => {
                 <DropdownMenu aria-label="Static Actions">
                   <DropdownItem key="profile" onClick={() => navigate("/gerenciarProd")}>Gerenciar Produtos</DropdownItem>
                   <DropdownItem key="profile" onClick={() => navigate("/gerenciarCateg")}>Gerenciar Categorias</DropdownItem>
+                  <DropdownItem key="profile" onClick={() => navigate("/gerenciarPedidos")}>Visualizar pedidos</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             )}
