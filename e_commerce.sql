@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 16/10/2024 às 16:14
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Generation Time: Nov 11, 2024 at 01:48 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `e_commerce`
+-- Database: `e_commerce`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `carrinho`
+-- Table structure for table `carrinho`
 --
 
 CREATE TABLE `carrinho` (
@@ -33,17 +33,22 @@ CREATE TABLE `carrinho` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `carrinho`
+-- Dumping data for table `carrinho`
 --
 
 INSERT INTO `carrinho` (`id`, `usuarioId`) VALUES
 (1, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(7, 1),
 (2, 2);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `categoria`
+-- Table structure for table `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -54,7 +59,7 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `categoria`
+-- Dumping data for table `categoria`
 --
 
 INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUES
@@ -67,7 +72,7 @@ INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUE
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `cidades`
+-- Table structure for table `cidades`
 --
 
 CREATE TABLE `cidades` (
@@ -79,7 +84,7 @@ CREATE TABLE `cidades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `cidades`
+-- Dumping data for table `cidades`
 --
 
 INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`) VALUES
@@ -5654,7 +5659,7 @@ INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `enderecos`
+-- Table structure for table `enderecos`
 --
 
 CREATE TABLE `enderecos` (
@@ -5672,7 +5677,7 @@ CREATE TABLE `enderecos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `enderecos`
+-- Dumping data for table `enderecos`
 --
 
 INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, `cep`, `cidadeId`, `estadoId`, `usuarioId`, `createdAt`, `updatedAt`) VALUES
@@ -5681,7 +5686,7 @@ INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `estados`
+-- Table structure for table `estados`
 --
 
 CREATE TABLE `estados` (
@@ -5693,7 +5698,7 @@ CREATE TABLE `estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `estados`
+-- Dumping data for table `estados`
 --
 
 INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) VALUES
@@ -5728,7 +5733,7 @@ INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) V
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `itens_carrinho`
+-- Table structure for table `itens_carrinho`
 --
 
 CREATE TABLE `itens_carrinho` (
@@ -5739,18 +5744,49 @@ CREATE TABLE `itens_carrinho` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `itens_carrinho`
+-- Dumping data for table `itens_carrinho`
 --
 
 INSERT INTO `itens_carrinho` (`id`, `carrinhoId`, `produtoId`, `qtd`) VALUES
 (30, 2, 6, 1),
 (31, 2, 2, 1),
-(32, 1, 4, 1);
+(32, 1, 4, 1),
+(33, 1, 2, 1),
+(34, 3, 1, 1),
+(35, 5, 2, 1),
+(36, 6, 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `produtos`
+-- Table structure for table `pedidos`
+--
+
+CREATE TABLE `pedidos` (
+  `id` int(11) NOT NULL,
+  `nome_recebedor` varchar(255) NOT NULL,
+  `cpf_recebedor` varchar(255) NOT NULL,
+  `status` enum('pendente','aprovado') NOT NULL DEFAULT 'pendente',
+  `valorTotal` float NOT NULL,
+  `carrinhoId` int(11) DEFAULT NULL,
+  `usuarioId` int(11) DEFAULT NULL,
+  `enderecoId` int(11) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pedidos`
+--
+
+INSERT INTO `pedidos` (`id`, `nome_recebedor`, `cpf_recebedor`, `status`, `valorTotal`, `carrinhoId`, `usuarioId`, `enderecoId`, `createdAt`, `updatedAt`) VALUES
+(2, 'joaoclasucsad1', '123.123.123-21', 'pendente', 3507, 3, 1, 1, '2024-11-10 00:09:35', '2024-11-10 00:09:35'),
+(3, 'joaoclasucsad1', '123.123.123-21', 'aprovado', 3507, 3, 1, 1, '2024-11-10 00:11:42', '2024-11-10 00:11:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produtos`
 --
 
 CREATE TABLE `produtos` (
@@ -5766,7 +5802,7 @@ CREATE TABLE `produtos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `produtos`
+-- Dumping data for table `produtos`
 --
 
 INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imagem_prod`, `categoriaId`, `createdAt`, `updatedAt`, `produtoId`) VALUES
@@ -5800,7 +5836,7 @@ INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imag
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -5816,7 +5852,7 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `usuarios`
+-- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `login`, `email`, `senha`, `tipo`, `token`, `createdAt`, `updatedAt`) VALUES
@@ -5824,31 +5860,31 @@ INSERT INTO `usuarios` (`id`, `nome`, `login`, `email`, `senha`, `tipo`, `token`
 (2, 'teste1', 'teste1', 'teste1@gmail.com', '$2a$10$ItUzYXsNirC2RyzIWLdhYeteqm9mY7YaexrP5krI8y4a3impmI5B.', 'usuario', 'tqi433zgeve', '2024-09-11 19:31:47', '2024-09-11 19:31:47');
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices de tabela `carrinho`
+-- Indexes for table `carrinho`
 --
 ALTER TABLE `carrinho`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuarioId` (`usuarioId`);
 
 --
--- Índices de tabela `categoria`
+-- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `cidades`
+-- Indexes for table `cidades`
 --
 ALTER TABLE `cidades`
   ADD PRIMARY KEY (`id`),
   ADD KEY `estadoId` (`estadoId`);
 
 --
--- Índices de tabela `enderecos`
+-- Indexes for table `enderecos`
 --
 ALTER TABLE `enderecos`
   ADD PRIMARY KEY (`id`),
@@ -5857,7 +5893,7 @@ ALTER TABLE `enderecos`
   ADD KEY `usuarioId` (`usuarioId`);
 
 --
--- Índices de tabela `estados`
+-- Indexes for table `estados`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`),
@@ -5865,7 +5901,7 @@ ALTER TABLE `estados`
   ADD UNIQUE KEY `sigla_2` (`sigla`);
 
 --
--- Índices de tabela `itens_carrinho`
+-- Indexes for table `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
   ADD PRIMARY KEY (`id`),
@@ -5873,7 +5909,16 @@ ALTER TABLE `itens_carrinho`
   ADD KEY `produtoId` (`produtoId`);
 
 --
--- Índices de tabela `produtos`
+-- Indexes for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carrinhoId` (`carrinhoId`),
+  ADD KEY `usuarioId` (`usuarioId`),
+  ADD KEY `enderecoId` (`enderecoId`);
+
+--
+-- Indexes for table `produtos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`id`),
@@ -5881,7 +5926,7 @@ ALTER TABLE `produtos`
   ADD KEY `categoriaId` (`categoriaId`);
 
 --
--- Índices de tabela `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
@@ -5891,75 +5936,81 @@ ALTER TABLE `usuarios`
   ADD UNIQUE KEY `email_2` (`email`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `carrinho`
+-- AUTO_INCREMENT for table `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de tabela `categoria`
+-- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de tabela `cidades`
+-- AUTO_INCREMENT for table `cidades`
 --
 ALTER TABLE `cidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5561;
 
 --
--- AUTO_INCREMENT de tabela `enderecos`
+-- AUTO_INCREMENT for table `enderecos`
 --
 ALTER TABLE `enderecos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de tabela `estados`
+-- AUTO_INCREMENT for table `estados`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT de tabela `itens_carrinho`
+-- AUTO_INCREMENT for table `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- AUTO_INCREMENT de tabela `produtos`
+-- AUTO_INCREMENT for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `produtos`
 --
 ALTER TABLE `produtos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT de tabela `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Restrições para tabelas despejadas
+-- Constraints for dumped tables
 --
 
 --
--- Restrições para tabelas `carrinho`
+-- Constraints for table `carrinho`
 --
 ALTER TABLE `carrinho`
   ADD CONSTRAINT `carrinho_ibfk_1` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Restrições para tabelas `cidades`
+-- Constraints for table `cidades`
 --
 ALTER TABLE `cidades`
   ADD CONSTRAINT `cidades_ibfk_1` FOREIGN KEY (`estadoId`) REFERENCES `estados` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Restrições para tabelas `enderecos`
+-- Constraints for table `enderecos`
 --
 ALTER TABLE `enderecos`
   ADD CONSTRAINT `enderecos_ibfk_4` FOREIGN KEY (`cidadeId`) REFERENCES `cidades` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -5967,14 +6018,22 @@ ALTER TABLE `enderecos`
   ADD CONSTRAINT `enderecos_ibfk_6` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Restrições para tabelas `itens_carrinho`
+-- Constraints for table `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
   ADD CONSTRAINT `itens_carrinho_ibfk_3` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `itens_carrinho_ibfk_4` FOREIGN KEY (`produtoId`) REFERENCES `produtos` (`id`);
 
 --
--- Restrições para tabelas `produtos`
+-- Constraints for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`enderecoId`) REFERENCES `enderecos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `produtos`
 --
 ALTER TABLE `produtos`
   ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`categoriaId`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
