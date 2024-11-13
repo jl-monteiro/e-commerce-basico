@@ -36,11 +36,11 @@ export const SearchProvider = ({ children }) => {
 
       const updatedItens = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${carrinhoId}`);
       setCarrinho(updatedItens.data);
-
     }
     catch (error) {
       console.log("CARRINHO ID: ", carrinhoId)
     }
+    
   };
 
   const fetchCarrinho = async () => {

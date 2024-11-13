@@ -20,6 +20,10 @@ const Header = () => {
 
   const { carrinho } = useContext(SearchContext)
 
+  const handleDeslogar = () => {
+    deslogar()
+    navigate("/login")
+  }
   
   const isAdmin = user && user.tipo === "admin";
 
@@ -89,7 +93,7 @@ const Header = () => {
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Static Actions">
                       <DropdownItem key="profile" onClick={() => navigate("/user")}>Perfil</DropdownItem>
-                      <DropdownItem key="logout" className="text-danger" color="danger" onClick={() => deslogar()}>
+                      <DropdownItem key="logout" className="text-danger" color="danger" onClick={handleDeslogar}>
                         Sair
                       </DropdownItem>
                     </DropdownMenu>

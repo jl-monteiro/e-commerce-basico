@@ -39,7 +39,8 @@ const Registrar = () => {
     }
   }
 
-  const handleRegistra = async () => {
+  const handleRegistra = async (e) => {
+    e.preventDefault()
     if (!nome || !login || !email || !emailConf || !senha || !senhaConf) {
       setError("Preencha todos os campos.");
       return
@@ -68,6 +69,11 @@ const Registrar = () => {
       setError('O email fornecido é inválido.');
       return
     }
+    const loginRegex =  /^[a-zA-Z0-9]+$/
+    if(!loginRegex.test(login)){
+      setError("Login não pode ter caracter especial ou espaço em branco.")
+      return
+    }
 
     const res = await registrar(nome, login, email, senha);
 
@@ -86,133 +92,135 @@ const Registrar = () => {
           <h1 className="text-3xl font-bold">Registrar</h1>
           <p className="text-gray-600">Crie uma conta para começar a usar o serviço</p>
         </div>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium leading-none"
-              htmlFor="nome"
-            >
-              Nome
-            </label>
-            <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="text"
-              placeholder="Digite seu nome"
-              value={nome}
-              onChange={(e) => [
-                setNome(e.target.value),
-                setError('')
-              ]}
-            />
-          </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium leading-none"
-              htmlFor="login"
-            >
-              Login
-            </label>
-            <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="text"
-              placeholder="Digite seu login"
-              value={login}
-              onChange={(e) => [setLogin(e.target.value), setError('')]}
-            />
-          </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium leading-none"
-              htmlFor="email"
-            >
-              E-Mail
-            </label>
-            <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="email"
-              placeholder="Digite seu e-mail"
-              value={email}
-              onChange={(e) => [setEmail(e.target.value), setError('')]}
-            />
-          </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium leading-none"
-              htmlFor="email"
-            >
-              Confirmar e-mail
-            </label>
-            <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="email"
-              placeholder="Confirme o e-mail"
-              value={emailConf}
-              onChange={(e) => [setEmailConf(e.target.value), setError('')]}
-            />
-          </div>
-          <div className="relative space-y-2">
-            <div className="flex items-center justify-between">
+        <form>
+          <div className="space-y-4">
+            <div className="space-y-2">
               <label
                 className="text-sm font-medium leading-none"
-                htmlFor="password"
+                htmlFor="nome"
               >
-                Senha
+                Nome
               </label>
+              <Input
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                type="text"
+                placeholder="Digite seu nome"
+                value={nome}
+                onChange={(e) => [
+                  setNome(e.target.value),
+                  setError('')
+                ]}
+              />
             </div>
-            <Input
-              className="mt-1 p-2 w-full border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md pr-10"
-              type={passShow ? "text" : "password"}
-              placeholder="Digite sua senha"
-              value={senha}
-              onChange={(e) => [setSenha(e.target.value), setError('')]}
-            />
-            <button
-              type='button'
-              className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
-              onClick={handlePassShow}
-            >
-              {passShow && <FaRegEyeSlash />}
-              {!passShow && <FaRegEye />}
-            </button>
-          </div>
-          <div className='relative space-y-2'>
-            <div className='flex items-center justify-between'>
+            <div className="space-y-2">
               <label
-                className='text-sm font-medium leading-none'
-                htmlFor='password'
+                className="text-sm font-medium leading-none"
+                htmlFor="login"
               >
-                Confirmar senha
+                Login
               </label>
+              <Input
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                type="text"
+                placeholder="Digite seu login"
+                value={login}
+                onChange={(e) => [setLogin(e.target.value), setError('')]}
+              />
             </div>
-            <Input
-              className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type={passShowConf ? "text" : "password"}
-              placeholder="Confirme sua senha"
-              value={senhaConf}
-              onChange={(e) => [setSenhaConf(e.target.value), setError('')]}
-            />
-            <button
-              type='button'
-              className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
-              onClick={handlePassShowConf}
+            <div className="space-y-2">
+              <label
+                className="text-sm font-medium leading-none"
+                htmlFor="email"
+              >
+                E-Mail
+              </label>
+              <Input
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                type="email"
+                placeholder="Digite seu e-mail"
+                value={email}
+                onChange={(e) => [setEmail(e.target.value), setError('')]}
+              />
+            </div>
+            <div className="space-y-2">
+              <label
+                className="text-sm font-medium leading-none"
+                htmlFor="email"
+              >
+                Confirmar e-mail
+              </label>
+              <Input
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                type="email"
+                placeholder="Confirme o e-mail"
+                value={emailConf}
+                onChange={(e) => [setEmailConf(e.target.value), setError('')]}
+              />
+            </div>
+            <div className="relative space-y-2">
+              <div className="flex items-center justify-between">
+                <label
+                  className="text-sm font-medium leading-none"
+                  htmlFor="password"
+                >
+                  Senha
+                </label>
+              </div>
+              <Input
+                className="mt-1 p-2 w-full border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md pr-10"
+                type={passShow ? "text" : "password"}
+                placeholder="Digite sua senha"
+                value={senha}
+                onChange={(e) => [setSenha(e.target.value), setError('')]}
+              />
+              <button
+                type='button'
+                className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
+                onClick={handlePassShow}
+              >
+                {passShow && <FaRegEyeSlash />}
+                {!passShow && <FaRegEye />}
+              </button>
+            </div>
+            <div className='relative space-y-2'>
+              <div className='flex items-center justify-between'>
+                <label
+                  className='text-sm font-medium leading-none'
+                  htmlFor='password'
+                >
+                  Confirmar senha
+                </label>
+              </div>
+              <Input
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                type={passShowConf ? "text" : "password"}
+                placeholder="Confirme sua senha"
+                value={senhaConf}
+                onChange={(e) => [setSenhaConf(e.target.value), setError('')]}
+              />
+              <button
+                type='button'
+                className='absolute right-3 top-1/2 transform -translate-y-1 focus:outline-none'
+                onClick={handlePassShowConf}
+              >
+                {passShowConf && <FaRegEyeSlash />}
+                {!passShowConf && <FaRegEye />}
+              </button>
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <Button
+              Text="Registrar"
+              className="w-full h-10 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              onClick={handleRegistra}
             >
-              {passShowConf && <FaRegEyeSlash />}
-              {!passShowConf && <FaRegEye />}
-            </button>
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button
-            Text="Registrar"
-            className="w-full h-10 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            onClick={handleRegistra}
-          >
-          </Button>
+            </Button>
 
-          <p className="text-gray-600 mt-4 text-center">
-            Já tem uma conta?
-            <Link to="/login" className="text-blue-600 hover:underline">&nbsp; Faça login</Link>
-          </p>
-        </div>
+            <p className="text-gray-600 mt-4 text-center">
+              Já tem uma conta?
+              <Link to="/login" className="text-blue-600 hover:underline">&nbsp; Faça login</Link>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );

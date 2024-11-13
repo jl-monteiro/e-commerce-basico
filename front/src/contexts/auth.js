@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
   const deslogar = () => {
     setUser(null);
     localStorage.removeItem("user_token");
+    
   };
 
   return (

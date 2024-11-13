@@ -9,6 +9,8 @@ import { Carousel } from 'primereact/carousel';
 
 import Alerta from "../../components/Alerta";
 import useAuth from "../../hooks/useAuth";
+import Carrinho from "../../components/Carrinho";
+import Modal from "../../components/Modal";
 
 const Produto = () => {
   const { id } = useParams();
@@ -16,10 +18,20 @@ const Produto = () => {
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
   const [carrinhoId, setCarrinhoId] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { user } = useAuth()
 
   const { loading, setLoading, addCarrinho, produtos, setProdutos } = useContext(SearchContext);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
 
   const fetchProdutos = async () => {
     try {
@@ -86,6 +98,7 @@ const Produto = () => {
     addCarrinho(parseInt(id), carrinhoId)
     setMsg("Adicionado ao carrinho com sucesso.")
     setMsgShow(true)
+    openModal()
   }
 
   const responsiveOptions = [
@@ -170,6 +183,10 @@ const Produto = () => {
           responsiveOptions={responsiveOptions}
           itemTemplate={produtoTemplate}
         />
+        
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Carrinho onClose={closeModal} />
+        </Modal>
       </div>
     )
   );
