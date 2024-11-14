@@ -12,6 +12,7 @@ import { Confirm } from 'react-admin'
 import Button from '../../components/form/Button'
 import Alerta from "../../components/Alerta";
 import { useNavigate } from "react-router-dom";
+import ViewPedido from "../ViewPedido";
 
 const User = () => {
   const { user } = useAuth();
@@ -20,27 +21,41 @@ const User = () => {
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+
   const [enderecos, setEnderecos] = useState([])
   const [pedidos, setPedidos] = useState([])
   const [editando, setEditando] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isModalEnderecoOpen, setIsModalEnderecoOpen] = useState(false);
+  const [pedidoVisualizado, setPedidoVisualizado] = useState(null)
+
+  const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false)
   const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
+
   const [openDialog, setOpenDialog] = useState(false)
   const [idRemove, setIdRemove] = useState(null)
+
   const [error, setError] = useState("")
+  
   const { loading, setLoading } = useContext(SearchContext);
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
 
   const [activeTab, setActiveTab] = useState("perfil")
 
-  const openModal = (tipo, endereco = null) => {
+  const openModalPedido = (tipo, pedido = null) => {
+    setIsModalPedidoOpen(true)
+    setPedidoVisualizado(pedido)
+  }
+  const closeModalPedido = () => setIsModalPedidoOpen(false)
+
+  const openModalEndereco = (tipo, endereco = null) => {
     setEnderecoEmEdicao(endereco)
-    setIsModalOpen(true);
+    setIsModalEnderecoOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModalEndereco = () => {
+    setIsModalEnderecoOpen(false);
     setEnderecoEmEdicao(null)
   };
 
@@ -64,7 +79,7 @@ const User = () => {
     fetchEndereco()
     fetchPedidos()
     setLoading(false);
-  }, [user, isModalOpen]);
+  }, [user, isModalEnderecoOpen]);
 
   const handleSave = () => {
     axios
@@ -102,10 +117,6 @@ const User = () => {
     setIdRemove(enderId)
   }
   const handleDialogClose = () => setOpenDialog(false);
-
-  const handleDetalhes = () => {
-
-  }
 
   const handlePendente = (id) => {
     navigate(`/meioPagamento/${id}`)
@@ -295,7 +306,7 @@ const User = () => {
                         <div className="flex gap-4 items-end justify-end">
                           <button
                             className="px-4 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
-                            onClick={() => openModal("editar", endereco)}>
+                            onClick={() => openModalEndereco("editar", endereco)}>
                             Editar
                           </button>
                           <button
@@ -311,7 +322,7 @@ const User = () => {
                   ))}
                   <button
                     className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
-                    onClick={openModal}
+                    onClick={openModalEndereco}
                   >
                     Adicionar novo endereço
                   </button>
@@ -356,7 +367,10 @@ const User = () => {
                           <p>Endereço: {pedido.endereco.logradouro}, {pedido.endereco.numero}, {pedido.endereco.bairro}</p>
                           <p className="font-bold">Total: {toBRL(pedido.valorTotal)}</p>
                         </div>
-
+                        <Button
+                          Text="Visualizar itens"
+                          onClick={() => openModalPedido("visualizar", pedido)}
+                        />
                         {pedido.status === "pendente" && (
                           <div className="flex mt-4">
                             <Button
@@ -374,6 +388,7 @@ const User = () => {
                             </div>
                           </div>
                         )}
+
                       </div>
                     ))
                   )}
@@ -382,8 +397,11 @@ const User = () => {
             </div>
           )}
 
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <Endereco onClose={closeModal} endereco={enderecoEmEdicao} />
+          <Modal isOpen={isModalEnderecoOpen} onClose={closeModalEndereco}>
+            <Endereco onClose={closeModalEndereco} endereco={enderecoEmEdicao} />
+          </Modal>
+          <Modal isOpen={isModalPedidoOpen} onClose={closeModalPedido}>
+            <ViewPedido onClose={closeModalPedido} pedido={pedidoVisualizado} />
           </Modal>
         </div>
       </div>

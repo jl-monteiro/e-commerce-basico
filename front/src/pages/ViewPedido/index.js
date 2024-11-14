@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "../../components/ui/Card";
-import Button from "../../components/form/Button";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 
@@ -14,7 +13,7 @@ const ViewPedido = ({ onClose, pedido }) => {
             try {
                 const response = await axios.get(`http://localhost:3003/sistema/itens-carrinho/${pedido.carrinhoId}`)
                 setItens(response.data)
-                console.log(response.data)
+                // console.log(response.data)
             }
             catch (err) {
                 console.error(err)
@@ -49,6 +48,7 @@ const ViewPedido = ({ onClose, pedido }) => {
                                 <p className="text-lg font-semibold text-gray-900">
                                     R$ {(prod.produto.preco_prod * prod.qtd).toFixed(2)}
                                 </p>
+                                
                             </div>
                         ))}
                         <div className="flex justify-between items-center py-4 border-t border-gray-200">
@@ -62,6 +62,7 @@ const ViewPedido = ({ onClose, pedido }) => {
                     <p className="text-2xl font-bold text-gray-900">R$ {pedido.valorTotal}</p>
                 </CardFooter>
             </Card>
+            
         </div>
     ))
 }

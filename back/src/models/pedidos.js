@@ -45,6 +45,7 @@ const Pedidos = conexao.define("pedidos", {
         type: Sequelize.INTEGER,
         references: {
             model: 'enderecos',
+         
             key: "id"
         }
     }
