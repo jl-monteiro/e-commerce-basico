@@ -69,7 +69,7 @@ const EnderecoController = {
     try {
       const { id } = req.params;
       const endereco = await Endereco.findByPk(id, {
-        include: [Cidade, Usuario],
+        include: [Cidade, Estado, Usuario],
       });
       if (endereco) {
         res.status(200).json(endereco);

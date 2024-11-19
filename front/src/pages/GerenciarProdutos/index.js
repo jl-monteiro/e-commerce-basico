@@ -8,6 +8,7 @@ import CadProdutos from "../CadProdutos";
 import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card";
+import SearchBar from "../../components/layout/SearchBar";
 
 const GerenciarProdutos = () => {
   const [isModalProdutoOpen, setIsModalProdutoOpen] = useState(false);
@@ -18,7 +19,7 @@ const GerenciarProdutos = () => {
 
   const [error, setError] = useState("")
 
-  const { loading, setLoading } = useContext(SearchContext);
+  const { loading, setLoading, produtosFiltrados, setProdutosFiltrados } = useContext(SearchContext);
 
   const openModalProduto = (tipo, produto = null) => {
     setProdutoEmEdicao(produto);
@@ -71,6 +72,9 @@ const GerenciarProdutos = () => {
         <div className="flex space-x-4 mb-6">
           <Button Text="Cadastrar Produto" onClick={openModalProduto} />
         </div>
+        <div className="flex space-x-4 mb-6">
+          <SearchBar />
+        </div>
 
         <div>
           <Card className="w-full shadow-lg">
@@ -91,7 +95,7 @@ const GerenciarProdutos = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {produtos.map((produto) => (
+                    {produtosFiltrados.map((produto) => (
                       <tr key={produto.id} className="border-b hover:bg-gray-100">
                         <td className="p-4">{produto.id}</td>
                         <td className="p-4">{produto.nome_prod}</td>

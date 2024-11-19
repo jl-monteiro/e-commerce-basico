@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Button from '../../components/form/Button'
 import Loading from "../../components/Loading";
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../../components/ui/Card'
 import Alerta from "../../components/Alerta";
@@ -11,17 +9,13 @@ import { Carousel } from 'primereact/carousel';
 import { SearchContext } from "../../contexts/SearchContext";
 
 const Home = () => {
-  const { produtos, setProdutos, loading, setLoading } = useContext(SearchContext);
+  const { produtos, setProdutos, loading, setLoading, produtosFiltrados, setProdutosFiltrados } = useContext(SearchContext);
+  
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
 
-  const [showFiltro, setShowFiltro] = useState(false)
   const [categorias, setCategorias] = useState([])
-  const [categoria, setCategoria] = useState("")
   const [categoriaSelecionada, setCategoriaSelecionada] = useState({})
-  const [produtosFiltrados, setProdutosFiltrados] = useState([])
-
-  const navigate = useNavigate()
 
   const fetchCategorias = async () => {
     try {
@@ -38,7 +32,7 @@ const Home = () => {
       const response = await axios.get(
         "http://localhost:3003/sistema/produtos"
       );
-      setProdutos(response.data);
+      setProdutos(response.data)
       setProdutosFiltrados(response.data)
     } catch (error) {
       console.error(error);

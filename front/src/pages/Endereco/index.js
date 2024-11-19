@@ -98,16 +98,6 @@ const Endereco = ({ onClose, endereco }) => {
     }
   }
 
-  const handleEstadoChange = (e) => {
-    const idEstado = e.target.value;
-    setEstadoSelecionado(idEstado);
-
-    const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(idEstado, 10));
-
-    setCidadesFiltradas(filtrarCidades);
-    setCidade("")
-  };
-
   const cepComplete = async () => {
     if (!cep) return
     console.log(cep)
@@ -181,7 +171,7 @@ const Endereco = ({ onClose, endereco }) => {
                     id="estadoId"
                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     value={estadoSelecionado}
-                    onChange={handleEstadoChange}
+                    onChange={(e) => setEstadoSelecionado(e.target.value)}
                     disabled
                   >
                     <option value="" disabled>Selecione o estado</option>

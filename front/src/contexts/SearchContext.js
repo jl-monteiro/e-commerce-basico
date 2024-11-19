@@ -7,8 +7,9 @@ export const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
   const [produtos, setProdutos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [produtosFiltrados, setProdutosFiltrados] = useState([])
 
+  const [loading, setLoading] = useState(true);
   const [carrinhoId, setCarrinhoId] = useState("");
   const [carrinho, setCarrinho] = useState([]);
 
@@ -76,6 +77,8 @@ export const SearchProvider = ({ children }) => {
   const value = {
     produtos,
     setProdutos,
+    produtosFiltrados,
+    setProdutosFiltrados,
     loading,
     setLoading,
     addCarrinho,

@@ -368,7 +368,7 @@ const User = () => {
                           <p className="font-bold">Total: {toBRL(pedido.valorTotal)}</p>
                         </div>
                         <Button
-                          Text="Visualizar itens"
+                          Text="Visualizar mais detalhes"
                           onClick={() => openModalPedido("visualizar", pedido)}
                         />
                         {pedido.status === "pendente" && (

@@ -60,6 +60,9 @@ const GerenciarCategorias = () => {
         (loading && <Loading />) || (
             <div className="flex flex-col container mx-auto p-6 items-center justify-center">
                 <h1 className="text-3xl font-bold mb-4 text-gray-800">Gerenciar Categorias</h1>
+                <div className="flex space-x-4 mb-6">
+                    <Button Text="Cadastrar Produto" onClick={openModalCategoria} />
+                </div>
                 <Card className="flex-grow shadow-lg rounded-lg">
                     <CardHeader>
                         <CardTitle className="text-xl font-semibold">Categorias</CardTitle>

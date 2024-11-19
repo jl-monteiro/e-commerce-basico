@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 
@@ -17,14 +17,14 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { signed, user, deslogar } = useAuth();
   const navigate = useNavigate()
-
+  const url = useLocation()
   const { carrinho } = useContext(SearchContext)
 
   const handleDeslogar = () => {
     deslogar()
     navigate("/login")
   }
-  
+
   const isAdmin = user && user.tipo === "admin";
 
   const openModal = () => {
@@ -45,9 +45,11 @@ const Header = () => {
               JL
             </Link>
           </div>
-          <div className="flex items-center gap-2">
 
-            <SearchBar />
+          <div className="flex items-center gap-2">
+            {url.pathname === "/" && (
+              <SearchBar />
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
