@@ -106,6 +106,7 @@ const User = () => {
     }
     catch (error) {
       console.error(error)
+      setError("Não foi possivel excluir o endereço. Contate o suporte.")
     }
     finally {
       handleDialogClose()
@@ -327,6 +328,7 @@ const User = () => {
                     Adicionar novo endereço
                   </button>
                 </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
               </div>
             </div>
           )}
