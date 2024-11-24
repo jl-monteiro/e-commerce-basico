@@ -45,7 +45,7 @@ const Endereco = ({ onClose, endereco }) => {
       const filtrarCidades = cidades.filter((cidade) => cidade.estadoId === parseInt(estadoSelecionado, 10))
       setCidadesFiltradas(filtrarCidades)
     }
-    if(cep){
+    if (cep) {
       setHasCep(true)
     }
   }, [estadoSelecionado, cidades])
@@ -96,39 +96,7 @@ const Endereco = ({ onClose, endereco }) => {
     finally {
       onClose()
     }
-  }
-
-  const cepComplete = async () => {
-    if (!cep) return
-    console.log(cep)
-
-    try {
-      const apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
-      const res = await axios.get(apiUrl)
-      const data = res.data
-
-      if (data.erro) {
-        setError("CEP não encontrado.")
-        setBairro("")
-        setLogradouro("")
-        return
-      }
-
-      let cid = cidades.find(cidade => cidade.nome_cidade === data.localidade)
-      setEstadoSelecionado(cid.estado.id)
-      setCidade(cid.id)
-      setBairro(data.bairro || "")
-      setLogradouro(data.logradouro || "")
-
-      setHasCep(true)
-
-      setError("")
-    }
-    catch (err) {
-      console.error("Erro ao buscar dados do CEP:", err);
-      setError("Erro ao buscar dados do CEP.");
-    }
-  }
+  }  
 
   const handleCep = async (e) => {
     const value = e.target.value
@@ -139,6 +107,34 @@ const Endereco = ({ onClose, endereco }) => {
       cepFormatado = `${onlyNum.slice(0, 5)}-${onlyNum.slice(5, 8)}`
     }
     setCep(cepFormatado)
+    if (cepFormatado.length === 9) {
+      try {
+        const apiUrl = `https://viacep.com.br/ws/${cepFormatado}/json/`;
+        const res = await axios.get(apiUrl)
+        const data = res.data
+
+        if (data.erro) {
+          setError("CEP não encontrado.")
+          setBairro("")
+          setLogradouro("")
+          return
+        }
+
+        let cid = cidades.find(cidade => cidade.nome_cidade === data.localidade)
+        setEstadoSelecionado(cid.estado.id)
+        setCidade(cid.id)
+        setBairro(data.bairro || "")
+        setLogradouro(data.logradouro || "")
+
+        setHasCep(true)
+
+        setError("")
+      }
+      catch (err) {
+        console.error("Erro ao buscar dados do CEP:", err);
+        setError("Erro ao buscar dados do CEP.");
+      }
+    }
   }
 
 
@@ -160,7 +156,6 @@ const Endereco = ({ onClose, endereco }) => {
                 className="block w-full border-gray-300 rounded-md shadow-sm sm:text-sm focus-visible:outline-none"
                 value={cep}
                 onChange={handleCep}
-                onBlur={cepComplete}
               />
             </div>
             {hasCep && (
