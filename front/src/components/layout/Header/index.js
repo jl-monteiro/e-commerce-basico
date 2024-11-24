@@ -47,7 +47,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            {url.pathname === "/" && (
+            {(url.pathname === "/" || url.pathname === "/home") && (
               <SearchBar />
             )}
           </div>

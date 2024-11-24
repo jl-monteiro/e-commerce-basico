@@ -55,7 +55,7 @@ export const SearchProvider = ({ children }) => {
         //console.log("Itens do carrinho: ", itens.data);
         setCarrinho(itens.data);
       } catch (error) {
-        if (error.response && error.response.status === 404) {
+        if (error) {
           try {
             const response = await axios.post("http://localhost:3003/sistema/carrinho", { usuarioId: user.id });
             //console.log("Carrinho criado: ", response.data);
