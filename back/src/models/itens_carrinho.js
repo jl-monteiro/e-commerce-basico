@@ -22,7 +22,8 @@ const Itens_carrinho = conexao.define("itens_carrinho", {
             model: 'produtos',
             key: 'id'
         },
-        allowNull: false
+        allowNull: false,
+        onDelete: "CASCADE"
     },
     qtd: {
         type: Sequelize.INTEGER,

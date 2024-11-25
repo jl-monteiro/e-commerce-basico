@@ -9,6 +9,7 @@ import { SearchContext } from "../../contexts/SearchContext";
 import Loading from "../../components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card";
 import SearchBar from "../../components/layout/SearchBar";
+import { Confirm } from 'react-admin'
 
 const GerenciarProdutos = () => {
   const [isModalProdutoOpen, setIsModalProdutoOpen] = useState(false);
@@ -16,10 +17,19 @@ const GerenciarProdutos = () => {
   const [produtoEmEdicao, setProdutoEmEdicao] = useState(null);
 
   const [produtos, setProdutos] = useState([]);
-
+  const [openDialog, setOpenDialog] = useState(false)
+  const [idRemove, setIdRemove] = useState(null)
+  const [imgRemove, setImgRemove] = useState(null)
   const [error, setError] = useState("")
 
   const { loading, setLoading, produtosFiltrados, setProdutosFiltrados } = useContext(SearchContext);
+
+  const handleClick = (produtoId, imagem) => {
+    setOpenDialog(true)
+    setImgRemove(imagem)
+    setIdRemove(produtoId)
+  }
+  const handleDialogClose = () => setOpenDialog(false);
 
   const openModalProduto = (tipo, produto = null) => {
     setProdutoEmEdicao(produto);
@@ -35,38 +45,47 @@ const GerenciarProdutos = () => {
   const handleExcluirProduto = async (id, imagem_prod) => {
     console.log(imagem_prod);
     try {
-      const rsp = await axios.post(
-        `http://localhost:3003/sistema/produtos/delete-image`,
-        { imageUrl: imagem_prod }
-      );
-      console.log(rsp);
       await axios.delete(`http://localhost:3003/sistema/produtos/${id}`);
-      const response = await axios.get(
-        "http://localhost:3003/sistema/produtos"
-      );
-      setProdutos(response.data);
+
+      await axios.post(`http://localhost:3003/sistema/produtos/delete-image`, { imageUrl: imagem_prod });
+
+      fetchProdutos()
     } catch (err) {
       console.error(err);
-      setError(err)
+      setError(err.response.data.message)
+    }
+    finally {
+      handleDialogClose()
+    }
+  };
+  const fetchProdutos = async () => {
+    try {
+      const response = await axios.get("http://localhost:3003/sistema/produtos");
+      setProdutos(response.data);
+      setProdutosFiltrados(response.data)
+    } catch (error) {
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    const fetchProdutos = async () => {
-      try {
-        const response = await axios.get("http://localhost:3003/sistema/produtos");
-        setProdutos(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+
     fetchProdutos();
     setLoading(false);
-  }, [isModalProdutoOpen]);
+  }, [isModalProdutoOpen, openDialog]);
 
   return (
     (loading && <Loading />) || (
       <div className="flex flex-col container mx-auto p-4 items-center justify-center">
+        <Confirm
+          isOpen={openDialog}
+          title={`Deletar produto?`}
+          content="Tem certeza que deseja deletar este produto?"
+          onConfirm={() => handleExcluirProduto(idRemove, imgRemove)}
+          onClose={handleDialogClose}
+          confirm={"Deletar"}
+          cancel={"Cancelar"}
+        />
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Gerenciamento de Produtos</h1>
 
         <div className="flex space-x-4 mb-6">
@@ -109,7 +128,7 @@ const GerenciarProdutos = () => {
                           />
                           <Button
                             Text="Excluir"
-                            onClick={() => handleExcluirProduto(produto.id, produto.imagem_prod)}
+                            onClick={() => handleClick(produto.id, produto.imagem_prod)}
                           />
                         </td>
                       </tr>

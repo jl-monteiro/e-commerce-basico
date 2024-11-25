@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 01:48 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Tempo de geração: 25/11/2024 às 18:20
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `e_commerce`
+-- Banco de dados: `e_commerce`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `carrinho`
+-- Estrutura para tabela `carrinho`
 --
 
 CREATE TABLE `carrinho` (
@@ -33,7 +33,7 @@ CREATE TABLE `carrinho` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `carrinho`
+-- Despejando dados para a tabela `carrinho`
 --
 
 INSERT INTO `carrinho` (`id`, `usuarioId`) VALUES
@@ -43,12 +43,17 @@ INSERT INTO `carrinho` (`id`, `usuarioId`) VALUES
 (5, 1),
 (6, 1),
 (7, 1),
-(2, 2);
+(9, 1),
+(10, 1),
+(11, 1),
+(12, 1),
+(2, 2),
+(8, 3);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categoria`
+-- Estrutura para tabela `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -59,7 +64,7 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `categoria`
+-- Despejando dados para a tabela `categoria`
 --
 
 INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUES
@@ -72,7 +77,7 @@ INSERT INTO `categoria` (`id`, `nome_categoria`, `createdAt`, `updatedAt`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cidades`
+-- Estrutura para tabela `cidades`
 --
 
 CREATE TABLE `cidades` (
@@ -84,7 +89,7 @@ CREATE TABLE `cidades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cidades`
+-- Despejando dados para a tabela `cidades`
 --
 
 INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`) VALUES
@@ -5659,7 +5664,7 @@ INSERT INTO `cidades` (`id`, `nome_cidade`, `estadoId`, `createdAt`, `updatedAt`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `enderecos`
+-- Estrutura para tabela `enderecos`
 --
 
 CREATE TABLE `enderecos` (
@@ -5677,7 +5682,7 @@ CREATE TABLE `enderecos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `enderecos`
+-- Despejando dados para a tabela `enderecos`
 --
 
 INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, `cep`, `cidadeId`, `estadoId`, `usuarioId`, `createdAt`, `updatedAt`) VALUES
@@ -5686,7 +5691,7 @@ INSERT INTO `enderecos` (`id`, `logradouro`, `numero`, `complemento`, `bairro`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `estados`
+-- Estrutura para tabela `estados`
 --
 
 CREATE TABLE `estados` (
@@ -5698,7 +5703,7 @@ CREATE TABLE `estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `estados`
+-- Despejando dados para a tabela `estados`
 --
 
 INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) VALUES
@@ -5733,7 +5738,7 @@ INSERT INTO `estados` (`id`, `nome_estado`, `sigla`, `createdAt`, `updatedAt`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `itens_carrinho`
+-- Estrutura para tabela `itens_carrinho`
 --
 
 CREATE TABLE `itens_carrinho` (
@@ -5744,22 +5749,23 @@ CREATE TABLE `itens_carrinho` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `itens_carrinho`
+-- Despejando dados para a tabela `itens_carrinho`
 --
 
 INSERT INTO `itens_carrinho` (`id`, `carrinhoId`, `produtoId`, `qtd`) VALUES
-(30, 2, 6, 1),
-(31, 2, 2, 1),
-(32, 1, 4, 1),
-(33, 1, 2, 1),
-(34, 3, 1, 1),
-(35, 5, 2, 1),
-(36, 6, 1, 1);
+(1, 7, 30, 1),
+(2, 9, 26, 1),
+(3, 9, 27, 1),
+(4, 9, 13, 1),
+(5, 10, 29, 1),
+(6, 10, 31, 1),
+(7, 11, 26, 1),
+(8, 11, 22, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pedidos`
+-- Estrutura para tabela `pedidos`
 --
 
 CREATE TABLE `pedidos` (
@@ -5776,17 +5782,17 @@ CREATE TABLE `pedidos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pedidos`
+-- Despejando dados para a tabela `pedidos`
 --
 
 INSERT INTO `pedidos` (`id`, `nome_recebedor`, `cpf_recebedor`, `status`, `valorTotal`, `carrinhoId`, `usuarioId`, `enderecoId`, `createdAt`, `updatedAt`) VALUES
-(2, 'joaoclasucsad1', '123.123.123-21', 'pendente', 3507, 3, 1, 1, '2024-11-10 00:09:35', '2024-11-10 00:09:35'),
-(3, 'joaoclasucsad1', '123.123.123-21', 'aprovado', 3507, 3, 1, 1, '2024-11-10 00:11:42', '2024-11-10 00:11:42');
+(2, 'memata de uma vez', '120.030.020-30', 'aprovado', 2480.33, 9, 1, 1, '2024-11-25 17:07:00', '2024-11-25 17:07:00'),
+(4, 'quinzevintemil', '123.992.999-92', 'pendente', 2335.27, 11, 1, 1, '2024-11-25 17:19:09', '2024-11-25 17:19:09');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `produtos`
+-- Estrutura para tabela `produtos`
 --
 
 CREATE TABLE `produtos` (
@@ -5802,17 +5808,10 @@ CREATE TABLE `produtos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `produtos`
+-- Despejando dados para a tabela `produtos`
 --
 
 INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imagem_prod`, `categoriaId`, `createdAt`, `updatedAt`, `produtoId`) VALUES
-(1, 'TV Tudo em 1 Samsung', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 3500, '1726078672133_1724610629193_shopping.png', 1, '2024-09-11 16:42:40', '2024-09-11 18:17:52', NULL),
-(2, 'Notebook Dell', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1500, '1726078754869_1724610728467_download.jpg', 1, '2024-09-11 18:19:14', '2024-09-11 18:19:14', NULL),
-(4, 'Fone de ouvido Bluetooth Preto', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 120, '1726080821223_1724610770477_download (1).jpg', 1, '2024-09-11 18:53:41', '2024-09-11 18:53:41', NULL),
-(5, 'Fogao 5 bocas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2200, '1726081058676_1724610859525_download (5).jpg', 2, '2024-09-11 18:57:38', '2024-09-11 18:57:38', NULL),
-(6, 'Aspirador', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 1799, '1726081152633_1724610812101_download (3).jpg', 2, '2024-09-11 18:58:58', '2024-09-11 18:59:12', NULL),
-(7, 'Air Fryer Tecnologico', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 799, '1726081174917_1724610837909_download (4).jpg', 2, '2024-09-11 18:59:34', '2024-09-11 18:59:34', NULL),
-(8, 'Microondas', 'Lorem ipsum dolor sit amet. Ut atque molestias aut nihil minus qui perferendis rerum a neque quia ea molestiae alias. Ab vero maiores aut magni minus ea culpa sequi 33 explicabo perferendis. Ab quod architecto ex rerum sunt ut laborum omnis.', 2999, '1726081226463_1724610880173_download (6).jpg', 2, '2024-09-11 19:00:26', '2024-09-11 19:00:26', NULL),
 (9, 'Armário de Cozinha Aéreo 2 Portas de Correr de Vidro Reflex com Nicho Aberto Rustic Emilly Madesa', 'O Armário Aéreo de 105 cm com nicho aberto da linha Emilly da Madesa é fabricado com materiais de ótima qualidade e conta com duas portas de correr em vidro reflex, que podem revelar sutilmente o interior do móvel ou refletir o espaço, variando conforme a', 256.49, '1729078676284_b32fade8f7010c4457e6527d92783ae3.png', 4, '2024-10-16 11:37:56', '2024-10-16 11:37:56', NULL),
 (10, 'Puff Colchonete Dobrável / Sofá 3 em 1 Solteiro BF Colchões', 'Pensando na sua praticidade, A BF Colchões desenvolveu o Puff Multiuso 3x1 para você usar como preferir. Produto versátil, dobrável, compacto, além de oferecer melhor aproveitamento de espaço. Produzido com uma espuma de alta qualidade que garante todo co', 185.99, '1729078748662_b32fade8f7010c4457e6527d92783ae3.png', 4, '2024-10-16 11:39:08', '2024-10-16 11:39:08', NULL),
 (11, 'Panela Frigideira De Indução E Fogão A Gás Antiaderente De Cerâmica Reforçada Linha Premium - HYLLIS/HOME GOODS', 'A linha de frigideiras possui 4 camadas, 2 camadas de revestimento cerâmico(mármore) e 2 camadas de aço inox resistente a alta temperatura. Com estrutura de inox as panelas possuem 4 mm de espessura que proporciona uma maior durabilidade do produto, como ', 69.99, '1729079323357_4a93e35c4dc0e518a702149c4e55fca2.png', 5, '2024-10-16 11:40:39', '2024-10-16 11:48:43', NULL),
@@ -5831,12 +5830,16 @@ INSERT INTO `produtos` (`id`, `nome_prod`, `descricao_prod`, `preco_prod`, `imag
 (24, 'Central Multimídia Universal 2 Din Mp5 Bt Espelha Chevrolet - First Option', 'Central Multimídia Universal 2 Din Mp5 Bt Espelha Chevrolet\r\nVocê pretende ter um Multimídia no seu carro? Saiba quais as vantagens de obter esse Multimídia!\r\n\r\n\r\n\r\nEssa Central Multimídia além de proporcionar conforto e funcionalidade também agrega valor', 235.15, '1729080058653_50e03ce4ec826a3488a8eb57b7b42669.png', 6, '2024-10-16 12:00:58', '2024-10-16 12:00:58', NULL),
 (25, 'Frigobar Brastemp 76L Branco Retrô BRA08HB', 'O frigobar Brastemp Retrô BRA08HB branco transforma qualquer ambiente no seu mundo. O design inconfundível conta com os acabamentos vintage com pés palito estilo retrô, puxadores metálicos e o icônico logo Brastemp dos anos 50. Com capacidade líquida tota', 1994.99, '1729080168677_b0daa38907a16e01337516ea634109c3.png', 2, '2024-10-16 12:02:48', '2024-10-16 12:02:48', NULL),
 (26, 'Lavadora de Roupas Brastemp 13kg Cesto Inox - 12 Programas de Lavagem Branca BWK13', 'Lavadora de Roupas Brastemp 13kg Cesto Inox\r\nHoje em dia não dá nem pra imaginar viver sem uma Lavadora de Roupas, não é mesmo? Além de praticidade as lavadoras são capazes de deixar diversos tipos de tecidos e peças limpinhas e cheirosas. Vem conhecer es', 1994.94, '1729080204813_85bd62db25067b0c81d21d9e3251dddb.png', 2, '2024-10-16 12:03:24', '2024-10-16 12:03:24', NULL),
-(27, 'Forno Elétrico de Bancada Multifuncional Mondial - 52L Branco Grand Family II FR-52-W', 'Forno Elétrico de Bancada Multifuncional Mondial\r\nO forno elétrico de bancada Grand Family II FR-52-W da Mondial é a escolha ideal para quem busca um produto multifuncional, com alta potência e capacidade para preparar receitas para toda a família. Com ca', 408.49, '1729080272582_d22ceedf5325d4de2ec0f75672cba0ee.png', 2, '2024-10-16 12:04:32', '2024-10-16 12:04:32', NULL);
+(27, 'Forno Elétrico de Bancada Multifuncional Mondial - 52L Branco Grand Family II FR-52-W', 'Forno Elétrico de Bancada Multifuncional Mondial\r\nO forno elétrico de bancada Grand Family II FR-52-W da Mondial é a escolha ideal para quem busca um produto multifuncional, com alta potência e capacidade para preparar receitas para toda a família. Com ca', 408.49, '1729080272582_d22ceedf5325d4de2ec0f75672cba0ee.png', 2, '2024-10-16 12:04:32', '2024-10-16 12:04:32', NULL),
+(28, 'Echo Dot 5ª geração | O Echo Dot com o melhor som já lançado | Cor Preta', 'O ECHO DOT COM O MELHOR SOM JÁ LANÇADO - Curta uma experiência sonora ainda melhor em comparação às versões anteriores do Echo Dot com Alexa e ouça vocais mais nítidos, graves mais potentes e um som vibrante em qualquer ambiente.\r\nSUAS MÚSICAS E CONTEÚDOS', 252.27, '1732554054290_617-HLllfZL._AC_SX569_.jpg', 1, '2024-11-25 17:00:54', '2024-11-25 17:00:54', NULL),
+(29, 'Notebook Gamer Acer Nitro V15 Intel Core i5-13420H, 8GB RAM, GeForce RTX 3050, SSD 512GB, 15.6\" FHD IPS 144Hz, Windows 11, Preto - ANV15-51-58AZ', 'Notebook Gamer Acer Nitro V15 Intel Core i5-13420H\r\n \r\n\r\nProcessador Que Faz Os Adversários Tremerem\r\nNada pode te parar com o Intel Core i5-13420H de 13ª geração deste notebook. Juntamente com 8 GB de memória RAM, expansível até 32 GB, o processador te l', 4399.99, '1732554189273_Sem tÃ­tulo.png', 1, '2024-11-25 17:03:09', '2024-11-25 17:03:09', NULL),
+(30, 'Geladeira Consul Frost Free 342 litros cor Inox com Gavetão Hortifruti - CRB39AK', 'Um pouco sobre o produto\r\n\r\nA Geladeira Consul Frost Free 342 litros não precisar descongelar nunca. Ela possui 12 níveis de altura para ajustar as prateleiras e ter o melhor aproveitamento do espaço interno, também conta com o Porta Latas para gelar até ', 1927.49, '1732554249884_Sem tÃ­tulo.png', 1, '2024-11-25 17:04:09', '2024-11-25 17:04:09', NULL),
+(31, 'Cacto Dançante E Falante Toca Música Repete A Fala E Dança', '\r\nRoupa Grátis irá conforme disponibilidade do estoque (SORTIDA).\r\n\r\nDescrição:\r\n\r\nNovo brinquedo da criançada, o cacto dança e fala vem com uma função de gravação para repetir qualquer linguagem que você fala, de uma maneira engraçada, ele é ótimo para e', 42.99, '1732554306273_Sem tÃ­tulo.png', 1, '2024-11-25 17:05:06', '2024-11-25 17:05:06', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estrutura para tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -5852,39 +5855,40 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuarios`
+-- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `login`, `email`, `senha`, `tipo`, `token`, `createdAt`, `updatedAt`) VALUES
 (1, 'joao luca', 'joaol', 'joao@gmail.com', '$2a$10$NCh5g0aV7Oingtbl.3qqG.59u23jv1RfooudNcKP9Bv7hgNUIKIra', 'admin', '9yp2xwaq0b9', '2024-09-11 16:42:01', '2024-09-11 16:42:01'),
-(2, 'teste1', 'teste1', 'teste1@gmail.com', '$2a$10$ItUzYXsNirC2RyzIWLdhYeteqm9mY7YaexrP5krI8y4a3impmI5B.', 'usuario', 'tqi433zgeve', '2024-09-11 19:31:47', '2024-09-11 19:31:47');
+(2, 'teste1', 'teste1', 'teste1@gmail.com', '$2a$10$ItUzYXsNirC2RyzIWLdhYeteqm9mY7YaexrP5krI8y4a3impmI5B.', 'usuario', 'tqi433zgeve', '2024-09-11 19:31:47', '2024-09-11 19:31:47'),
+(3, 'joao lucas', 'joaolucas', 'jlcs1609@gmail.com', '$2a$10$GvOQYdEBTG0.bbBQFFtiwOBfO8lj5NseFQ.apqXGOkI7kNGb645l.', 'usuario', 'q6t7fhcfwea', '2024-11-13 16:48:09', '2024-11-13 16:53:17');
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `carrinho`
+-- Índices de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuarioId` (`usuarioId`);
 
 --
--- Indexes for table `categoria`
+-- Índices de tabela `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `cidades`
+-- Índices de tabela `cidades`
 --
 ALTER TABLE `cidades`
   ADD PRIMARY KEY (`id`),
   ADD KEY `estadoId` (`estadoId`);
 
 --
--- Indexes for table `enderecos`
+-- Índices de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
   ADD PRIMARY KEY (`id`),
@@ -5893,7 +5897,7 @@ ALTER TABLE `enderecos`
   ADD KEY `usuarioId` (`usuarioId`);
 
 --
--- Indexes for table `estados`
+-- Índices de tabela `estados`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`),
@@ -5901,7 +5905,7 @@ ALTER TABLE `estados`
   ADD UNIQUE KEY `sigla_2` (`sigla`);
 
 --
--- Indexes for table `itens_carrinho`
+-- Índices de tabela `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
   ADD PRIMARY KEY (`id`),
@@ -5909,7 +5913,7 @@ ALTER TABLE `itens_carrinho`
   ADD KEY `produtoId` (`produtoId`);
 
 --
--- Indexes for table `pedidos`
+-- Índices de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
@@ -5918,7 +5922,7 @@ ALTER TABLE `pedidos`
   ADD KEY `enderecoId` (`enderecoId`);
 
 --
--- Indexes for table `produtos`
+-- Índices de tabela `produtos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`id`),
@@ -5926,7 +5930,7 @@ ALTER TABLE `produtos`
   ADD KEY `categoriaId` (`categoriaId`);
 
 --
--- Indexes for table `usuarios`
+-- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
@@ -5936,81 +5940,81 @@ ALTER TABLE `usuarios`
   ADD UNIQUE KEY `email_2` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `carrinho`
+-- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `categoria`
+-- AUTO_INCREMENT de tabela `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `cidades`
+-- AUTO_INCREMENT de tabela `cidades`
 --
 ALTER TABLE `cidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5561;
 
 --
--- AUTO_INCREMENT for table `enderecos`
+-- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `estados`
+-- AUTO_INCREMENT de tabela `estados`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `itens_carrinho`
+-- AUTO_INCREMENT de tabela `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `pedidos`
+-- AUTO_INCREMENT de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `produtos`
+-- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- Restrições para tabelas despejadas
 --
 
 --
--- Constraints for table `carrinho`
+-- Restrições para tabelas `carrinho`
 --
 ALTER TABLE `carrinho`
   ADD CONSTRAINT `carrinho_ibfk_1` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `cidades`
+-- Restrições para tabelas `cidades`
 --
 ALTER TABLE `cidades`
   ADD CONSTRAINT `cidades_ibfk_1` FOREIGN KEY (`estadoId`) REFERENCES `estados` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `enderecos`
+-- Restrições para tabelas `enderecos`
 --
 ALTER TABLE `enderecos`
   ADD CONSTRAINT `enderecos_ibfk_4` FOREIGN KEY (`cidadeId`) REFERENCES `cidades` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -6018,14 +6022,14 @@ ALTER TABLE `enderecos`
   ADD CONSTRAINT `enderecos_ibfk_6` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `itens_carrinho`
+-- Restrições para tabelas `itens_carrinho`
 --
 ALTER TABLE `itens_carrinho`
-  ADD CONSTRAINT `itens_carrinho_ibfk_3` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `itens_carrinho_ibfk_4` FOREIGN KEY (`produtoId`) REFERENCES `produtos` (`id`);
+  ADD CONSTRAINT `itens_carrinho_ibfk_1` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `itens_carrinho_ibfk_2` FOREIGN KEY (`produtoId`) REFERENCES `produtos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `pedidos`
+-- Restrições para tabelas `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`carrinhoId`) REFERENCES `carrinho` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -6033,7 +6037,7 @@ ALTER TABLE `pedidos`
   ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`enderecoId`) REFERENCES `enderecos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `produtos`
+-- Restrições para tabelas `produtos`
 --
 ALTER TABLE `produtos`
   ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`categoriaId`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,

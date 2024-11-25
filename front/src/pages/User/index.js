@@ -32,11 +32,13 @@ const User = () => {
   const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false)
   const [enderecoEmEdicao, setEnderecoEmEdicao] = useState(null)
 
-  const [openDialog, setOpenDialog] = useState(false)
-  const [idRemove, setIdRemove] = useState(null)
+  const [openDialogEndereco, setOpenDialogEndereco] = useState(false)
+  const [openDialogPedido, setOpenDialogPedido] = useState(false)
+  const [idPedidoRemove, setIdPedidoRemove] = useState(null)
+  const [idEnderecoRemove, setIdEnderecoRemove] = useState(null)
 
   const [error, setError] = useState("")
-  
+
   const { loading, setLoading } = useContext(SearchContext);
   const [msg, setMsg] = useState("")
   const [msgShow, setMsgShow] = useState(false)
@@ -113,11 +115,20 @@ const User = () => {
     }
   }
 
-  const handleClick = (enderId) => {
-    setOpenDialog(true)
-    setIdRemove(enderId)
+  // CONFIRM DELETE
+  const handleClickEndereco = (enderId) => {
+    setOpenDialogEndereco(true)
+    setIdEnderecoRemove(enderId)
   }
-  const handleDialogClose = () => setOpenDialog(false);
+  const handleClickPedido = (pedidoId) => {
+    setOpenDialogPedido(true)
+    setIdPedidoRemove(pedidoId)
+  }
+
+  const handleDialogClose = () => {
+    setOpenDialogEndereco(false)
+    setOpenDialogPedido(false)
+  }
 
   const handlePendente = (id) => {
     navigate(`/meioPagamento/${id}`)
@@ -132,6 +143,9 @@ const User = () => {
     catch (error) {
       console.error(error)
       setError("Não foi possível excluir o pedido. Contate o suporte.")
+    }
+    finally {
+      handleDialogClose()
     }
   }
 
@@ -155,6 +169,28 @@ const User = () => {
   return (
     (loading && <Loading />) || (
       <div className="flex">
+        <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
+
+        <Confirm
+          isOpen={openDialogEndereco}
+          title={`Deletar endereco?`}
+          content="Tem certeza que deseja deletar este endereco?"
+          onConfirm={() => handleExcluirEndereco(idEnderecoRemove)}
+          onClose={handleDialogClose}
+          confirm={"Deletar"}
+          cancel={"Cancelar"}
+        />
+
+        <Confirm
+          isOpen={openDialogPedido}
+          title={`Deletar pedido?`}
+          content="Tem certeza que deseja deletar este pedido?"
+          onConfirm={() => handleExcluirPedido(idPedidoRemove)}
+          onClose={handleDialogClose}
+          confirm={"Deletar"}
+          cancel={"Cancelar"}
+        />
+
         <div className="w-64 flex flex-col items-center py-6">
           <div className="w-full flex flex-col items-start space-y-4">
             <button
@@ -183,17 +219,6 @@ const User = () => {
 
 
         <div className="flex-1 p-8 bg-gray-100">
-          <Alerta msg={msg} msgShow={msgShow} setMsgShow={setMsgShow} />
-
-          <Confirm
-            isOpen={openDialog}
-            title={`Deletar endereco?`}
-            content="Tem certeza que deseja deletar este endereco?"
-            onConfirm={() => handleExcluirEndereco(idRemove)}
-            onClose={handleDialogClose}
-            confirm={"Deletar"}
-            cancel={"Cancelar"}
-          />
 
           {activeTab === "perfil" && (
             <div className="flex-1">
@@ -312,7 +337,7 @@ const User = () => {
                           </button>
                           <button
                             className="px-2 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
-                            onClick={() => handleClick(endereco.id)}>
+                            onClick={() => handleClickEndereco(endereco.id)}>
                             <FaTrash />
                           </button>
                         </div>
@@ -381,7 +406,7 @@ const User = () => {
                             />
                             <div className="px-6">
                               <button
-                                onClick={() => handleExcluirPedido(pedido.id)}
+                                onClick={() => handleClickPedido(pedido.id)}
                                 className="p-2  bg-red-100 text-red-600 rounded-full hover:bg-red-200"
                                 title="Excluir Pedido"
                               >

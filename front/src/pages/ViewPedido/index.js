@@ -38,6 +38,7 @@ const ViewPedido = ({ onClose, pedido }) => {
 
     return (loading && <Loading /> || (
         <div className="container mx-auto p-4">
+            
             <Card className="shadow-lg">
                 <CardHeader>
                     <CardTitle className="text-2xl">Carrinho</CardTitle>
