@@ -36,7 +36,7 @@ const ViewPedido = ({ onClose, pedido }) => {
 
     const base_url = "http://localhost:3003/sistema/produtos/files/users/"
 
-    return (loading && <Loading /> || (
+    return ((loading && <Loading />) || (
         <div className="container mx-auto p-4">
             
             <Card className="shadow-lg">

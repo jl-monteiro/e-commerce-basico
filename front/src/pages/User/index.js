@@ -84,6 +84,28 @@ const User = () => {
   }, [user, isModalEnderecoOpen]);
 
   const handleSave = () => {
+    if (!nome || !login || !email) {
+      setError("Preencha todos os campos.");
+      return
+    }
+    if (nome.length < 3) {
+      setError("O nome deve ter pelo menos 3 caracteres")
+      return
+    }
+    if (login.length < 3) {
+      setError("O login deve ter pelo menos 3 caracteres")
+      return
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('O email fornecido é inválido.');
+      return
+    }
+    const loginRegex = /^[a-zA-Z0-9]+$/
+    if (!loginRegex.test(login)) {
+      setError("Login não pode ter caracter especial ou espaço em branco.")
+      return
+    }
     axios
       .put(`http://localhost:3003/sistema/usuarios/${user.id}`, {
         nome,
@@ -94,6 +116,7 @@ const User = () => {
         setEditando(false);
         setMsg("Dados atualizados com sucesso.")
         setMsgShow(true)
+        setError("")
       })
       .catch((error) => {
         console.error(error);
@@ -236,6 +259,9 @@ const User = () => {
                   <div className="flex items-center gap-4">
                     <FaRegUserCircle size="50px" />
                   </div>
+                  {user.tipo === "admin" && (
+                    <label className="text-sm text-gray-700">Admin</label>
+                  )}
                   <div className="grid gap-2">
                     <label
                       htmlFor="nome"
@@ -251,6 +277,7 @@ const User = () => {
                       onChange={(e) => [
                         setNome(e.target.value),
                         setEditando(true),
+                        setError("")
                       ]}
                       className="border border-gray-300 rounded-md p-2 w-full"
                     />
@@ -270,6 +297,7 @@ const User = () => {
                       onChange={(e) => [
                         setLogin(e.target.value),
                         setEditando(true),
+                        setError("")
                       ]}
                       className="border border-gray-300 rounded-md p-2 w-full"
                     />
@@ -289,13 +317,12 @@ const User = () => {
                       onChange={(e) => [
                         setEmail(e.target.value),
                         setEditando(true),
+                        setError("")
                       ]}
                       className="border border-gray-300 rounded-md p-2 w-full"
                     />
                   </div>
-                  {user.tipo === "admin" && (
-                    <label className="text-sm text-gray-700">Admin</label>
-                  )}
+
                 </div>
 
                 <div
