@@ -189,6 +189,17 @@ const User = () => {
     });
   };
 
+  const entregaDate = (dateString) => {
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + 12)
+    return date.toLocaleDateString("pt-BR", {
+      weekday: "short",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
   return (
     (loading && <Loading />) || (
       <div className="flex">
@@ -414,7 +425,10 @@ const User = () => {
                             {pedido.status === "pendente" ? (
                               <p className="text-sm text-red-400">Pendente - Aguardando processamento.</p>
                             ) : (
-                              <p className="text-sm text-green-400">Aprovado - Pedido confirmado.</p>
+                              <>
+                                <p className="text-sm text-green-400">Aprovado - Pedido confirmado.</p>
+                                <p className="text-sm text-gray-600">Estimativa de entrega: {entregaDate(pedido.updatedAt)}</p>
+                              </>
                             )}
                           </div>
 
